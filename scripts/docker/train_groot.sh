@@ -77,7 +77,11 @@ fi
 ports=()
 [[ "$CMD" == "serve" ]] && ports+=(-p "${PORT:-8000}:8000")
 
+# PyTorch DataLoader + video shard cache needs far more than Docker's 64MB /dev/shm default.
+SHM_SIZE="${SHM_SIZE:-16g}"
+
 exec docker run --rm -it --gpus all \
+  --shm-size="$SHM_SIZE" \
   -v "$DATA_ROOT:/data/demos" \
   -v "$CKPT_ROOT:/checkpoints" \
   -v "$HF_CACHE:/root/.cache/huggingface" \

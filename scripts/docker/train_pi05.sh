@@ -31,7 +31,10 @@ fi
 ports=()
 [[ "$CMD" == "serve" ]] && ports+=(-p "${PORT:-8000}:8000")
 
+SHM_SIZE="${SHM_SIZE:-16g}"
+
 exec docker run --rm -it --gpus all \
+  --shm-size="$SHM_SIZE" \
   -v "$DATA_ROOT:/data/demos" \
   -v "$CKPT_ROOT:/checkpoints" \
   -v "$HF_CACHE:/root/.cache/huggingface" \
