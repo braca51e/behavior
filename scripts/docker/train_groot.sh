@@ -73,6 +73,12 @@ fi
 [[ -n "${MAX_STEPS:-}" ]] && extra+=(-e "MAX_STEPS=$MAX_STEPS")
 [[ -n "${PATH_TO_CKPT:-}" ]] && extra+=(-e "PATH_TO_CKPT=$PATH_TO_CKPT")
 [[ -n "${PORT:-}" ]] && extra+=(-e "PORT=$PORT")
+# W&B: default offline inside entrypoint; set WANDB_MODE=online + WANDB_API_KEY to sync live.
+[[ -n "${WANDB_MODE:-}" ]] && extra+=(-e "WANDB_MODE=$WANDB_MODE")
+[[ -n "${WANDB_API_KEY:-}" ]] && extra+=(-e "WANDB_API_KEY=$WANDB_API_KEY")
+[[ -n "${WANDB_PROJECT:-}" ]] && extra+=(-e "WANDB_PROJECT=$WANDB_PROJECT")
+[[ -n "${WANDB_ENTITY:-}" ]] && extra+=(-e "WANDB_ENTITY=$WANDB_ENTITY")
+[[ -n "${WANDB_RUN_GROUP:-}" ]] && extra+=(-e "WANDB_RUN_GROUP=$WANDB_RUN_GROUP")
 
 ports=()
 [[ "$CMD" == "serve" ]] && ports+=(-p "${PORT:-8000}:8000")

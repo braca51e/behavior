@@ -167,6 +167,7 @@ Defaults inside the container:
 | `GLOBAL_BATCH_SIZE` | `128` | Official doc uses `2048` on 8 big GPUs |
 | `MAX_STEPS` | `150000` | Cap training steps |
 | `SHM_SIZE` | `16g` | Docker `/dev/shm` for DataLoader video cache |
+| `WANDB_MODE` | `offline` | Set `online` + `WANDB_API_KEY` to stream metrics to wandb.ai |
 
 Examples:
 
@@ -175,6 +176,12 @@ TASK_NAME=picking_up_trash scripts/docker/train_groot.sh train
 NUM_GPUS=2 GLOBAL_BATCH_SIZE=256 scripts/docker/train_groot.sh train
 MAX_STEPS=5000 scripts/docker/train_groot.sh train   # short pilot
 SHM_SIZE=32g scripts/docker/train_groot.sh train     # if shm bus-errors persist
+
+# Weights & Biases (live dashboard)
+export WANDB_API_KEY=...          # https://wandb.ai/authorize — do not paste into chat
+export WANDB_MODE=online
+# optional: export WANDB_ENTITY=my-team WANDB_PROJECT=B1K
+scripts/docker/train_groot.sh train
 ```
 
 ### What “healthy” looks like
