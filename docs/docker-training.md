@@ -292,29 +292,35 @@ Do **not** use `scripts/run_visual_pilot.sh` for provided/trained GR00T — that
 
 #### E.4 CLI-only / all-Docker (no host conda, no display)
 
-`b1k-groot` **never** runs Isaac/OmniGibson. Use **two containers**:
+`b1k-groot` = **policy only**. Eval uses a **second** image with OmniGibson
+(Isaac Sim). You can **pull** Stanford’s published image or **build** it yourself.
 
 ```bash
-# Terminal A — policy (b1k-groot)
+# --- once: get the eval image ---
+# Option A (fast): pull official challenge-aligned image (~15 GB compressed layers)
+docker pull stanfordvl/behavior:3.9.2
+
+# Option B (build yourself — hours, tens of GB free disk required):
+#   scripts/docker/build_behavior_eval.sh    # clones BEHAVIOR-1K v3.9.2, tags b1k-eval
+#   export EVAL_IMAGE=b1k-eval
+
+# Terminal A — policy
 export PATH_TO_CKPT=/home/ubuntu/behavior/data/checkpoints/groot/provided/turning_on_radio_GR00T-checkpoint-150000
 export HF_TOKEN=hf_...
 export HF_CACHE=$HOME/.cache/huggingface
 scripts/docker/train_groot.sh serve
 
-# Terminal B — sim eval (separate OmniGibson/Isaac image)
-docker pull stanfordvl/omnigibson:isaac_4_5   # or your challenge-compatible EVAL_IMAGE
-# Optional but recommended for 2026 challenge evaluator parity:
-#   export B1K_ROOT=/path/to/BEHAVIOR-1K   # v3.9.2 checkout with assets
-#   export OMNIGIBSON_DATA_PATH=/path/to/og_data
-export EVAL_IMAGE=stanfordvl/omnigibson:isaac_4_5
+# Terminal B — headless eval + MP4 (all Docker)
+export EVAL_IMAGE=stanfordvl/behavior:3.9.2   # or b1k-eval
+export OG_DATA=$PWD/data/omnigibson_data      # assets persist here
 export OUT_DIR=$PWD/outputs/groot_docker_eval
 scripts/docker/eval_headless.sh
-# MP4 → $OUT_DIR/videos/  (scp to laptop — no GUI needed on the server)
+# scp $OUT_DIR/videos/*.mp4 to your laptop
 ```
 
-If `eval_headless.sh` fails with `ModuleNotFoundError: omnigibson` / missing assets, the
-eval image still needs a BEHAVIOR-1K v3.9.2 tree + dataset mounts (`B1K_ROOT`,
-`OMNIGIBSON_DATA_PATH`). That is separate from `b1k-groot` and is large on disk.
+Building yourself uses BEHAVIOR-1K’s official `docker/Dockerfile` (runs `setup.sh`
+with `--accept-nvidia-eula`). Prefer `docker pull stanfordvl/behavior:3.9.2` unless
+you need a custom rebuild.
 
 ---
 
