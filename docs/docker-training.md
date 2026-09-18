@@ -290,6 +290,32 @@ python -m omnigibson.eval.eval \
 
 Do **not** use `scripts/run_visual_pilot.sh` for provided/trained GR00T — that script serves this repo’s **echo** MVP, not `b1k-groot`.
 
+#### E.4 CLI-only / all-Docker (no host conda, no display)
+
+`b1k-groot` **never** runs Isaac/OmniGibson. Use **two containers**:
+
+```bash
+# Terminal A — policy (b1k-groot)
+export PATH_TO_CKPT=/home/ubuntu/behavior/data/checkpoints/groot/provided/turning_on_radio_GR00T-checkpoint-150000
+export HF_TOKEN=hf_...
+export HF_CACHE=$HOME/.cache/huggingface
+scripts/docker/train_groot.sh serve
+
+# Terminal B — sim eval (separate OmniGibson/Isaac image)
+docker pull stanfordvl/omnigibson:isaac_4_5   # or your challenge-compatible EVAL_IMAGE
+# Optional but recommended for 2026 challenge evaluator parity:
+#   export B1K_ROOT=/path/to/BEHAVIOR-1K   # v3.9.2 checkout with assets
+#   export OMNIGIBSON_DATA_PATH=/path/to/og_data
+export EVAL_IMAGE=stanfordvl/omnigibson:isaac_4_5
+export OUT_DIR=$PWD/outputs/groot_docker_eval
+scripts/docker/eval_headless.sh
+# MP4 → $OUT_DIR/videos/  (scp to laptop — no GUI needed on the server)
+```
+
+If `eval_headless.sh` fails with `ModuleNotFoundError: omnigibson` / missing assets, the
+eval image still needs a BEHAVIOR-1K v3.9.2 tree + dataset mounts (`B1K_ROOT`,
+`OMNIGIBSON_DATA_PATH`). That is separate from `b1k-groot` and is large on disk.
+
 ---
 
 ## Step-by-step: π0.5

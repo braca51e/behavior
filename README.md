@@ -36,11 +36,11 @@ GPU, simulator, or the 3.27 TB demo set** — that is the design's
 > watching the MP4 (`scripts/run_visual_pilot.sh`).
 > **Train π0.5 / GR00T without host conda/uv?** Start with the **TL;DR** in
 > [`docs/docker-training.md`](docs/docker-training.md) — build image → download
-> demos → (GR00T: HF token + deploy-modality) → `train` → `serve` → host eval.
+> demos → (GR00T: HF token + deploy-modality) → `train` → `serve` → eval.
 > Also covers **W&B online**, **organizer-provided checkpoints**, and
-> **headless eval with MP4** (`--headless --write-video`). Demos, checkpoints,
-> and Hugging Face models persist under `data/` (or `HF_CACHE`) so re-runs do
-> not re-download.
+> **headless eval with MP4**. On a **CLI-only / Docker-only** box, use two
+> containers: `train_groot.sh serve` + `scripts/docker/eval_headless.sh`
+> (Isaac/OmniGibson is a separate image — not inside `b1k-groot`).
 > `docs/challenge-spec.md` is the authoritative requirements spec;
 > `docs/design.md` is the strategy rationale.
 
