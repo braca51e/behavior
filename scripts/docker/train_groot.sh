@@ -19,6 +19,16 @@ source "$(dirname "$0")/_persist_paths.sh"
 CMD="${1:-help}"
 shift || true
 
+if [[ "$CMD" == "train" || "$CMD" == "deploy-modality" ]]; then
+  if [[ ! -f "$DATA_ROOT/meta/info.json" ]]; then
+    echo "FAIL: missing $DATA_ROOT/meta/info.json (no demos on host)" >&2
+    echo "  Run:  scripts/docker/download_demos.sh 0" >&2
+    echo "  Then: scripts/docker/train_groot.sh deploy-modality" >&2
+    echo "  Then: scripts/docker/train_groot.sh train" >&2
+    exit 1
+  fi
+fi
+
 if [[ "$CMD" == "train" && -z "${HF_TOKEN:-}" ]]; then
   echo "FAIL: export HF_TOKEN (gated nvidia/Cosmos-Reason2-2B + GR00T-N1.7-3B)" >&2
   exit 1
