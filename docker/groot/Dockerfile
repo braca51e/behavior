@@ -30,7 +30,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl git git-lfs \
-        python3.10 python3.10-venv python3-pip \
+        build-essential \
+        python3.10 python3.10-dev python3.10-venv python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     && git lfs install --system \
     && ln -sf /usr/bin/python3.10 /usr/local/bin/python \
