@@ -1,0 +1,1 @@
+{"task": "freeze_pies", "instance_id": 301, "rollout_id": 0, "steps": 12208, "success": false, "agent_distance": {"base": 1.567, "left": 1.813, "right": 1.115}, "normalized_agent_distance": {"base": 1.0413, "left": 1.1284, "right": 1.1781}, "q_score": {"final": 0.5}, "time": {"simulator_steps": 12208, "simulator_time": 406.933, "normalized_time": 1.3564}}

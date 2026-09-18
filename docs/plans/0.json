@@ -1,0 +1,34 @@
+{
+  "task_id": 0,
+  "task": "turning_on_radio",
+  "plan": [
+    {
+      "skill": "move_to",
+      "args": {
+        "object": ""
+      },
+      "text": "move to ",
+      "mean_steps": 345,
+      "p90_steps": 572,
+      "pred_families": [
+        "positioned"
+      ],
+      "count": 4
+    },
+    {
+      "skill": "turn_on",
+      "args": {
+        "object": ""
+      },
+      "text": "turn on ",
+      "mean_steps": 150,
+      "p90_steps": 225,
+      "pred_families": [
+        "lit"
+      ],
+      "count": 4
+    }
+  ],
+  "episode_mean_steps": 495.0,
+  "num_episodes": 4
+}

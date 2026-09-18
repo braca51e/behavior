@@ -1,0 +1,51 @@
+[img logo] ../assets/behavior_logo3.png
+
+StanfordVL/BEHAVIOR-1K Home 🏆 2026 BEHAVIOR Challenge 🏆 2026 BEHAVIOR Challenge Announcements / Updates Announcements / Updates Table of contents 08/24/2026 07/27/2026 Leaderboard Dataset Baselines Evaluation and Rules Submission Guidelines Demo Gallery Documentation Documentation Installation Quickstart Important Concepts Examples OmniGibson OmniGibson Overview Prims Objects Object States Robots Controllers Sensors Systems Scenes Transition Rules Simulator Tasks Environments Vector Environments Setting Macros Under the Hood - Isaac Sim Tutorials Tutorials Demo Collection Running on a Compute Cluster Remote Streaming Saving and Loading Simulation State Customizing Robots Custom Robot Import Components Components BDDL BDDL Task Definitions Noun Hierarchy Knowledgebase 3D Assets 3D Assets Scenes Objects Annotation process Asset pipeline Asset sources Teleoperation Teleoperation JoyLo VR Task Sampling Data Collection Other Other Speed Optimization Roadmap FAQ Known Issues & Troubleshooting Contributing API Reference API Reference lazy macros simulator transition_rules Action primitives Action primitives curobo starter_semantic_action_primitives symbolic_semantic_action_primitives Controllers Controllers controller_base controller_view dd_controller holonomic_base_joint_controller ik_controller joint_controller multi_finger_gripper_controller null_joint_controller osc_controller Envs Envs data_wrapper env_base env_wrapper hdf5_data_wrapper lerobot_data_wrapper metrics_wrapper sb3_vec_env vec_env_base Eval Eval eval evaluator policies Utils Utils dataset_utils eval_utils light_utils network_utils obs_utils score_utils Wrappers Wrappers default_wrapper rgbd_full_res_wrapper Examples Examples Environments Environments behavior_env_demo navigation_env_demo vector_env_demo Learning Learning navigation_policy_demo Object states Object states attachment_demo dicing_demo heated_state_demo object_state_texture_demo onfire_demo overlaid_demo particle_applier_remover_demo sample_kinematics_demo slicing_demo temperature_demo Objects Objects draw_bounding_box highlight_objects import_custom_object load_object_selector visualize_object Robots Robots all_robots_visualizer grasping_mode_example import_custom_robot robot_control_example Scenes Scenes scene_selector scene_tour_demo traversability_map_example Simulator Simulator sim_save_load_example Teleoperation Teleoperation robot_teleoperate_demo vr_robot_control_demo vr_scene_tour_demo Wip Wip curobo_example folded_unfolded_state_demo heat_source_or_sink_demo particle_source_sink_demo rs_int_primitives_example solve_behavior_task solve_simple_task view_cloth_configurations Maps Maps map_base segmentation_map traversable_map Metrics Metrics agent_metric metric_base task_metric Object states Object states aabb adjacency attached_to burnt cloth_mixin contact_particles contact_subscribed_state_mixin contains cooked covered draped factory filled folded frozen heat_source_or_sink heated inside joint_break_subscribed_state_mixin joint_state kinematics_mixin link_based_state_mixin max_temperature next_to object_state_base on_fire on_top open_state overlaid particle particle_modifier particle_source_or_sink pose robot_related_states saturated sliceable slicer_active temperature tensorized_value_state toggle touching under update_state_mixin Objects Objects dataset_object light_object primitive_object usd_object Prims Prims cloth_prim entity_prim geom_prim joint_prim material_prim prim_base rigid_dynamic_prim rigid_kinematic_prim rigid_prim xform_prim Reward functions Reward functions collision_reward grasp_reward point_goal_reward potential_reward reaching_goal_reward reward_function_base Robots Robots definition_schema robot Scene graphs Scene graphs graph_builder Scenes Scenes interactive_traversable_scene scene_base static_traversable_scene traversable_scene Sensors Sensors dropout_sensor_noise scan_sensor sensor_base sensor_noise_base vision_sensor Systems Systems macro_particle_system micro_particle_system system_base Tasks Tasks behavior_task dummy_task grasp_task point_navigation_task point_reaching_task task_base Termination conditions Termination conditions falling grasp_goal max_collision point_goal predicate_goal reaching_goal termination_condition_base timeout Utils Utils asset_conversion_utils asset_utils backend_utils bddl_utils coacd_runner config_utils constants control_utils data_utils deprecated_utils geometry_utils git_utils grasping_planning_utils gym_utils lazy_import_utils motion_planning_utils numpy_utils object_state_utils object_utils physx_utils processing_utils profiling_utils pynvml_utils python_utils registry_utils render_utils sampling_utils sim_utils teleop_utils transform_utils transform_utils_np ui_utils urdf_preprocessing urdfpy_utils usd_utils vision_utils Changelog Knowledgebase Research Past Events BEHAVIOR-100 BEHAVIOR-100 VR Dataset Demo Gallery Support BEHAVIOR Challenge Updates On this page, we provide updates regarding the 2026 BEHAVIOR Challenge , including important bug fixes, new feature announcements, and clarifications about challenge rules.
+
+### 08/24/2026
+
+Challenge rule clarifications:
+
+Please use the v3.9.2 tag of the BEHAVIOR-1K repository for challenge evaluation. It includes the fixes below.
+
+Bug fixes:
+
+Corrected the arm, gripper, and trunk velocity observations in the 2026 challenge demonstration dataset. These fields now use the raw simulator joint velocities from the original HDF5 demonstrations, and meta/stats.json has been recomputed accordingly. The affected fields are: state[10:17] : arm_left_qvel
+
+state[26:28] : gripper_left_qvel
+
+state[35:42] : arm_right_qvel
+
+state[51:53] : gripper_right_qvel
+
+state[57:61] : trunk_qvel
+
+Actions and all other dataset fields are unchanged.
+
+Updated partial-scene evaluation to load the exact room instances specified for each task in B100_task_misc.csv . This keeps the evaluation scene consistent with the challenge task metadata.
+
+Fixed observation loading with RGBDFullResWrapper by refreshing simulator handles after changing camera resolutions and before rebuilding the observation space.
+
+Fixed bugs affecting the challenge leaderboard and submission form.
+
+New features:
+
+Introduced a participant registration form for the 2026 BEHAVIOR Challenge.
+
+### 07/27/2026
+
+Challenge rule clarifications:
+
+Please use the v3.9.2 tag of the BEHAVIOR-1K repository for evaluation and replay workflows, rather than the older v3.9.0 tag. Since v3.9.0 , v3.9.2 includes important challenge updates, including LeRobot v3 / Hugging Face demo download instructions, evaluator Torch thread configuration, sponsor-page content, synchronized BDDL generated data, and synchronized asset synset metadata.
+
+Bug fixes:
+
+Updated the released demonstration dataset so observation.state[0:3] now records the R1Pro base velocity in the robot-local frame. Previously, these dimensions were populated from raw holonomic base joint velocities; the corrected values rotate the base x/y joint velocities by the base yaw and keep the yaw velocity as the third component. This matches the action convention used by the R1Pro base controller.
+
+Fixed the released depth videos for the 2026 demonstration dataset. See the Hugging Face discussion for details: behavior-1k/2026-challenge-demos discussion #2 .
+
+New features:
+
+Added meta/tasks.jsonl with natural-language task descriptions for all 100 challenge tasks. The first 50 tasks follow the 2025 challenge descriptions with spelling/grammar fixes where needed; the remaining 50 were derived from the 2026 annotations and task definitions.
+
+Uploaded per-episode language annotations for all 20,000 demonstrations.

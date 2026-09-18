@@ -1,0 +1,23 @@
+{
+  "0": {
+    "predicates": [
+      "Powered(Radio)",
+      "On(Radio)"
+    ],
+    "episode_mean_steps": 9000
+  },
+  "1": {
+    "predicates": [
+      "In(TrashBag, TrashCan)",
+      "On(TrashBag, Floor)"
+    ],
+    "episode_mean_steps": 12000
+  },
+  "3": {
+    "predicates": [
+      "In(Plate, Sink)",
+      "Cleaned(Counter)"
+    ],
+    "episode_mean_steps": 14000
+  }
+}

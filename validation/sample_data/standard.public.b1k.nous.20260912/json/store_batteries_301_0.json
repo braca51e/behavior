@@ -1,0 +1,1 @@
+{"task": "store_batteries", "instance_id": 301, "rollout_id": 0, "steps": 5667, "success": false, "agent_distance": {"base": 2.64, "left": 2.042, "right": 1.713}, "normalized_agent_distance": {"base": 0.5492, "left": 1.3313, "right": 0.5265}, "q_score": {"final": 0.25}, "time": {"simulator_steps": 5667, "simulator_time": 188.9, "normalized_time": 0.6296}}

@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local sim / training artifacts (large)
+outputs/
+data/demos/data/
+data/demos/meta/
+data/demos/videos/
+data/demos/.cache/
+data/baselines/
+data/checkpoints/
+*.mp4
+*.part
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+credentials.json

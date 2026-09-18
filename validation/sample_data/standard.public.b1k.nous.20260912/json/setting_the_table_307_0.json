@@ -1,0 +1,1 @@
+{"task": "setting_the_table", "instance_id": 307, "rollout_id": 0, "steps": 7663, "success": true, "agent_distance": {"base": 0.601, "left": 0.733, "right": 0.971}, "normalized_agent_distance": {"base": 1.3855, "left": 0.9825, "right": 0.2711}, "q_score": {"final": 1.0}, "time": {"simulator_steps": 7663, "simulator_time": 255.433, "normalized_time": 0.8514}}

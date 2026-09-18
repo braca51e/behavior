@@ -1,0 +1,1 @@
+{"task": "picking_up_trash", "instance_id": 301, "rollout_id": 0, "steps": 9534, "success": false, "agent_distance": {"base": 1.115, "left": 1.337, "right": 0.681}, "normalized_agent_distance": {"base": 0.9131, "left": 1.3164, "right": 0.5309}, "q_score": {"final": 0.0}, "time": {"simulator_steps": 9534, "simulator_time": 317.8, "normalized_time": 1.0593}}

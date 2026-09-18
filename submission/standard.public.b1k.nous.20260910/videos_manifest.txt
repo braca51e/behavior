@@ -1,0 +1,1 @@
+# video portal manifest: <local mp4> <portal url>

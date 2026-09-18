@@ -1,0 +1,1 @@
+{"task": "clean_a_keyboard", "instance_id": 319, "rollout_id": 0, "steps": 10114, "success": false, "agent_distance": {"base": 0.849, "left": 1.152, "right": 1.493}, "normalized_agent_distance": {"base": 1.1135, "left": 0.8246, "right": 0.7966}, "q_score": {"final": 0.25}, "time": {"simulator_steps": 10114, "simulator_time": 337.133, "normalized_time": 1.1238}}

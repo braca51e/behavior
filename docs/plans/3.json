@@ -1,0 +1,60 @@
+{
+  "task_id": 3,
+  "task": "cleaning_up_plates_and_food",
+  "plan": [
+    {
+      "skill": "move_to",
+      "args": {
+        "object": ""
+      },
+      "text": "move to ",
+      "mean_steps": 270,
+      "p90_steps": 405,
+      "pred_families": [
+        "positioned"
+      ],
+      "count": 4
+    },
+    {
+      "skill": "pick_up",
+      "args": {
+        "object": ""
+      },
+      "text": "pick up ",
+      "mean_steps": 120,
+      "p90_steps": 180,
+      "pred_families": [
+        "object_in_gripper"
+      ],
+      "count": 4
+    },
+    {
+      "skill": "place_on",
+      "args": {
+        "object": ""
+      },
+      "text": "place  on surface",
+      "mean_steps": 150,
+      "p90_steps": 225,
+      "pred_families": [
+        "positioned"
+      ],
+      "count": 4
+    },
+    {
+      "skill": "wipe",
+      "args": {
+        "object": ""
+      },
+      "text": "wipe surface",
+      "mean_steps": 180,
+      "p90_steps": 270,
+      "pred_families": [
+        "cleaned"
+      ],
+      "count": 4
+    }
+  ],
+  "episode_mean_steps": 720.0,
+  "num_episodes": 4
+}

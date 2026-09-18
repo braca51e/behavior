@@ -1,0 +1,115 @@
+[img logo] ../assets/behavior_logo3.png
+
+StanfordVL/BEHAVIOR-1K Home 🏆 2026 BEHAVIOR Challenge 🏆 2026 BEHAVIOR Challenge Announcements / Updates Leaderboard Dataset Baselines Baselines Table of contents Provided checkpoints Common setup Placeholders Install BEHAVIOR-1K Download the demonstrations π0.5 Setup Prepare the dataset Train GR00T N1.7 Setup Prepare the dataset Serve the policy Evaluation Evaluation and Rules Submission Guidelines Demo Gallery Documentation Documentation Installation Quickstart Important Concepts Examples OmniGibson OmniGibson Overview Prims Objects Object States Robots Controllers Sensors Systems Scenes Transition Rules Simulator Tasks Environments Vector Environments Setting Macros Under the Hood - Isaac Sim Tutorials Tutorials Demo Collection Running on a Compute Cluster Remote Streaming Saving and Loading Simulation State Customizing Robots Custom Robot Import Components Components BDDL BDDL Task Definitions Noun Hierarchy Knowledgebase 3D Assets 3D Assets Scenes Objects Annotation process Asset pipeline Asset sources Teleoperation Teleoperation JoyLo VR Task Sampling Data Collection Other Other Speed Optimization Roadmap FAQ Known Issues & Troubleshooting Contributing API Reference API Reference lazy macros simulator transition_rules Action primitives Action primitives curobo starter_semantic_action_primitives symbolic_semantic_action_primitives Controllers Controllers controller_base controller_view dd_controller holonomic_base_joint_controller ik_controller joint_controller multi_finger_gripper_controller null_joint_controller osc_controller Envs Envs data_wrapper env_base env_wrapper hdf5_data_wrapper lerobot_data_wrapper metrics_wrapper sb3_vec_env vec_env_base Eval Eval eval evaluator policies Utils Utils dataset_utils eval_utils light_utils network_utils obs_utils score_utils Wrappers Wrappers default_wrapper rgbd_full_res_wrapper Examples Examples Environments Environments behavior_env_demo navigation_env_demo vector_env_demo Learning Learning navigation_policy_demo Object states Object states attachment_demo dicing_demo heated_state_demo object_state_texture_demo onfire_demo overlaid_demo particle_applier_remover_demo sample_kinematics_demo slicing_demo temperature_demo Objects Objects draw_bounding_box highlight_objects import_custom_object load_object_selector visualize_object Robots Robots all_robots_visualizer grasping_mode_example import_custom_robot robot_control_example Scenes Scenes scene_selector scene_tour_demo traversability_map_example Simulator Simulator sim_save_load_example Teleoperation Teleoperation robot_teleoperate_demo vr_robot_control_demo vr_scene_tour_demo Wip Wip curobo_example folded_unfolded_state_demo heat_source_or_sink_demo particle_source_sink_demo rs_int_primitives_example solve_behavior_task solve_simple_task view_cloth_configurations Maps Maps map_base segmentation_map traversable_map Metrics Metrics agent_metric metric_base task_metric Object states Object states aabb adjacency attached_to burnt cloth_mixin contact_particles contact_subscribed_state_mixin contains cooked covered draped factory filled folded frozen heat_source_or_sink heated inside joint_break_subscribed_state_mixin joint_state kinematics_mixin link_based_state_mixin max_temperature next_to object_state_base on_fire on_top open_state overlaid particle particle_modifier particle_source_or_sink pose robot_related_states saturated sliceable slicer_active temperature tensorized_value_state toggle touching under update_state_mixin Objects Objects dataset_object light_object primitive_object usd_object Prims Prims cloth_prim entity_prim geom_prim joint_prim material_prim prim_base rigid_dynamic_prim rigid_kinematic_prim rigid_prim xform_prim Reward functions Reward functions collision_reward grasp_reward point_goal_reward potential_reward reaching_goal_reward reward_function_base Robots Robots definition_schema robot Scene graphs Scene graphs graph_builder Scenes Scenes interactive_traversable_scene scene_base static_traversable_scene traversable_scene Sensors Sensors dropout_sensor_noise scan_sensor sensor_base sensor_noise_base vision_sensor Systems Systems macro_particle_system micro_particle_system system_base Tasks Tasks behavior_task dummy_task grasp_task point_navigation_task point_reaching_task task_base Termination conditions Termination conditions falling grasp_goal max_collision point_goal predicate_goal reaching_goal termination_condition_base timeout Utils Utils asset_conversion_utils asset_utils backend_utils bddl_utils coacd_runner config_utils constants control_utils data_utils deprecated_utils geometry_utils git_utils grasping_planning_utils gym_utils lazy_import_utils motion_planning_utils numpy_utils object_state_utils object_utils physx_utils processing_utils profiling_utils pynvml_utils python_utils registry_utils render_utils sampling_utils sim_utils teleop_utils transform_utils transform_utils_np ui_utils urdf_preprocessing urdfpy_utils usd_utils vision_utils Changelog Knowledgebase Research Past Events BEHAVIOR-100 BEHAVIOR-100 VR Dataset Demo Gallery Support Baselines For the 2026 BEHAVIOR Challenge, we provide starter training and evaluation pipelines for two baseline methods:
+
+π0.5 — fine-tuned with a challenge fork of OpenPI
+
+GR00T N1.7 — fine-tuned with a challenge fork of Isaac-GR00T
+
+These baselines are meant to help participants verify the full challenge workflow — loading the demonstration dataset, fine-tuning a policy, running evaluation in OmniGibson, and preparing outputs for submission — and serve as reference implementations for the expected observation and action interfaces of the challenge track. Participants are encouraged to build on these pipelines, compare against them, and open-source improvements when possible.
+
+Both walkthroughs share the same first steps ( Common setup ) and the same last step ( Evaluation ); only the training and serving steps differ between the two methods.
+
+## Provided checkpoints
+
+We provide fine-tuned checkpoints so participants can run evaluation without training:
+
+turning_on_radio
+
+Evaluation only?
+
+Complete the Common setup , then jump straight to the corresponding Serve the policy step and Evaluation .
+
+## Common setup
+
+Both baselines use uv to manage Python dependencies for training, and a conda environment for the OmniGibson evaluator. See the uv installation instructions to set it up.
+
+### Placeholders
+
+The commands on this page use a few shell variables. Set them once per terminal, replacing the example values with local paths and the task to train or evaluate:
+
+export PATH_TO_BEHAVIOR_1K = ~/BEHAVIOR-1K # path to the BEHAVIOR-1K checkout export TASK_NAME = turning_on_radio # any challenge task export DATA_ROOT = ~/2026-challenge-demos # local LeRobot v3 root (data/, meta/, videos/) export DATASET_PATH = $DATA_ROOT # OpenPI dataset_root export REPO_ID = behavior-1k/2026-challenge-demos # OpenPI repo_id / norm stats (HF hub id, not a local path) See the dataset page for the full task list.
+
+### Install BEHAVIOR-1K
+
+Clone the v3.9.2 tag of BEHAVIOR-1K and run the setup script. It creates a behavior conda environment with OmniGibson, the simulation assets, and the evaluation dependencies. Do not use the older v3.9.0 tag for challenge evaluation workflows because dataset and evaluator compatibility fixes are shipped in v3.9.2 .
+
+git clone -b v3.9.2 https://github.com/StanfordVL/BEHAVIOR-1K.git $PATH_TO_BEHAVIOR_1K cd $PATH_TO_BEHAVIOR_1K ./setup.sh --new-env --omnigibson --bddl --joylo --dataset --eval See the installation guide for prerequisites and troubleshooting.
+
+### Download the demonstrations
+
+The demos ship as a LeRobot v3.0 dataset on HuggingFace: behavior-1k/2026-challenge-demos . Tasks are stored as numbered chunks ( chunk-000 is the first task, chunk-001 the second, and so on). Download only the relevant chunk — the full dataset is 3.27 TB:
+
+export TASK_ID = 0 # 0-indexed task id; maps to chunk-000, chunk-001, ... CHUNK = $( printf "chunk-%03d" $TASK_ID ) huggingface-cli download behavior-1k/2026-challenge-demos \ --repo-type dataset \ --local-dir " $DATA_ROOT " \ --include "data/ $CHUNK /**" \ --include "meta/episodes/ $CHUNK /**" \ --include "videos/*/ $CHUNK /**" \ --include "meta/info.json" \ --include "meta/stats.json" \ --include "meta/tasks.parquet" This places the demos under $DATA_ROOT in LeRobot's data/ , meta/ , and videos/ layout. Drop the --include filters to download all 100 tasks. See the dataset page for details on the data format.
+
+## π0.5
+
+This walkthrough fine-tunes π0.5 on the challenge dataset using a fork of OpenPI.
+
+### Setup
+
+Clone the behavior branch of the OpenPI fork and set up its environment:
+
+export OPENPI_DIR = ~/openpi # where to put the OpenPI checkout git clone -b behavior https://github.com/wensi-ai/openpi.git $OPENPI_DIR cd $OPENPI_DIR git submodule update --init --recursive GIT_LFS_SKIP_SMUDGE = 1 uv sync source .venv/bin/activate GIT_LFS_SKIP_SMUDGE = 1 uv pip install -e . Prepare the dataset Every command below passes the dataset location explicitly via --data.repo_id=$REPO_ID --data.base_config.dataset_root=$DATASET_PATH . Alternatively, set repo_id and dataset_root once in the pi05_b1k block of src/openpi/training/config.py and drop those flags.
+
+Before training, compute normalization statistics for the dataset:
+
+cd $OPENPI_DIR uv run scripts/compute_norm_stats.py pi05_b1k \ --data.repo_id = $REPO_ID \ --data.base_config.dataset_root = $DATASET_PATH This writes norm_stats.json under outputs/assets/pi05_b1k/$REPO_ID .
+
+### Train
+
+The pi05_b1k config fine-tunes the π0.5 base model ( gs://openpi-assets/checkpoints/pi05_base/params ) on the R1Pro robot with a 32-step action horizon. Robot and task definitions live in src/openpi/configs/robots/b1k.py and src/openpi/configs/tasks/b1k.py .
+
+Pick a unique experiment name $EXP_NAME for each run and start training from $OPENPI_DIR :
+
+```bash XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 uv run scripts/b1k/train_b1k.py pi05_b1k \ --exp_name=$EXP_NAME \ --overwrite \ --batch_size=64 \ --data.repo_id=$REPO_ID \ --data.base_config.dataset_root=$DATASET_PATH === "Multi-GPU (single node)" Pass the GPU count and device list as positional arguments (e.g. ... pi05_b1k 8 0,1,2,3,4,5,6,7 ):
+
+./scripts/b1k/train_b1k.sh pi05_b1k $NUM_GPUS $CUDA_VISIBLE_DEVICES \ --data.repo_id = $REPO_ID \ --data.base_config.dataset_root = $DATASET_PATH === "SLURM" Use scripts/b1k/train_b1k.sbatch.sh . Before submitting, edit the #SBATCH directives at the top of the script (account, partition, GPU type/count, memory, time limit) and update the virtual-environment activation line to point to the OpenPI install.
+
+Submit a new run:
+
+EXP_NAME = my_run sbatch scripts/b1k/train_b1k.sbatch.sh pi05_b1k \ --overwrite \ --data.repo_id = $REPO_ID \ --data.base_config.dataset_root = $DATASET_PATH Resume an existing run by omitting --overwrite (by default the script resumes from outputs/checkpoints/pi05_b1k/$EXP_NAME/ ):
+
+EXP_NAME = my_run sbatch scripts/b1k/train_b1k.sbatch.sh pi05_b1k \ --data.repo_id = $REPO_ID \ --data.base_config.dataset_root = $DATASET_PATH Any extra arguments after the config name are passed through to train_b1k.py . Job logs are written to the path set by #SBATCH --output . Checkpoints are saved under `outputs/checkpoints/pi05_b1k/$EXP_NAME/`. ### Serve the policy Set `$PATH_TO_CKPT` to a checkpoint step directory (for example `outputs/checkpoints/pi05_b1k/$EXP_NAME/<step>`, or the provided checkpoint from the [table above](#provided-checkpoints)) and start the policy server: ```bash cd $OPENPI_DIR source .venv/bin/activate CUDA_VISIBLE_DEVICES=0 XLA_PYTHON_CLIENT_MEM_FRACTION=0.85 \ uv run scripts/b1k/serve_b1k.py \ --robot b1k/R1Pro \ --task b1k/$TASK_NAME \ --repo-id $REPO_ID \ --policy.config pi05_b1k \ --policy.dir $PATH_TO_CKPT \ --control_mode receding_horizon \ --action_horizon 16 \ --port 8000
+
+This starts a websocket policy server on port 8000. Leave it running and continue to Evaluation .
+
+## GR00T N1.7
+
+This walkthrough fine-tunes GR00T N1.7 on the challenge dataset using a fork of Isaac-GR00T.
+
+### Setup
+
+Clone the Isaac-GR00T fork and set up its environment:
+
+export GROOT_DIR = ~/Isaac-GR00T # where to put the Isaac-GR00T checkout git clone https://github.com/wensi-ai/Isaac-GR00T $GROOT_DIR cd $GROOT_DIR uv sync --frozen --python 3 .10 uv pip install --python .venv/bin/python websockets source .venv/bin/activate Gated backbone
+
+The N1.7 backbone [nvidia/Cosmos-Reason2-2B](https://huggingface.co/nvidia/Cosmos-Reason2-2B) is gated. Accept the gate before training.
+
+### Prepare the dataset
+
+Deploy the GR00T modality configuration ( meta/modality.json ) into every task dataset under $DATA_ROOT :
+
+cd $GROOT_DIR python scripts/b1k/deploy_modality.py $DATA_ROOT Normalization statistics ( meta/stats.json ) are generated automatically on the first training run.
+
+The GR00T loader reads both the released v3.0 demos and v2.1 natively — no conversion is needed to train. Convert only if downstream tooling requires v2.1.
+
+The conversion runs **in place**: `$DATA_ROOT/$TASK_NAME` becomes v2.1 and the original v3.0 copy is backed up to `$DATA_ROOT/${TASK_NAME}_v3.0`. ```bash cd $GROOT_DIR/scripts/lerobot_conversion uv venv --python 3.11 .venv && source .venv/bin/activate GIT_LFS_SKIP_SMUDGE=1 uv pip install \ "lerobot @ git+https://github.com/huggingface/lerobot.git@c75455a6de5c818fa1bb69fb2d92423e86c70475" \ huggingface_hub jsonlines numpy pyarrow tqdm python convert_v3_to_v2.py --root $DATA_ROOT --repo-id $TASK_NAME cd $GROOT_DIR source .venv/bin/activate # re-activate the GR00T venv (conversion used its own) Re-run deploy_modality.py afterwards — the conversion does not carry modality.json over. ??? tip "Optional: pre-cache the base models" Training downloads both models automatically on the first run; pre-cache them to fail fast on access or network issues: export HF_TOKEN = hf_xxx # the account that accepted the Cosmos-Reason2-2B gate python - <<'PY' import os from huggingface_hub import snapshot_download tok = os.environ.get("HF_TOKEN") snapshot_download("nvidia/GR00T-N1.7-3B", token=tok) snapshot_download("nvidia/Cosmos-Reason2-2B", token=tok) # gated backbone PY ### Train `scripts/b1k/train_b1k.py` fine-tunes the GR00T N1.7 base model (`nvidia/GR00T-N1.7-3B`) on the R1Pro robot with a 16-step action horizon, tuning the projector and diffusion action head while keeping the vision encoder and LLM frozen. The R1Pro embodiment — cameras, proprioception, and action groups — is defined in `examples/b1k/r1pro.py` and registered under the `NEW_EMBODIMENT` tag. Run the following from `$GROOT_DIR` to fine-tune on 8 GPUs: ```bash CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 WANDB_MODE=online OMP_NUM_THREADS=4 \ torchrun --nproc_per_node=8 --master_port=29500 scripts/b1k/train_b1k.py \ --experiment-name b1k-$TASK_NAME \ --base-model-path nvidia/GR00T-N1.7-3B \ --dataset-path $DATASET_PATH \ --embodiment-tag NEW_EMBODIMENT \ --modality-config-path examples/b1k/r1pro.py \ --num-gpus 8 \ --global-batch-size 2048 \ --output-dir outputs \ --save-steps 1500 --save-total-limit 5 --max-steps 150000 \ --dataloader-num-workers 8 --decode-only-used-frames
+
+Checkpoints land in outputs/b1k-$TASK_NAME/checkpoint-<step>/ , each one standalone and directly servable. Metrics are logged to the B1K Weights & Biases project ( WANDB_MODE=offline to log locally). Reruns start fresh by default; pass --resume-from-checkpoint to continue from the latest checkpoint.
+
+Tip
+
+Match OMP_NUM_THREADS and --dataloader-num-workers to the CPU, and CUDA_VISIBLE_DEVICES , --nproc_per_node , and --num-gpus to the GPU count. --decode-only-used-frames skips decoding unused video frames to speed up data loading.
+
+### Serve the policy
+
+Set $PATH_TO_CKPT to a checkpoint directory (for example outputs/b1k-$TASK_NAME/checkpoint-<step> , or the provided checkpoint from the table above ) and start the policy server:
+
+cd $GROOT_DIR source .venv/bin/activate CUDA_VISIBLE_DEVICES = 0 python scripts/b1k/serve_b1k.py \ --model-path $PATH_TO_CKPT \ --modality-config-path examples/b1k/r1pro.py \ --embodiment-tag NEW_EMBODIMENT \ --host 127 .0.0.1 --port 8000 This starts a websocket policy server on port 8000, applying temporal ensembling by default; health-check it with curl -s http://127.0.0.1:8000/healthz . Leave it running and continue to Evaluation .
+
+## Evaluation
+
+Evaluation runs as two processes: the policy server started in Serve the policy , and the OmniGibson evaluator from BEHAVIOR-1K. With the server running, open a second terminal and run the evaluator inside the behavior conda environment created during Common setup :
+
+conda activate behavior cd $PATH_TO_BEHAVIOR_1K export LOG_PATH = ./eval_logs/ $TASK_NAME # where metrics and videos are written python -m omnigibson.eval.eval \ --task-name $TASK_NAME \ --host 127 .0.0.1 \ --port 8000 \ --output-dir $LOG_PATH \ --write-video The evaluator writes per-rollout metrics and videos to $LOG_PATH . For the full evaluator flag reference, observation wrappers, and custom robot configurations, see Evaluation and Rules ; for preparing a submission, see the Submission Guidelines .

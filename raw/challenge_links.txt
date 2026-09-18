@@ -1,0 +1,310 @@
+Skip to content -> #2026-behavior-challenge
+StanfordVL/BEHAVIOR-1K -> https://github.com/StanfordVL/BEHAVIOR-1K
+Home -> ../index.html
+🏆 2026 BEHAVIOR Challenge -> index.html
+Documentation -> ../getting_started/installation.html
+Knowledgebase -> https://behavior.stanford.edu/knowledgebase/
+Research -> ../other/related_research.html
+Past Events -> archive/index.html
+BEHAVIOR-100 -> ../behavior_100/overview.html
+Support -> https://discord.gg/bccR5vGFEx
+Announcements / Updates -> updates.html
+Leaderboard -> https://huggingface.co/spaces/behavior-1k/2026-challenge-leaderboard
+Dataset -> dataset.html
+Baselines -> baselines.html
+Evaluation and Rules -> evaluation.html
+Submission Guidelines -> submission.html
+Demo Gallery -> tasks/index.html
+Installation -> ../getting_started/installation.html
+Quickstart -> ../getting_started/quickstart.html
+Important Concepts -> ../getting_started/important_concepts.html
+Examples -> ../getting_started/examples.html
+Overview -> ../omnigibson/overview.html
+Prims -> ../omnigibson/prims.html
+Objects -> ../omnigibson/objects.html
+Object States -> ../omnigibson/object_states.html
+Robots -> ../omnigibson/robots.html
+Controllers -> ../omnigibson/controllers.html
+Sensors -> ../omnigibson/sensors.html
+Systems -> ../omnigibson/systems.html
+Scenes -> ../omnigibson/scenes.html
+Transition Rules -> ../omnigibson/transition_rules.html
+Simulator -> ../omnigibson/simulator.html
+Tasks -> ../omnigibson/tasks.html
+Environments -> ../omnigibson/environments.html
+Vector Environments -> ../omnigibson/vector_environments.html
+Setting Macros -> ../omnigibson/setting_macros.html
+Under the Hood - Isaac Sim -> ../omnigibson/under_the_hood.html
+Demo Collection -> ../tutorials/demo_collection.html
+Running on a Compute Cluster -> ../tutorials/running_on_a_compute_cluster.html
+Remote Streaming -> ../tutorials/remote_streaming.html
+Saving and Loading Simulation State -> ../tutorials/save_load.html
+Customizing Robots -> ../tutorials/customizing_robots.html
+Custom Robot Import -> ../tutorials/custom_robot_import.html
+Task Definitions -> ../behavior_components/behavior_tasks.html
+Noun Hierarchy -> ../behavior_components/noun_hierarchy.html
+Knowledgebase -> ../behavior_components/behavior_knowledgebase.html
+Scenes -> ../behavior_components/scenes.html
+Objects -> ../behavior_components/objects.html
+Annotation process -> ../behavior_components/annotation_process.html
+Asset pipeline -> ../behavior_components/asset_pipeline.html
+Asset sources -> ../behavior_components/asset_sources.html
+JoyLo -> ../behavior_components/joylo.html
+VR -> ../behavior_components/vr.html
+Task Sampling -> ../behavior_components/task_sampling.html
+Data Collection -> ../behavior_components/data_collection.html
+Speed Optimization -> ../other/speed_optimization.html
+Roadmap -> ../other/roadmap.html
+FAQ -> ../other/faq.html
+Known Issues & Troubleshooting -> ../other/known_issues.html
+Contributing -> ../other/contributing.html
+API Reference -> ../reference/SUMMARY.html
+lazy -> ../reference/lazy.html
+macros -> ../reference/macros.html
+simulator -> ../reference/simulator.html
+transition_rules -> ../reference/transition_rules.html
+Action primitives -> ../reference/action_primitives/action_primitive_set_base.html
+curobo -> ../reference/action_primitives/curobo.html
+starter_semantic_action_primitives -> ../reference/action_primitives/starter_semantic_action_primitives.html
+symbolic_semantic_action_primitives -> ../reference/action_primitives/symbolic_semantic_action_primitives.html
+Controllers -> ../reference/controllers/index.html
+controller_base -> ../reference/controllers/controller_base.html
+controller_view -> ../reference/controllers/controller_view.html
+dd_controller -> ../reference/controllers/dd_controller.html
+holonomic_base_joint_controller -> ../reference/controllers/holonomic_base_joint_controller.html
+ik_controller -> ../reference/controllers/ik_controller.html
+joint_controller -> ../reference/controllers/joint_controller.html
+multi_finger_gripper_controller -> ../reference/controllers/multi_finger_gripper_controller.html
+null_joint_controller -> ../reference/controllers/null_joint_controller.html
+osc_controller -> ../reference/controllers/osc_controller.html
+Envs -> ../reference/envs/index.html
+data_wrapper -> ../reference/envs/data_wrapper.html
+env_base -> ../reference/envs/env_base.html
+env_wrapper -> ../reference/envs/env_wrapper.html
+hdf5_data_wrapper -> ../reference/envs/hdf5_data_wrapper.html
+lerobot_data_wrapper -> ../reference/envs/lerobot_data_wrapper.html
+metrics_wrapper -> ../reference/envs/metrics_wrapper.html
+sb3_vec_env -> ../reference/envs/sb3_vec_env.html
+vec_env_base -> ../reference/envs/vec_env_base.html
+Eval -> ../reference/eval/index.html
+eval -> ../reference/eval/eval.html
+evaluator -> ../reference/eval/evaluator.html
+policies -> ../reference/eval/policies.html
+Utils -> ../reference/eval/utils/index.html
+dataset_utils -> ../reference/eval/utils/dataset_utils.html
+eval_utils -> ../reference/eval/utils/eval_utils.html
+light_utils -> ../reference/eval/utils/light_utils.html
+network_utils -> ../reference/eval/utils/network_utils.html
+obs_utils -> ../reference/eval/utils/obs_utils.html
+score_utils -> ../reference/eval/utils/score_utils.html
+Wrappers -> ../reference/eval/wrappers/index.html
+default_wrapper -> ../reference/eval/wrappers/default_wrapper.html
+rgbd_full_res_wrapper -> ../reference/eval/wrappers/rgbd_full_res_wrapper.html
+Examples -> ../reference/examples/index.html
+Environments -> ../reference/examples/environments/index.html
+behavior_env_demo -> ../reference/examples/environments/behavior_env_demo.html
+navigation_env_demo -> ../reference/examples/environments/navigation_env_demo.html
+vector_env_demo -> ../reference/examples/environments/vector_env_demo.html
+Learning -> ../reference/examples/learning/index.html
+navigation_policy_demo -> ../reference/examples/learning/navigation_policy_demo.html
+Object states -> ../reference/examples/object_states/index.html
+attachment_demo -> ../reference/examples/object_states/attachment_demo.html
+dicing_demo -> ../reference/examples/object_states/dicing_demo.html
+heated_state_demo -> ../reference/examples/object_states/heated_state_demo.html
+object_state_texture_demo -> ../reference/examples/object_states/object_state_texture_demo.html
+onfire_demo -> ../reference/examples/object_states/onfire_demo.html
+overlaid_demo -> ../reference/examples/object_states/overlaid_demo.html
+particle_applier_remover_demo -> ../reference/examples/object_states/particle_applier_remover_demo.html
+sample_kinematics_demo -> ../reference/examples/object_states/sample_kinematics_demo.html
+slicing_demo -> ../reference/examples/object_states/slicing_demo.html
+temperature_demo -> ../reference/examples/object_states/temperature_demo.html
+Objects -> ../reference/examples/objects/index.html
+draw_bounding_box -> ../reference/examples/objects/draw_bounding_box.html
+highlight_objects -> ../reference/examples/objects/highlight_objects.html
+import_custom_object -> ../reference/examples/objects/import_custom_object.html
+load_object_selector -> ../reference/examples/objects/load_object_selector.html
+visualize_object -> ../reference/examples/objects/visualize_object.html
+Robots -> ../reference/examples/robots/index.html
+all_robots_visualizer -> ../reference/examples/robots/all_robots_visualizer.html
+grasping_mode_example -> ../reference/examples/robots/grasping_mode_example.html
+import_custom_robot -> ../reference/examples/robots/import_custom_robot.html
+robot_control_example -> ../reference/examples/robots/robot_control_example.html
+Scenes -> ../reference/examples/scenes/index.html
+scene_selector -> ../reference/examples/scenes/scene_selector.html
+scene_tour_demo -> ../reference/examples/scenes/scene_tour_demo.html
+traversability_map_example -> ../reference/examples/scenes/traversability_map_example.html
+Simulator -> ../reference/examples/simulator/index.html
+sim_save_load_example -> ../reference/examples/simulator/sim_save_load_example.html
+Teleoperation -> ../reference/examples/teleoperation/index.html
+robot_teleoperate_demo -> ../reference/examples/teleoperation/robot_teleoperate_demo.html
+vr_robot_control_demo -> ../reference/examples/teleoperation/vr_robot_control_demo.html
+vr_scene_tour_demo -> ../reference/examples/teleoperation/vr_scene_tour_demo.html
+Wip -> ../reference/examples/wip/index.html
+curobo_example -> ../reference/examples/wip/curobo_example.html
+folded_unfolded_state_demo -> ../reference/examples/wip/folded_unfolded_state_demo.html
+heat_source_or_sink_demo -> ../reference/examples/wip/heat_source_or_sink_demo.html
+particle_source_sink_demo -> ../reference/examples/wip/particle_source_sink_demo.html
+rs_int_primitives_example -> ../reference/examples/wip/rs_int_primitives_example.html
+solve_behavior_task -> ../reference/examples/wip/solve_behavior_task.html
+solve_simple_task -> ../reference/examples/wip/solve_simple_task.html
+view_cloth_configurations -> ../reference/examples/wip/view_cloth_configurations.html
+Maps -> ../reference/maps/index.html
+map_base -> ../reference/maps/map_base.html
+segmentation_map -> ../reference/maps/segmentation_map.html
+traversable_map -> ../reference/maps/traversable_map.html
+Metrics -> ../reference/metrics/index.html
+agent_metric -> ../reference/metrics/agent_metric.html
+metric_base -> ../reference/metrics/metric_base.html
+task_metric -> ../reference/metrics/task_metric.html
+Object states -> ../reference/object_states/index.html
+aabb -> ../reference/object_states/aabb.html
+adjacency -> ../reference/object_states/adjacency.html
+attached_to -> ../reference/object_states/attached_to.html
+burnt -> ../reference/object_states/burnt.html
+cloth_mixin -> ../reference/object_states/cloth_mixin.html
+contact_particles -> ../reference/object_states/contact_particles.html
+contact_subscribed_state_mixin -> ../reference/object_states/contact_subscribed_state_mixin.html
+contains -> ../reference/object_states/contains.html
+cooked -> ../reference/object_states/cooked.html
+covered -> ../reference/object_states/covered.html
+draped -> ../reference/object_states/draped.html
+factory -> ../reference/object_states/factory.html
+filled -> ../reference/object_states/filled.html
+folded -> ../reference/object_states/folded.html
+frozen -> ../reference/object_states/frozen.html
+heat_source_or_sink -> ../reference/object_states/heat_source_or_sink.html
+heated -> ../reference/object_states/heated.html
+inside -> ../reference/object_states/inside.html
+joint_break_subscribed_state_mixin -> ../reference/object_states/joint_break_subscribed_state_mixin.html
+joint_state -> ../reference/object_states/joint_state.html
+kinematics_mixin -> ../reference/object_states/kinematics_mixin.html
+link_based_state_mixin -> ../reference/object_states/link_based_state_mixin.html
+max_temperature -> ../reference/object_states/max_temperature.html
+next_to -> ../reference/object_states/next_to.html
+object_state_base -> ../reference/object_states/object_state_base.html
+on_fire -> ../reference/object_states/on_fire.html
+on_top -> ../reference/object_states/on_top.html
+open_state -> ../reference/object_states/open_state.html
+overlaid -> ../reference/object_states/overlaid.html
+particle -> ../reference/object_states/particle.html
+particle_modifier -> ../reference/object_states/particle_modifier.html
+particle_source_or_sink -> ../reference/object_states/particle_source_or_sink.html
+pose -> ../reference/object_states/pose.html
+robot_related_states -> ../reference/object_states/robot_related_states.html
+saturated -> ../reference/object_states/saturated.html
+sliceable -> ../reference/object_states/sliceable.html
+slicer_active -> ../reference/object_states/slicer_active.html
+temperature -> ../reference/object_states/temperature.html
+tensorized_value_state -> ../reference/object_states/tensorized_value_state.html
+toggle -> ../reference/object_states/toggle.html
+touching -> ../reference/object_states/touching.html
+under -> ../reference/object_states/under.html
+update_state_mixin -> ../reference/object_states/update_state_mixin.html
+Objects -> ../reference/objects/index.html
+dataset_object -> ../reference/objects/dataset_object.html
+light_object -> ../reference/objects/light_object.html
+primitive_object -> ../reference/objects/primitive_object.html
+usd_object -> ../reference/objects/usd_object.html
+Prims -> ../reference/prims/index.html
+cloth_prim -> ../reference/prims/cloth_prim.html
+entity_prim -> ../reference/prims/entity_prim.html
+geom_prim -> ../reference/prims/geom_prim.html
+joint_prim -> ../reference/prims/joint_prim.html
+material_prim -> ../reference/prims/material_prim.html
+prim_base -> ../reference/prims/prim_base.html
+rigid_dynamic_prim -> ../reference/prims/rigid_dynamic_prim.html
+rigid_kinematic_prim -> ../reference/prims/rigid_kinematic_prim.html
+rigid_prim -> ../reference/prims/rigid_prim.html
+xform_prim -> ../reference/prims/xform_prim.html
+Reward functions -> ../reference/reward_functions/index.html
+collision_reward -> ../reference/reward_functions/collision_reward.html
+grasp_reward -> ../reference/reward_functions/grasp_reward.html
+point_goal_reward -> ../reference/reward_functions/point_goal_reward.html
+potential_reward -> ../reference/reward_functions/potential_reward.html
+reaching_goal_reward -> ../reference/reward_functions/reaching_goal_reward.html
+reward_function_base -> ../reference/reward_functions/reward_function_base.html
+Robots -> ../reference/robots/index.html
+definition_schema -> ../reference/robots/definition_schema.html
+robot -> ../reference/robots/robot.html
+Scene graphs -> ../reference/scene_graphs/index.html
+graph_builder -> ../reference/scene_graphs/graph_builder.html
+Scenes -> ../reference/scenes/index.html
+interactive_traversable_scene -> ../reference/scenes/interactive_traversable_scene.html
+scene_base -> ../reference/scenes/scene_base.html
+static_traversable_scene -> ../reference/scenes/static_traversable_scene.html
+traversable_scene -> ../reference/scenes/traversable_scene.html
+Sensors -> ../reference/sensors/index.html
+dropout_sensor_noise -> ../reference/sensors/dropout_sensor_noise.html
+scan_sensor -> ../reference/sensors/scan_sensor.html
+sensor_base -> ../reference/sensors/sensor_base.html
+sensor_noise_base -> ../reference/sensors/sensor_noise_base.html
+vision_sensor -> ../reference/sensors/vision_sensor.html
+Systems -> ../reference/systems/index.html
+macro_particle_system -> ../reference/systems/macro_particle_system.html
+micro_particle_system -> ../reference/systems/micro_particle_system.html
+system_base -> ../reference/systems/system_base.html
+Tasks -> ../reference/tasks/index.html
+behavior_task -> ../reference/tasks/behavior_task.html
+dummy_task -> ../reference/tasks/dummy_task.html
+grasp_task -> ../reference/tasks/grasp_task.html
+point_navigation_task -> ../reference/tasks/point_navigation_task.html
+point_reaching_task -> ../reference/tasks/point_reaching_task.html
+task_base -> ../reference/tasks/task_base.html
+Termination conditions -> ../reference/termination_conditions/index.html
+falling -> ../reference/termination_conditions/falling.html
+grasp_goal -> ../reference/termination_conditions/grasp_goal.html
+max_collision -> ../reference/termination_conditions/max_collision.html
+point_goal -> ../reference/termination_conditions/point_goal.html
+predicate_goal -> ../reference/termination_conditions/predicate_goal.html
+reaching_goal -> ../reference/termination_conditions/reaching_goal.html
+termination_condition_base -> ../reference/termination_conditions/termination_condition_base.html
+timeout -> ../reference/termination_conditions/timeout.html
+Utils -> ../reference/utils/index.html
+asset_conversion_utils -> ../reference/utils/asset_conversion_utils.html
+asset_utils -> ../reference/utils/asset_utils.html
+backend_utils -> ../reference/utils/backend_utils.html
+bddl_utils -> ../reference/utils/bddl_utils.html
+coacd_runner -> ../reference/utils/coacd_runner.html
+config_utils -> ../reference/utils/config_utils.html
+constants -> ../reference/utils/constants.html
+control_utils -> ../reference/utils/control_utils.html
+data_utils -> ../reference/utils/data_utils.html
+deprecated_utils -> ../reference/utils/deprecated_utils.html
+geometry_utils -> ../reference/utils/geometry_utils.html
+git_utils -> ../reference/utils/git_utils.html
+grasping_planning_utils -> ../reference/utils/grasping_planning_utils.html
+gym_utils -> ../reference/utils/gym_utils.html
+lazy_import_utils -> ../reference/utils/lazy_import_utils.html
+motion_planning_utils -> ../reference/utils/motion_planning_utils.html
+numpy_utils -> ../reference/utils/numpy_utils.html
+object_state_utils -> ../reference/utils/object_state_utils.html
+object_utils -> ../reference/utils/object_utils.html
+physx_utils -> ../reference/utils/physx_utils.html
+processing_utils -> ../reference/utils/processing_utils.html
+profiling_utils -> ../reference/utils/profiling_utils.html
+pynvml_utils -> ../reference/utils/pynvml_utils.html
+python_utils -> ../reference/utils/python_utils.html
+registry_utils -> ../reference/utils/registry_utils.html
+render_utils -> ../reference/utils/render_utils.html
+sampling_utils -> ../reference/utils/sampling_utils.html
+sim_utils -> ../reference/utils/sim_utils.html
+teleop_utils -> ../reference/utils/teleop_utils.html
+transform_utils -> ../reference/utils/transform_utils.html
+transform_utils_np -> ../reference/utils/transform_utils_np.html
+ui_utils -> ../reference/utils/ui_utils.html
+urdf_preprocessing -> ../reference/utils/urdf_preprocessing.html
+urdfpy_utils -> ../reference/utils/urdfpy_utils.html
+usd_utils -> ../reference/utils/usd_utils.html
+vision_utils -> ../reference/utils/vision_utils.html
+Changelog -> https://github.com/StanfordVL/OmniGibson/releases
+VR Dataset -> ../behavior_100/dataset.html
+Demo Gallery -> ../behavior_100/demo_gallery.html
+Submission Portal -> https://behavior-1k-2026-challenge-leaderboard.hf.space/submit
+Submission Guidelines -> ./submission.html
+Evaluation & Rules -> ./evaluation.html
+Simovation -> https://www.linkedin.com/company/simovationinc/
+Discord community -> https://discord.gg/bccR5vGFEx
+Zoom -> https://stanford.zoom.us/j/98056621630?pwd=G3JqHl6lWB0qnMAV3BZMJaWgoiXeqT.1
+dataset documentation -> dataset.html
+π0.5 and GR00T N1.7 baseline pipelines -> baselines.html
+submission guidelines -> submission.html

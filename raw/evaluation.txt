@@ -1,0 +1,175 @@
+[img logo] ../assets/behavior_logo3.png
+
+StanfordVL/BEHAVIOR-1K Home 🏆 2026 BEHAVIOR Challenge 🏆 2026 BEHAVIOR Challenge Announcements / Updates Leaderboard Dataset Baselines Evaluation and Rules Evaluation and Rules Table of contents Challenge Track Running Evaluations Custom Robot Configuration Metrics and Results Prizes Evaluation Protocol and Logistics Performance Benchmarks System Spec Evaluation Frame Rate with Random Actions Submission Guidelines Demo Gallery Documentation Documentation Installation Quickstart Important Concepts Examples OmniGibson OmniGibson Overview Prims Objects Object States Robots Controllers Sensors Systems Scenes Transition Rules Simulator Tasks Environments Vector Environments Setting Macros Under the Hood - Isaac Sim Tutorials Tutorials Demo Collection Running on a Compute Cluster Remote Streaming Saving and Loading Simulation State Customizing Robots Custom Robot Import Components Components BDDL BDDL Task Definitions Noun Hierarchy Knowledgebase 3D Assets 3D Assets Scenes Objects Annotation process Asset pipeline Asset sources Teleoperation Teleoperation JoyLo VR Task Sampling Data Collection Other Other Speed Optimization Roadmap FAQ Known Issues & Troubleshooting Contributing API Reference API Reference lazy macros simulator transition_rules Action primitives Action primitives curobo starter_semantic_action_primitives symbolic_semantic_action_primitives Controllers Controllers controller_base controller_view dd_controller holonomic_base_joint_controller ik_controller joint_controller multi_finger_gripper_controller null_joint_controller osc_controller Envs Envs data_wrapper env_base env_wrapper hdf5_data_wrapper lerobot_data_wrapper metrics_wrapper sb3_vec_env vec_env_base Eval Eval eval evaluator policies Utils Utils dataset_utils eval_utils light_utils network_utils obs_utils score_utils Wrappers Wrappers default_wrapper rgbd_full_res_wrapper Examples Examples Environments Environments behavior_env_demo navigation_env_demo vector_env_demo Learning Learning navigation_policy_demo Object states Object states attachment_demo dicing_demo heated_state_demo object_state_texture_demo onfire_demo overlaid_demo particle_applier_remover_demo sample_kinematics_demo slicing_demo temperature_demo Objects Objects draw_bounding_box highlight_objects import_custom_object load_object_selector visualize_object Robots Robots all_robots_visualizer grasping_mode_example import_custom_robot robot_control_example Scenes Scenes scene_selector scene_tour_demo traversability_map_example Simulator Simulator sim_save_load_example Teleoperation Teleoperation robot_teleoperate_demo vr_robot_control_demo vr_scene_tour_demo Wip Wip curobo_example folded_unfolded_state_demo heat_source_or_sink_demo particle_source_sink_demo rs_int_primitives_example solve_behavior_task solve_simple_task view_cloth_configurations Maps Maps map_base segmentation_map traversable_map Metrics Metrics agent_metric metric_base task_metric Object states Object states aabb adjacency attached_to burnt cloth_mixin contact_particles contact_subscribed_state_mixin contains cooked covered draped factory filled folded frozen heat_source_or_sink heated inside joint_break_subscribed_state_mixin joint_state kinematics_mixin link_based_state_mixin max_temperature next_to object_state_base on_fire on_top open_state overlaid particle particle_modifier particle_source_or_sink pose robot_related_states saturated sliceable slicer_active temperature tensorized_value_state toggle touching under update_state_mixin Objects Objects dataset_object light_object primitive_object usd_object Prims Prims cloth_prim entity_prim geom_prim joint_prim material_prim prim_base rigid_dynamic_prim rigid_kinematic_prim rigid_prim xform_prim Reward functions Reward functions collision_reward grasp_reward point_goal_reward potential_reward reaching_goal_reward reward_function_base Robots Robots definition_schema robot Scene graphs Scene graphs graph_builder Scenes Scenes interactive_traversable_scene scene_base static_traversable_scene traversable_scene Sensors Sensors dropout_sensor_noise scan_sensor sensor_base sensor_noise_base vision_sensor Systems Systems macro_particle_system micro_particle_system system_base Tasks Tasks behavior_task dummy_task grasp_task point_navigation_task point_reaching_task task_base Termination conditions Termination conditions falling grasp_goal max_collision point_goal predicate_goal reaching_goal termination_condition_base timeout Utils Utils asset_conversion_utils asset_utils backend_utils bddl_utils coacd_runner config_utils constants control_utils data_utils deprecated_utils geometry_utils git_utils grasping_planning_utils gym_utils lazy_import_utils motion_planning_utils numpy_utils object_state_utils object_utils physx_utils processing_utils profiling_utils pynvml_utils python_utils registry_utils render_utils sampling_utils sim_utils teleop_utils transform_utils transform_utils_np ui_utils urdf_preprocessing urdfpy_utils usd_utils vision_utils Changelog Knowledgebase Research Past Events BEHAVIOR-100 BEHAVIOR-100 VR Dataset Demo Gallery Support Evaluation and Rules Challenge Track For the 2026 BEHAVIOR Challenge, there is a single evaluation track:
+
+You are allowed to use privileged information during training (e.g. other observation modalities, task info, etc.), so long as you are not using it during challenge-track evaluation. BDDL task definitions can be used and are identical during evaluation. You may also collect additional data yourself via teleoperation, RL, scripted policies, or other approaches.
+
+There are no restrictions on the type of policy used. Methods such as IL, RL, or TAMP are all allowed. Additional components like SLAM or LLM-based querying are also permitted, provided the policy follows the challenge-track observation restrictions during evaluation. If a submission depends on external model-query APIs, participants must provide the credentials, quota, and serving configuration needed for evaluation; the organizers will not cover external API usage costs.
+
+## Running Evaluations
+
+Use the v3.9.2 tag
+
+Run challenge evaluation from the v3.9.2 tag of BEHAVIOR-1K , not the older v3.9.0 tag. The challenge evaluator and dataset interfaces in v3.9.2 include the latest compatibility fixes that the organizers will use for evaluation.
+
+We provide OmniGibson/omnigibson/eval/eval.py as the command-line entry point for running websocket-based evaluations. Start your policy server first, then run the evaluator from the repository root:
+
+python -m omnigibson.eval.eval \ --task-name turning_on_radio \ --host 127 .0.0.1 \ --port 8000 \ --instance-indices 0 \ --num-rollouts 1 \ --output-dir outputs/b1k_eval \ --write-video The evaluator connects to the policy server at --host and --port ; the policy server is responsible for receiving observations and returning robot actions. The websocket interface is implemented by the evaluation utilities adapted from openpi , and baseline servers such as OpenPI or GR00T can expose compatible endpoints.
+
+Key arguments:
+
+--task-name
+
+turning_on_radio
+
+--host
+
+--port
+
+8000
+
+/healthz
+
+--instance-indices
+
+0 1 2 3 4 5 6 7 8 9
+
+0-19
+
+20-39
+
+--num-rollouts
+
+--max-steps
+
+1.5x
+
+--env-wrapper
+
+omnigibson.eval.wrappers.DefaultWrapper
+
+omnigibson.eval.wrappers.RGBDFullResWrapper
+
+--output-dir
+
+<output-dir>/json/
+
+--write-video
+
+<output-dir>/videos/
+
+--video-fps
+
+--headless
+
+--no-headless
+
+The evaluator sends flattened observations to the policy server. The server should return a msgpack-encoded response containing an action array with the robot action for the current step. The helper server implementation is WebsocketPolicyServer in OmniGibson/omnigibson/eval/utils/network_utils.py , and the evaluator-side client is omnigibson.eval.policies.WebsocketPolicy .
+
+Each successful rollout produces a JSON result containing q_score , time , agent_distance , and normalized efficiency metrics. For challenge submissions, run evaluation with --write-video ; this records the head and wrist camera videos that must be submitted with the rollout metrics.
+
+Example wrappers live under omnigibson.eval.wrappers :
+
+### DefaultWrapper
+
+Low-resolution RGB observations at 224 x 224 , plus proprioception. This is useful for faster debugging but does not include depth.
+
+### RGBDFullResWrapper
+
+Official RGB + depth challenge observations, with a 720 x 720 head camera and 480 x 480 wrist cameras.
+
+You are welcome to use the provided wrappers or implement a custom wrapper for your own policy. Submitted evaluation wrappers must expose only RGB, depth, and proprioception to the policy. Include the wrapper code in your submission; the organizers will manually inspect it to ensure the challenge-track observation restrictions are followed and that the environment is not manipulated directly, e.g. by teleporting the robot or changing object states.
+
+## Custom Robot Configuration
+
+By default, the evaluator loads the bundled R1Pro robot config at OmniGibson/omnigibson/eval/r1pro.yaml . The 2026 challenge does not restrict participants to a fixed robot embodiment: you may instead pass a custom OmniGibson robot configuration file with --robot-config , as long as the robot and controllers are supported by OmniGibson and the policy still follows the challenge-track observation restrictions.
+
+python -m omnigibson.eval.eval \ --task-name turning_on_radio \ --robot-config path/to/my_robot.yaml \ --host 127 .0.0.1 \ --port 8000 The config file should contain one complete robot dictionary using canonical OmniGibson fields. In particular:
+
+model
+
+r1pro
+
+model
+
+type
+
+name
+
+robot_r1
+
+controller_config
+
+robot.action_dim
+
+obs_modalities
+
+proprio_obs
+
+sensor_config
+
+action_normalize
+
+grasping_mode
+
+position
+
+orientation
+
+If your robot is not already available in OmniGibson, see the custom robot import tutorial for how to import a new robot model into BEHAVIOR / OmniGibson before referencing it from a custom robot config.
+
+Minimal structure:
+
+model : r1pro name : robot_r1 eval : camera_sensor_names : left_wrist : robot_r1:left_realsense_link:Camera:0 right_wrist : robot_r1:right_realsense_link:Camera:0 head : robot_r1:zed_link:Camera:0 obs_modalities : - proprio - rgb controller_config : base : name : HolonomicBaseJointController motor_type : velocity arm_left : name : JointController motor_type : position arm_right : name : JointController motor_type : position The optional eval.camera_sensor_names block maps evaluation camera roles to robot sensor names. It is used by the provided wrappers and video writer to identify the head and wrist cameras. --write-video requires the head , left_wrist , and right_wrist roles. The official RGBDFullResWrapper uses these roles to set the head camera to 720 x 720 and wrist cameras to 480 x 480 ; all other vision sensors are treated as wrist-resolution sensors.
+
+For controller syntax and supported controller types, see the OmniGibson controller documentation . For the recommended R1Pro baseline config, start from the bundled OmniGibson/omnigibson/eval/r1pro.yaml and modify controller_config or other robot fields as needed.
+
+## Metrics and Results
+
+We will calculate the following metric during policy rollout:
+
+### Primary Metric (Ranking)
+
+Task success score: Averaged across 100 tasks.
+
+Calculation: Partial successes = (Number of goal BDDL predicates satisfied at episode end) / (Total number of goal predicates).
+
+### Secondary Metrics (Efficiency)
+
+Simulated time: Total simulation time (hardware-independent).
+
+Distance navigated: Accumulated distance traveled by the agent’s base body. This metric evaluates the efficiency of the agent in navigating the environment.
+
+Displacement of end effectors/hands: Accumulated displacement of the agent’s end effectors/hands. This metric evaluates the efficiency of the agent in its interaction with the environment.
+
+Secondary metrics will be normalized using human averages from 200 demonstrations per task.
+
+The success score ( Q ) is the metric used for ranking submissions. If two submissions achieve the same score, secondary metrics will be used to break ties.
+
+## Prizes
+
+The 2026 BEHAVIOR Challenge has an $11,000 prize pool:
+
+## Evaluation Protocol and Logistics
+
+Evaluation protocol:
+
+0-9
+
+--instance-indices 0 1 2 3 4 5 6 7 8 9
+
+1.5x
+
+10-19
+
+## Performance Benchmarks
+
+### System Spec
+
+The following benchmarks were measured on:
+
+Scene Load Time: Approximately 150-300 seconds (one-time cost per trial, varies by scene complexity)
+
+### Evaluation Frame Rate with Random Actions
+
+The following table records the approximate frames per second (FPS) performance when running evaluation with random actions across different settings:

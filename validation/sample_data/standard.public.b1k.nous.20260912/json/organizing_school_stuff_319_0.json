@@ -1,0 +1,1 @@
+{"task": "organizing_school_stuff", "instance_id": 319, "rollout_id": 0, "steps": 16221, "success": false, "agent_distance": {"base": 0.717, "left": 1.656, "right": 0.36}, "normalized_agent_distance": {"base": 0.2569, "left": 0.9801, "right": 0.7905}, "q_score": {"final": 0.5}, "time": {"simulator_steps": 16221, "simulator_time": 540.7, "normalized_time": 1.8023}}

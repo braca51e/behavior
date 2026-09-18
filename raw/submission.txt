@@ -1,0 +1,59 @@
+[img logo] ../assets/behavior_logo3.png
+
+StanfordVL/BEHAVIOR-1K Home 🏆 2026 BEHAVIOR Challenge 🏆 2026 BEHAVIOR Challenge Announcements / Updates Leaderboard Dataset Baselines Evaluation and Rules Submission Guidelines Submission Guidelines Table of contents Submission Overview Evaluation Outputs Robot and Wrapper Configuration Final Model Evaluation Final Submission Package Demo Gallery Documentation Documentation Installation Quickstart Important Concepts Examples OmniGibson OmniGibson Overview Prims Objects Object States Robots Controllers Sensors Systems Scenes Transition Rules Simulator Tasks Environments Vector Environments Setting Macros Under the Hood - Isaac Sim Tutorials Tutorials Demo Collection Running on a Compute Cluster Remote Streaming Saving and Loading Simulation State Customizing Robots Custom Robot Import Components Components BDDL BDDL Task Definitions Noun Hierarchy Knowledgebase 3D Assets 3D Assets Scenes Objects Annotation process Asset pipeline Asset sources Teleoperation Teleoperation JoyLo VR Task Sampling Data Collection Other Other Speed Optimization Roadmap FAQ Known Issues & Troubleshooting Contributing API Reference API Reference lazy macros simulator transition_rules Action primitives Action primitives curobo starter_semantic_action_primitives symbolic_semantic_action_primitives Controllers Controllers controller_base controller_view dd_controller holonomic_base_joint_controller ik_controller joint_controller multi_finger_gripper_controller null_joint_controller osc_controller Envs Envs data_wrapper env_base env_wrapper hdf5_data_wrapper lerobot_data_wrapper metrics_wrapper sb3_vec_env vec_env_base Eval Eval eval evaluator policies Utils Utils dataset_utils eval_utils light_utils network_utils obs_utils score_utils Wrappers Wrappers default_wrapper rgbd_full_res_wrapper Examples Examples Environments Environments behavior_env_demo navigation_env_demo vector_env_demo Learning Learning navigation_policy_demo Object states Object states attachment_demo dicing_demo heated_state_demo object_state_texture_demo onfire_demo overlaid_demo particle_applier_remover_demo sample_kinematics_demo slicing_demo temperature_demo Objects Objects draw_bounding_box highlight_objects import_custom_object load_object_selector visualize_object Robots Robots all_robots_visualizer grasping_mode_example import_custom_robot robot_control_example Scenes Scenes scene_selector scene_tour_demo traversability_map_example Simulator Simulator sim_save_load_example Teleoperation Teleoperation robot_teleoperate_demo vr_robot_control_demo vr_scene_tour_demo Wip Wip curobo_example folded_unfolded_state_demo heat_source_or_sink_demo particle_source_sink_demo rs_int_primitives_example solve_behavior_task solve_simple_task view_cloth_configurations Maps Maps map_base segmentation_map traversable_map Metrics Metrics agent_metric metric_base task_metric Object states Object states aabb adjacency attached_to burnt cloth_mixin contact_particles contact_subscribed_state_mixin contains cooked covered draped factory filled folded frozen heat_source_or_sink heated inside joint_break_subscribed_state_mixin joint_state kinematics_mixin link_based_state_mixin max_temperature next_to object_state_base on_fire on_top open_state overlaid particle particle_modifier particle_source_or_sink pose robot_related_states saturated sliceable slicer_active temperature tensorized_value_state toggle touching under update_state_mixin Objects Objects dataset_object light_object primitive_object usd_object Prims Prims cloth_prim entity_prim geom_prim joint_prim material_prim prim_base rigid_dynamic_prim rigid_kinematic_prim rigid_prim xform_prim Reward functions Reward functions collision_reward grasp_reward point_goal_reward potential_reward reaching_goal_reward reward_function_base Robots Robots definition_schema robot Scene graphs Scene graphs graph_builder Scenes Scenes interactive_traversable_scene scene_base static_traversable_scene traversable_scene Sensors Sensors dropout_sensor_noise scan_sensor sensor_base sensor_noise_base vision_sensor Systems Systems macro_particle_system micro_particle_system system_base Tasks Tasks behavior_task dummy_task grasp_task point_navigation_task point_reaching_task task_base Termination conditions Termination conditions falling grasp_goal max_collision point_goal predicate_goal reaching_goal termination_condition_base timeout Utils Utils asset_conversion_utils asset_utils backend_utils bddl_utils coacd_runner config_utils constants control_utils data_utils deprecated_utils geometry_utils git_utils grasping_planning_utils gym_utils lazy_import_utils motion_planning_utils numpy_utils object_state_utils object_utils physx_utils processing_utils profiling_utils pynvml_utils python_utils registry_utils render_utils sampling_utils sim_utils teleop_utils transform_utils transform_utils_np ui_utils urdf_preprocessing urdfpy_utils usd_utils vision_utils Changelog Knowledgebase Research Past Events BEHAVIOR-100 BEHAVIOR-100 VR Dataset Demo Gallery Support Submission Guidelines Open Submission Portal Submission Overview No formal registration is required to participate in the challenge. Full evaluation size: 100 tasks x 10 instances x 1 rollout = 1,000 rollout outputs. Partial submissions are allowed. Missing rollout instances count as zero in the final score. Multiple checkpoints from the same team and model family are considered one entry. No cherry-picking rollout results. Simulation nondeterminism is expected, and different rollouts of the same policy may produce different results for a given instance. Submissions should report the prescribed rollout for each instance rather than selecting the best outcomes across repeated runs, instances, or tasks. Robot configuration must be reproducible. If you use a custom robot config with --robot-config , include the exact YAML/JSON file in your submission package. Evaluation Outputs After running the evaluation script at OmniGibson/omnigibson/eval/eval.py , each rollout produces:
+
+--write-video
+
+See Evaluation and Rules for the evaluation protocol, wrappers, metrics, and command-line options.
+
+## Robot and Wrapper Configuration
+
+Final evaluation must be reproducible from the files you submit. Include the exact evaluation wrapper and robot configuration used to generate your reported results.
+
+If you use the default robot setup, include the bundled omnigibson/eval/r1pro.yaml or clearly state that you used it unchanged.
+
+If you use a custom robot setup, include the complete robot config passed through --robot-config . The file must contain canonical OmniGibson robot fields such as model , name , controller_config , observation settings, sensor settings, and any eval.camera_sensor_names needed by the evaluation wrappers or video writer.
+
+The returned action array from your policy server must match the action space induced by the submitted robot config.
+
+Custom wrappers must still expose only RGB, depth, and proprioception to the policy for challenge-track evaluation.
+
+{ "task" : "turning_on_radio" , "instance_id" : 0 , "rollout_id" : 0 , "steps" : 500 , "success" : false , "agent_distance" : { "base" : 2.0 , "left" : 1.5 , "right" : 1.2 }, "normalized_agent_distance" : { "base" : 1.5 , "left" : 1.2 , "right" : 1.1 }, "q_score" : { "final" : 0.4 }, "time" : { "simulator_steps" : 500 , "simulator_time" : 16.6666666667 , "normalized_time" : 1.6 } } Do not edit evaluation outputs
+
+Do not modify the output JSON files or rollout videos in any way.
+
+## Final Model Evaluation
+
+There are two supported ways to submit your model for final evaluation.
+
+### Docker-based evaluation
+
+Recommended. Submit a Docker image that serves your policy. We run OmniGibson outside the container and connect to your policy through the WebSocket policy client.
+
+The submitted model should run on a single 24GB VRAM GPU. Final evaluation will use GPUs such as RTX 3090, A5000, and TitanRTX.
+
+### IP address-based evaluation
+
+Serve your policy yourself and provide an IP address that allows us to query it for evaluation. We only accept IP address-based submissions that expose at least 50 ports for parallel evaluation.
+
+Common serving options include TorchServe, LitServe, vLLM, NVIDIA Triton, or an equivalent model-serving stack.
+
+Submission confidentiality and open source
+
+Submitted solutions will remain confidential unless participants explicitly grant permission for disclosure. We strongly encourage open-source submissions, as they help advance reproducible research and accelerate progress in embodied AI.
+
+## Final Submission Package
+
+Your final zip file should contain:
+
+.py
+
+.yaml
+
+.json
+
+controller_config
+
+eval.camera_sensor_names
+
+In addition, submit a link through the submission portal to all rollout MP4 videos, one for each rollout performed, up to 1,000 videos.

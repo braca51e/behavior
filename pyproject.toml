@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "b1k"
+version = "0.1.0"
+description = "2026 BEHAVIOR Challenge solution: hierarchical System2/System1 embodied agent on R1Pro (serving side)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "msgpack>=1.0",
+    "websockets>=12",
+    "PyYAML>=6",
+]
+
+[project.optional-dependencies]
+# Training/eval-only extras (never required at serve time on the 24 GB box).
+train = ["pandas>=1.5", "pyarrow", "torch>=2.0", "huggingface_hub", "scipy"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+# Convenience: `b1k-server` == the documented entrypoint.
+b1k-server = "b1k.server:main"
+
+# ---------------------------------------------------------------------------
+# setuptools src-layout discovery: the package lives under src/.
+# ---------------------------------------------------------------------------
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["b1k*"]
+namespaces = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"

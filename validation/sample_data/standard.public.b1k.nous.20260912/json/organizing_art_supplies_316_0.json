@@ -1,0 +1,1 @@
+{"task": "organizing_art_supplies", "instance_id": 316, "rollout_id": 0, "steps": 6599, "success": false, "agent_distance": {"base": 2.309, "left": 0.437, "right": 1.936}, "normalized_agent_distance": {"base": 1.2714, "left": 1.0404, "right": 0.9232}, "q_score": {"final": 0.5}, "time": {"simulator_steps": 6599, "simulator_time": 219.967, "normalized_time": 0.7332}}

@@ -1,0 +1,1 @@
+{"task": "laying_tile_floors", "instance_id": 316, "rollout_id": 0, "steps": 5760, "success": false, "agent_distance": {"base": 0.471, "left": 0.854, "right": 1.702}, "normalized_agent_distance": {"base": 0.3239, "left": 0.6223, "right": 0.5053}, "q_score": {"final": 0.25}, "time": {"simulator_steps": 5760, "simulator_time": 192.0, "normalized_time": 0.64}}

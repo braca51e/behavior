@@ -1,0 +1,1 @@
+{"task": "turning_out_all_lights_before_sleep", "instance_id": 307, "rollout_id": 0, "steps": 14757, "success": false, "agent_distance": {"base": 2.31, "left": 1.259, "right": 1.959}, "normalized_agent_distance": {"base": 0.2698, "left": 0.5868, "right": 0.8384}, "q_score": {"final": 0.75}, "time": {"simulator_steps": 14757, "simulator_time": 491.9, "normalized_time": 1.6396}}

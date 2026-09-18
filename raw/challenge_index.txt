@@ -1,0 +1,483 @@
+🏆 2026 BEHAVIOR Challenge - BEHAVIOR
+Skip to content
+BEHAVIOR
+🏆 2026 BEHAVIOR Challenge
+Initializing search
+StanfordVL/BEHAVIOR-1K
+Home
+🏆 2026 BEHAVIOR Challenge
+Documentation
+Knowledgebase
+Research
+Past Events
+BEHAVIOR-100
+Support
+BEHAVIOR
+StanfordVL/BEHAVIOR-1K
+Home
+🏆 2026 BEHAVIOR Challenge
+🏆 2026 BEHAVIOR Challenge
+Announcements / Updates
+Leaderboard
+Dataset
+Baselines
+Evaluation and Rules
+Submission Guidelines
+Demo Gallery
+Documentation
+Documentation
+Installation
+Quickstart
+Important Concepts
+Examples
+OmniGibson
+OmniGibson
+Overview
+Prims
+Objects
+Object States
+Robots
+Controllers
+Sensors
+Systems
+Scenes
+Transition Rules
+Simulator
+Tasks
+Environments
+Vector Environments
+Setting Macros
+Under the Hood - Isaac Sim
+Tutorials
+Tutorials
+Demo Collection
+Running on a Compute Cluster
+Remote Streaming
+Saving and Loading Simulation State
+Customizing Robots
+Custom Robot Import
+Components
+Components
+BDDL
+BDDL
+Task Definitions
+Noun Hierarchy
+Knowledgebase
+3D Assets
+3D Assets
+Scenes
+Objects
+Annotation process
+Asset pipeline
+Asset sources
+Teleoperation
+Teleoperation
+JoyLo
+VR
+Task Sampling
+Data Collection
+Other
+Other
+Speed Optimization
+Roadmap
+FAQ
+Known Issues & Troubleshooting
+Contributing
+API Reference
+API Reference
+lazy
+macros
+simulator
+transition_rules
+Action primitives
+Action primitives
+curobo
+starter_semantic_action_primitives
+symbolic_semantic_action_primitives
+Controllers
+Controllers
+controller_base
+controller_view
+dd_controller
+holonomic_base_joint_controller
+ik_controller
+joint_controller
+multi_finger_gripper_controller
+null_joint_controller
+osc_controller
+Envs
+Envs
+data_wrapper
+env_base
+env_wrapper
+hdf5_data_wrapper
+lerobot_data_wrapper
+metrics_wrapper
+sb3_vec_env
+vec_env_base
+Eval
+Eval
+eval
+evaluator
+policies
+Utils
+Utils
+dataset_utils
+eval_utils
+light_utils
+network_utils
+obs_utils
+score_utils
+Wrappers
+Wrappers
+default_wrapper
+rgbd_full_res_wrapper
+Examples
+Examples
+Environments
+Environments
+behavior_env_demo
+navigation_env_demo
+vector_env_demo
+Learning
+Learning
+navigation_policy_demo
+Object states
+Object states
+attachment_demo
+dicing_demo
+heated_state_demo
+object_state_texture_demo
+onfire_demo
+overlaid_demo
+particle_applier_remover_demo
+sample_kinematics_demo
+slicing_demo
+temperature_demo
+Objects
+Objects
+draw_bounding_box
+highlight_objects
+import_custom_object
+load_object_selector
+visualize_object
+Robots
+Robots
+all_robots_visualizer
+grasping_mode_example
+import_custom_robot
+robot_control_example
+Scenes
+Scenes
+scene_selector
+scene_tour_demo
+traversability_map_example
+Simulator
+Simulator
+sim_save_load_example
+Teleoperation
+Teleoperation
+robot_teleoperate_demo
+vr_robot_control_demo
+vr_scene_tour_demo
+Wip
+Wip
+curobo_example
+folded_unfolded_state_demo
+heat_source_or_sink_demo
+particle_source_sink_demo
+rs_int_primitives_example
+solve_behavior_task
+solve_simple_task
+view_cloth_configurations
+Maps
+Maps
+map_base
+segmentation_map
+traversable_map
+Metrics
+Metrics
+agent_metric
+metric_base
+task_metric
+Object states
+Object states
+aabb
+adjacency
+attached_to
+burnt
+cloth_mixin
+contact_particles
+contact_subscribed_state_mixin
+contains
+cooked
+covered
+draped
+factory
+filled
+folded
+frozen
+heat_source_or_sink
+heated
+inside
+joint_break_subscribed_state_mixin
+joint_state
+kinematics_mixin
+link_based_state_mixin
+max_temperature
+next_to
+object_state_base
+on_fire
+on_top
+open_state
+overlaid
+particle
+particle_modifier
+particle_source_or_sink
+pose
+robot_related_states
+saturated
+sliceable
+slicer_active
+temperature
+tensorized_value_state
+toggle
+touching
+under
+update_state_mixin
+Objects
+Objects
+dataset_object
+light_object
+primitive_object
+usd_object
+Prims
+Prims
+cloth_prim
+entity_prim
+geom_prim
+joint_prim
+material_prim
+prim_base
+rigid_dynamic_prim
+rigid_kinematic_prim
+rigid_prim
+xform_prim
+Reward functions
+Reward functions
+collision_reward
+grasp_reward
+point_goal_reward
+potential_reward
+reaching_goal_reward
+reward_function_base
+Robots
+Robots
+definition_schema
+robot
+Scene graphs
+Scene graphs
+graph_builder
+Scenes
+Scenes
+interactive_traversable_scene
+scene_base
+static_traversable_scene
+traversable_scene
+Sensors
+Sensors
+dropout_sensor_noise
+scan_sensor
+sensor_base
+sensor_noise_base
+vision_sensor
+Systems
+Systems
+macro_particle_system
+micro_particle_system
+system_base
+Tasks
+Tasks
+behavior_task
+dummy_task
+grasp_task
+point_navigation_task
+point_reaching_task
+task_base
+Termination conditions
+Termination conditions
+falling
+grasp_goal
+max_collision
+point_goal
+predicate_goal
+reaching_goal
+termination_condition_base
+timeout
+Utils
+Utils
+asset_conversion_utils
+asset_utils
+backend_utils
+bddl_utils
+coacd_runner
+config_utils
+constants
+control_utils
+data_utils
+deprecated_utils
+geometry_utils
+git_utils
+grasping_planning_utils
+gym_utils
+lazy_import_utils
+motion_planning_utils
+numpy_utils
+object_state_utils
+object_utils
+physx_utils
+processing_utils
+profiling_utils
+pynvml_utils
+python_utils
+registry_utils
+render_utils
+sampling_utils
+sim_utils
+teleop_utils
+transform_utils
+transform_utils_np
+ui_utils
+urdf_preprocessing
+urdfpy_utils
+usd_utils
+vision_utils
+Changelog
+Knowledgebase
+Research
+Past Events
+BEHAVIOR-100
+BEHAVIOR-100
+VR Dataset
+Demo Gallery
+Support
+🏆
+2026 BEHAVIOR Challenge
+Join us for the second year of the BEHAVIOR Challenge: solve
+100 full-length household tasks
+in the realistic BEHAVIOR-1K environment. BEHAVIOR tests whether embodied agents can combine high-level reasoning, long-horizon navigation, and dexterous bimanual manipulation in house-scale scenes.
+Important Dates
+Challenge Launch:
+07/02/2026
+Submission Deadline:
+10/16/2026
+Winners Announcement:
+11/04/2026
+Submission Portal
+Submission Guidelines
+Event Details
+Event:
+To be announced
+Time:
+To be announced
+Location:
+To be announced
+Leaderboard
+Evaluation & Rules
+Prize Pool
+🏆
+Total Prize Pool
+$11,000
+🥇
+1st Place
+$5,000
+🥈
+2nd Place
+$3,000
+🥉
+3rd Place
+$2,000
+🌐
+Outstanding Open Source
+$1,000
+Challenge at a Glance
+Tasks
+100 full-length household tasks
+Environments
+7 scenes, including 4 new scenes
+Evaluation track
+One track using RGB + depth + proprioception
+Demonstrations
+20,000 human teleoperation demos, 1,950 hours in total
+Baselines
+π0.5 (pi0.5) and GR00T N1.7
+Ranking metric
+Average task success score with BDDL partial credit
+Detailed specifications live on the canonical challenge pages:
+Dataset
+,
+Baselines
+,
+Evaluation and Rules
+, and
+Submission Guidelines
+. Browse the full task list in the
+Demo Gallery
+.
+Demonstration Data
+The challenge provides large-scale human teleoperation demonstrations for learning long-horizon household behaviors. The release includes RGB and depth observations, robot proprioception and actions, and skill/subtask annotations; the full dataset format and statistics are documented on the
+Dataset
+page.
+Demonstrations were collected with
+JoyLo
+, a whole-body teleoperation interface for controlling the robot base, torso, arms, and grippers. We thank
+Simovation
+for providing high-quality JoyLo teleoperation data in simulation.
+Why Participate
+BEHAVIOR tasks go beyond short pick-and-place or navigation benchmarks. Agents must search across rooms, manipulate many objects, handle object state changes, and satisfy symbolic BDDL goal conditions after several minutes of autonomous execution.
+The 2026 challenge is intended as a shared benchmark for testing robot foundation models, imitation learning, reinforcement learning, task and motion planning, memory systems, SLAM, and LLM-assisted policies under the same realistic evaluation protocol.
+The tasks also exercise diverse object state changes and low-level skills, including opening, closing, pouring, wiping, spraying, attaching, toggling, cooking, and slicing.
+Getting Started
+Join the
+Discord community
+for announcements and participant discussion.
+Attend office hours every Monday, 5-6pm Pacific Time, over
+Zoom
+.
+Download the dataset and review the
+dataset documentation
+.
+Start from the
+π0.5 and GR00T N1.7 baseline pipelines
+.
+Run evaluation and prepare your submission using the
+submission guidelines
+.
+Whether you're a robotics veteran or just entering the field, we're here to support you.
+BibTeX
+To cite BEHAVIOR-1K, please use:
+@article
+{
+li2024behavior
+,
+title
+=
+{Behavior-1k: A human-centered, embodied ai benchmark with 1,000 everyday activities and realistic simulation}
+,
+author
+=
+{Li, Chengshu and Zhang, Ruohan and Wong, Josiah and Gokmen, Cem and Srivastava, Sanjana and Mart{\'i}n-Mart{\'i}n, Roberto and Wang, Chen and Levine, Gabrael and Ai, Wensi and Martinez, Benjamin and Yin, Hang and Lingelbach, Michael and Hwang, Minjune and Hiranaka, Ayano and Garlanka, Sujay and Aydin, Arman and Lee, Sharon and Sun, Jiankai and Anvari, Mona and Sharma, Manasi and Bansal, Dhruva and Hunter, Samuel and Kim, Kyu-Young and Lou, Alan and Matthews, Caleb R. and Villa-Renteria, Ivan and Tang, Jerry Huayang and Tang, Claire and Xia, Fei and Li, Yunzhu and Savarese, Silvio and Gweon, Hyowon and Liu, C. Karen and Wu, Jiajun and Fei-Fei, Li}
+,
+journal
+=
+{arXiv preprint arXiv:2403.09227}
+,
+year
+=
+{2024}
+}
+Sponsors
+High-quality simulation data provided by Simovation.
+We gratefully acknowledge the support of our sponsors who make this challenge possible:
+Back to top
+© 2026 Stanford Vision and Learning Lab

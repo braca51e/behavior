@@ -1,0 +1,1 @@
+{"task": "setup_a_bar_for_a_cocktail_party", "instance_id": 319, "rollout_id": 0, "steps": 10247, "success": false, "agent_distance": {"base": 1.882, "left": 0.698, "right": 2.109}, "normalized_agent_distance": {"base": 0.6877, "left": 1.3197, "right": 0.6246}, "q_score": {"final": 0.75}, "time": {"simulator_steps": 10247, "simulator_time": 341.567, "normalized_time": 1.1385}}

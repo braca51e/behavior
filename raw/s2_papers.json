@@ -1,0 +1,2489 @@
+{
+ "ARXIV:2303.04137": {
+  "paperId": "bdba3bd30a49ea4c5b20b43dbd8f0eb59e9d80e2",
+  "externalIds": {
+   "DBLP": "journals/ijrr/ChiXFCDBTS25",
+   "ArXiv": "2303.04137",
+   "DOI": "10.1177/02783649241273668",
+   "CorpusId": 257378658
+  },
+  "title": "Diffusion policy: Visuomotor policy learning via action diffusion",
+  "venue": "Robotics: Science and Systems Conference",
+  "year": 2023,
+  "citationCount": 4109,
+  "authors": [
+   {
+    "authorId": "46859937",
+    "name": "Cheng Chi"
+   },
+   {
+    "authorId": "2480008",
+    "name": "S. Feng"
+   },
+   {
+    "authorId": "15394275",
+    "name": "Yilun Du"
+   },
+   {
+    "authorId": "74498275",
+    "name": "Zhenjia Xu"
+   },
+   {
+    "authorId": "2090529",
+    "name": "Eric Cousineau"
+   },
+   {
+    "authorId": "2302757",
+    "name": "B. Burchfiel"
+   },
+   {
+    "authorId": "3340170",
+    "name": "Shuran Song"
+   }
+  ]
+ },
+ "ARXIV:2304.13705": {
+  "paperId": "91eb20f923ea3b0246868902aef4e9bea572b800",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2304-13705",
+   "ArXiv": "2304.13705",
+   "DOI": "10.48550/arXiv.2304.13705",
+   "CorpusId": 258331658
+  },
+  "title": "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+  "venue": "Robotics: Science and Systems Conference",
+  "year": 2023,
+  "citationCount": 2291,
+  "authors": [
+   {
+    "authorId": "145914976",
+    "name": "Tony Zhao"
+   },
+   {
+    "authorId": "2109446216",
+    "name": "Vikash Kumar"
+   },
+   {
+    "authorId": "1736651",
+    "name": "S. Levine"
+   },
+   {
+    "authorId": "46881670",
+    "name": "Chelsea Finn"
+   }
+  ]
+ },
+ "ARXIV:2307.15818": {
+  "paperId": "38939304bb760473141c2aca0305e44fbe04e6e8",
+  "externalIds": {
+   "ArXiv": "2307.15818",
+   "DBLP": "conf/corl/ZitkovichYXXXXW23",
+   "DOI": "10.48550/arXiv.2307.15818",
+   "CorpusId": 260293142
+  },
+  "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+  "venue": "Conference on Robot Learning",
+  "year": 2023,
+  "citationCount": 4118,
+  "authors": [
+   {
+    "authorId": "118025075",
+    "name": "Anthony Brohan"
+   },
+   {
+    "authorId": "2161343011",
+    "name": "Noah Brown"
+   },
+   {
+    "authorId": "2196517336",
+    "name": "Justice Carbajal"
+   },
+   {
+    "authorId": "2527420",
+    "name": "Yevgen Chebotar"
+   },
+   {
+    "authorId": "1805203",
+    "name": "K. Choromanski"
+   },
+   {
+    "authorId": "95691186",
+    "name": "Tianli Ding"
+   },
+   {
+    "authorId": "2283848260",
+    "name": "Danny Driess"
+   },
+   {
+    "authorId": "89890133",
+    "name": "Kumar Avinava Dubey"
+   },
+   {
+    "authorId": "46881670",
+    "name": "Chelsea Finn"
+   },
+   {
+    "authorId": "47686265",
+    "name": "Peter R. Florence"
+   },
+   {
+    "authorId": "3430433",
+    "name": "Chuyuan Fu"
+   },
+   {
+    "authorId": "153134021",
+    "name": "Montse Gonzalez Arenas"
+   },
+   {
+    "authorId": "2161342233",
+    "name": "K. Gopalakrishnan"
+   },
+   {
+    "authorId": "2273880591",
+    "name": "Kehang Han"
+   },
+   {
+    "authorId": "1944801",
+    "name": "Karol Hausman"
+   },
+   {
+    "authorId": "1505793452",
+    "name": "Alexander Herzog"
+   },
+   {
+    "authorId": "2726592",
+    "name": "Jasmine Hsu"
+   },
+   {
+    "authorId": "2704814",
+    "name": "Brian Ichter"
+   },
+   {
+    "authorId": "17818078",
+    "name": "A. Irpan"
+   },
+   {
+    "authorId": "2052368480",
+    "name": "Nikhil J. Joshi"
+   },
+   {
+    "authorId": "144885996",
+    "name": "Ryan C. Julian"
+   },
+   {
+    "authorId": "48313860",
+    "name": "Dmitry Kalashnikov"
+   },
+   {
+    "authorId": "2161342687",
+    "name": "Yuheng Kuang"
+   },
+   {
+    "authorId": "2057988112",
+    "name": "Isabel Leal"
+   },
+   {
+    "authorId": "1736651",
+    "name": "S. Levine"
+   },
+   {
+    "authorId": "47407464",
+    "name": "H. Michalewski"
+   },
+   {
+    "authorId": "2080746",
+    "name": "Igor Mordatch"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "2251957",
+    "name": "Kanishka Rao"
+   },
+   {
+    "authorId": "2163522073",
+    "name": "Krista Reymann"
+   },
+   {
+    "authorId": "1766489",
+    "name": "M. Ryoo"
+   },
+   {
+    "authorId": "2196524735",
+    "name": "Grecia Salazar"
+   },
+   {
+    "authorId": "2840758",
+    "name": "Pannag R. Sanketi"
+   },
+   {
+    "authorId": "3142556",
+    "name": "P. Sermanet"
+   },
+   {
+    "authorId": "2196040785",
+    "name": "Jaspiar Singh"
+   },
+   {
+    "authorId": "2111007256",
+    "name": "Anikait Singh"
+   },
+   {
+    "authorId": "1737285",
+    "name": "Radu Soricut"
+   },
+   {
+    "authorId": "2195355151",
+    "name": "Huong Tran"
+   },
+   {
+    "authorId": "2657155",
+    "name": "Vincent Vanhoucke"
+   },
+   {
+    "authorId": "144579461",
+    "name": "Q. Vuong"
+   },
+   {
+    "authorId": "88728227",
+    "name": "Ayzaan Wahid"
+   },
+   {
+    "authorId": "69426588",
+    "name": "Stefan Welker"
+   },
+   {
+    "authorId": "3202367",
+    "name": "Paul Wohlhart"
+   },
+   {
+    "authorId": "9961095",
+    "name": "Ted Xiao"
+   },
+   {
+    "authorId": "10909315",
+    "name": "Tianhe Yu"
+   },
+   {
+    "authorId": "2196524598",
+    "name": "Brianna Zitkovich"
+   }
+  ]
+ },
+ "ARXIV:2310.08864": {
+  "paperId": "ef7d31137ef06c5be8c2824ecc5af6ce3358cc8f",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2310-08864",
+   "ArXiv": "2310.08864",
+   "DOI": "10.1109/ICRA57147.2024.10611477",
+   "CorpusId": 263626099
+  },
+  "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models : Open X-Embodiment Collaboration0",
+  "venue": "IEEE International Conference on Robotics and Automation",
+  "year": 2023,
+  "citationCount": 1172,
+  "authors": [
+   {
+    "authorId": "5836681",
+    "name": "A. Padalkar"
+   },
+   {
+    "authorId": "2253748715",
+    "name": "A. Pooley"
+   },
+   {
+    "authorId": "2256951061",
+    "name": "Ajinkya Jain"
+   },
+   {
+    "authorId": "2238127835",
+    "name": "Alex Bewley"
+   },
+   {
+    "authorId": "2253642204",
+    "name": "Alex Herzog"
+   },
+   {
+    "authorId": "17818078",
+    "name": "A. Irpan"
+   },
+   {
+    "authorId": "121873407",
+    "name": "Alexander Khazatsky"
+   },
+   {
+    "authorId": "2253550685",
+    "name": "Anant Rai"
+   },
+   {
+    "authorId": "2111007256",
+    "name": "Anikait Singh"
+   },
+   {
+    "authorId": "118025075",
+    "name": "Anthony Brohan"
+   },
+   {
+    "authorId": "51247992",
+    "name": "A. Raffin"
+   },
+   {
+    "authorId": "88728227",
+    "name": "Ayzaan Wahid"
+   },
+   {
+    "authorId": "2375921719",
+    "name": "Ben Burgess-Limerick"
+   },
+   {
+    "authorId": "2238120623",
+    "name": "Beomjoon Kim"
+   },
+   {
+    "authorId": "2237290631",
+    "name": "Bernhard Sch\u00f6lkopf"
+   },
+   {
+    "authorId": "2704814",
+    "name": "Brian Ichter"
+   },
+   {
+    "authorId": "2281998765",
+    "name": "Cewu Lu"
+   },
+   {
+    "authorId": "2254150689",
+    "name": "Charles Xu"
+   },
+   {
+    "authorId": "46881670",
+    "name": "Chelsea Finn"
+   },
+   {
+    "authorId": "1490695028",
+    "name": "Chenfeng Xu"
+   },
+   {
+    "authorId": "2253746565",
+    "name": "Cheng Chi"
+   },
+   {
+    "authorId": "2256612775",
+    "name": "Chenguang Huang"
+   },
+   {
+    "authorId": "2256938625",
+    "name": "Christine Chan"
+   },
+   {
+    "authorId": "2253801737",
+    "name": "Chuer Pan"
+   },
+   {
+    "authorId": "3430433",
+    "name": "Chuyuan Fu"
+   },
+   {
+    "authorId": "144373380",
+    "name": "Coline Devin"
+   },
+   {
+    "authorId": "2283848260",
+    "name": "Danny Driess"
+   },
+   {
+    "authorId": "2004879394",
+    "name": "Deepak Pathak"
+   },
+   {
+    "authorId": "2322628540",
+    "name": "Dhruv Shah"
+   },
+   {
+    "authorId": "108281807",
+    "name": "Dieter B\u00fcchler"
+   },
+   {
+    "authorId": "48313860",
+    "name": "Dmitry Kalashnikov"
+   },
+   {
+    "authorId": "1779671",
+    "name": "Dorsa Sadigh"
+   },
+   {
+    "authorId": "2253752957",
+    "name": "Edward Johns"
+   },
+   {
+    "authorId": "1443777921",
+    "name": "Federico Ceola"
+   },
+   {
+    "authorId": "2237987648",
+    "name": "Fei Xia"
+   },
+   {
+    "authorId": "50707365",
+    "name": "F. Stulp"
+   },
+   {
+    "authorId": "2257386929",
+    "name": "Gaoyue Zhou"
+   },
+   {
+    "authorId": "1732493",
+    "name": "G. Sukhatme"
+   },
+   {
+    "authorId": "101987257",
+    "name": "Gautam Salhotra"
+   },
+   {
+    "authorId": "2253536756",
+    "name": "Ge Yan"
+   },
+   {
+    "authorId": "2184722575",
+    "name": "Giulio Schiavi"
+   },
+   {
+    "authorId": "2255041135",
+    "name": "Hao Su"
+   },
+   {
+    "authorId": "122851212",
+    "name": "Haoshu Fang"
+   },
+   {
+    "authorId": "2257452648",
+    "name": "Haochen Shi"
+   },
+   {
+    "authorId": "2207330",
+    "name": "H. B. Amor"
+   },
+   {
+    "authorId": "2243047488",
+    "name": "Henrik I Christensen"
+   },
+   {
+    "authorId": "2052903664",
+    "name": "Hiroki Furuta"
+   },
+   {
+    "authorId": "2029241116",
+    "name": "H. Walke"
+   },
+   {
+    "authorId": "2152115958",
+    "name": "Hongjie Fang"
+   },
+   {
+    "authorId": "2080746",
+    "name": "Igor Mordatch"
+   },
+   {
+    "authorId": "30407997",
+    "name": "Ilija Radosavovic"
+   },
+   {
+    "authorId": "2057988112",
+    "name": "Isabel Leal"
+   },
+   {
+    "authorId": "6454541",
+    "name": "Jacky Liang"
+   },
+   {
+    "authorId": "2238088091",
+    "name": "Jaehyung Kim"
+   },
+   {
+    "authorId": "2221192892",
+    "name": "Jan Schneider"
+   },
+   {
+    "authorId": "2726592",
+    "name": "Jasmine Hsu"
+   },
+   {
+    "authorId": "1775407",
+    "name": "Jeannette Bohg"
+   },
+   {
+    "authorId": "1696556124",
+    "name": "Jeff Bingham"
+   },
+   {
+    "authorId": "2326444500",
+    "name": "Jiajun Wu"
+   },
+   {
+    "authorId": "9095876",
+    "name": "Jialin Wu"
+   },
+   {
+    "authorId": "2282025",
+    "name": "Jiankai Sun"
+   },
+   {
+    "authorId": "2238220544",
+    "name": "Jianlan Luo"
+   },
+   {
+    "authorId": "2256468903",
+    "name": "Jiayuan Gu"
+   },
+   {
+    "authorId": "2257005884",
+    "name": "Jie Tan"
+   },
+   {
+    "authorId": "2256484322",
+    "name": "Jihoon Oh"
+   },
+   {
+    "authorId": "2257249601",
+    "name": "Jitendra Malik"
+   },
+   {
+    "authorId": "2704494",
+    "name": "Jonathan Tompson"
+   },
+   {
+    "authorId": "2143067490",
+    "name": "Jonathan Yang"
+   },
+   {
+    "authorId": "2253826001",
+    "name": "Joseph J. Lim"
+   },
+   {
+    "authorId": "2184921450",
+    "name": "Jo\u00e3o Silv\u00e9rio"
+   },
+   {
+    "authorId": "2238178686",
+    "name": "Junhyek Han"
+   },
+   {
+    "authorId": "2256967164",
+    "name": "Kanishka Rao"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "1944801",
+    "name": "Karol Hausman"
+   },
+   {
+    "authorId": "2253750510",
+    "name": "Keegan Go"
+   },
+   {
+    "authorId": "2161342233",
+    "name": "K. Gopalakrishnan"
+   },
+   {
+    "authorId": "2253727638",
+    "name": "Ken Goldberg"
+   },
+   {
+    "authorId": "2253740486",
+    "name": "Kendra Byrne"
+   },
+   {
+    "authorId": "21095952",
+    "name": "Kenneth Oslund"
+   },
+   {
+    "authorId": "8308607",
+    "name": "Kento Kawaharazuka"
+   },
+   {
+    "authorId": "2254189637",
+    "name": "Kevin Zhang"
+   },
+   {
+    "authorId": "81905590",
+    "name": "K. Majd"
+   },
+   {
+    "authorId": "51047912",
+    "name": "Krishan Rana"
+   },
+   {
+    "authorId": "2093939303",
+    "name": "K. Srinivasan"
+   },
+   {
+    "authorId": "2143804724",
+    "name": "L. Chen"
+   },
+   {
+    "authorId": "2253567347",
+    "name": "Lerrel Pinto"
+   },
+   {
+    "authorId": "2253731404",
+    "name": "Liam Tan"
+   },
+   {
+    "authorId": "2253741217",
+    "name": "Lionel Ott"
+   },
+   {
+    "authorId": "2256481400",
+    "name": "Lisa Lee"
+   },
+   {
+    "authorId": "2245825283",
+    "name": "Masayoshi Tomizuka"
+   },
+   {
+    "authorId": "117791840",
+    "name": "Maximilian Du"
+   },
+   {
+    "authorId": "2106194123",
+    "name": "Michael Ahn"
+   },
+   {
+    "authorId": "2247824858",
+    "name": "Mingtong Zhang"
+   },
+   {
+    "authorId": "2253455336",
+    "name": "Mingyu Ding"
+   },
+   {
+    "authorId": "2193493900",
+    "name": "M. K. Srirama"
+   },
+   {
+    "authorId": "145467103",
+    "name": "Mohit Sharma"
+   },
+   {
+    "authorId": "2159987907",
+    "name": "Moo Jin Kim"
+   },
+   {
+    "authorId": "147495445",
+    "name": "Muhammad Zubair Irshad"
+   },
+   {
+    "authorId": "2173085172",
+    "name": "Naoaki Kanazawa"
+   },
+   {
+    "authorId": "1491707104",
+    "name": "Nicklas Hansen"
+   },
+   {
+    "authorId": "2801204",
+    "name": "N. Heess"
+   },
+   {
+    "authorId": "2052368480",
+    "name": "Nikhil J. Joshi"
+   },
+   {
+    "authorId": "2253748689",
+    "name": "Niko Suenderhauf"
+   },
+   {
+    "authorId": "52218759",
+    "name": "Norman Di Palo"
+   },
+   {
+    "authorId": "2475960105",
+    "name": "N. Shafiullah"
+   },
+   {
+    "authorId": "7264115",
+    "name": "Oier Mees"
+   },
+   {
+    "authorId": "2250726149",
+    "name": "Oliver Kroemer"
+   },
+   {
+    "authorId": "2840758",
+    "name": "Pannag R. Sanketi"
+   },
+   {
+    "authorId": "3202367",
+    "name": "Paul Wohlhart"
+   },
+   {
+    "authorId": "2153917744",
+    "name": "Peng Xu"
+   },
+   {
+    "authorId": "3142556",
+    "name": "P. Sermanet"
+   },
+   {
+    "authorId": "123235030",
+    "name": "Priya Sundaresan"
+   },
+   {
+    "authorId": "144579461",
+    "name": "Q. Vuong"
+   },
+   {
+    "authorId": "102801230",
+    "name": "Rafael Rafailov"
+   },
+   {
+    "authorId": "2253748783",
+    "name": "Ran Tian"
+   },
+   {
+    "authorId": "2197078118",
+    "name": "Ria Doshi"
+   },
+   {
+    "authorId": "35509365",
+    "name": "R. Mendonca"
+   },
+   {
+    "authorId": "2117716975",
+    "name": "Rutav Shah"
+   },
+   {
+    "authorId": "1387872831",
+    "name": "Ryan Hoque"
+   },
+   {
+    "authorId": "144885996",
+    "name": "Ryan C. Julian"
+   },
+   {
+    "authorId": "2253588342",
+    "name": "Samuel Bustamante"
+   },
+   {
+    "authorId": "51881277",
+    "name": "Sean Kirmani"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   },
+   {
+    "authorId": "144375552",
+    "name": "Sherry Moore"
+   },
+   {
+    "authorId": "8527563",
+    "name": "Shikhar Bahl"
+   },
+   {
+    "authorId": "2193057311",
+    "name": "Shivin Dass"
+   },
+   {
+    "authorId": "2254874914",
+    "name": "Shuran Song"
+   },
+   {
+    "authorId": "3068504",
+    "name": "Sichun Xu"
+   },
+   {
+    "authorId": "51445278",
+    "name": "Siddhant Haldar"
+   },
+   {
+    "authorId": "1722033888",
+    "name": "S. Adebola"
+   },
+   {
+    "authorId": "1631651129",
+    "name": "Simon Guist"
+   },
+   {
+    "authorId": "3457048",
+    "name": "Soroush Nasiriany"
+   },
+   {
+    "authorId": "1745219",
+    "name": "S. Schaal"
+   },
+   {
+    "authorId": "69426588",
+    "name": "Stefan Welker"
+   },
+   {
+    "authorId": "71692259",
+    "name": "Stephen Tian"
+   },
+   {
+    "authorId": "36076404",
+    "name": "S. Dasari"
+   },
+   {
+    "authorId": "69879999",
+    "name": "Suneel Belkhale"
+   },
+   {
+    "authorId": "2253748734",
+    "name": "Takayuki Osa"
+   },
+   {
+    "authorId": "2253762492",
+    "name": "Tatsuya Harada"
+   },
+   {
+    "authorId": "145930468",
+    "name": "T. Matsushima"
+   },
+   {
+    "authorId": "9961095",
+    "name": "Ted Xiao"
+   },
+   {
+    "authorId": "10909315",
+    "name": "Tianhe Yu"
+   },
+   {
+    "authorId": "95691186",
+    "name": "Tianli Ding"
+   },
+   {
+    "authorId": "121676884",
+    "name": "Todor Davchev"
+   },
+   {
+    "authorId": "145914976",
+    "name": "Tony Zhao"
+   },
+   {
+    "authorId": "2057103965",
+    "name": "Travis Armstrong"
+   },
+   {
+    "authorId": "1398038481",
+    "name": "T. Darrell"
+   },
+   {
+    "authorId": "2253472236",
+    "name": "Vidhi Jain"
+   },
+   {
+    "authorId": "2657155",
+    "name": "Vincent Vanhoucke"
+   },
+   {
+    "authorId": "144267500",
+    "name": "Wei Zhan"
+   },
+   {
+    "authorId": "2246658976",
+    "name": "Wenxuan Zhou"
+   },
+   {
+    "authorId": "2106871731",
+    "name": "Wolfram Burgard"
+   },
+   {
+    "authorId": "2254208802",
+    "name": "Xi Chen"
+   },
+   {
+    "authorId": "2255251113",
+    "name": "Xiaolong Wang"
+   },
+   {
+    "authorId": "8362363",
+    "name": "Xinghao Zhu"
+   },
+   {
+    "authorId": "2108263986",
+    "name": "Xuanlin Li"
+   },
+   {
+    "authorId": "2161346119",
+    "name": "Yao Lu"
+   },
+   {
+    "authorId": "2527420",
+    "name": "Yevgen Chebotar"
+   },
+   {
+    "authorId": "2256290706",
+    "name": "Yifan Zhou"
+   },
+   {
+    "authorId": "2255171532",
+    "name": "Yifeng Zhu"
+   },
+   {
+    "authorId": "2256016502",
+    "name": "Ying Xu"
+   },
+   {
+    "authorId": "2253810575",
+    "name": "Yixuan Wang"
+   },
+   {
+    "authorId": "3312309",
+    "name": "Yonatan Bisk"
+   },
+   {
+    "authorId": "2255540603",
+    "name": "Yoonyoung Cho"
+   },
+   {
+    "authorId": "46358230",
+    "name": "Youngwoon Lee"
+   },
+   {
+    "authorId": "2238151901",
+    "name": "Yuchen Cui"
+   },
+   {
+    "authorId": "2253837067",
+    "name": "Yueh-Hua Wu"
+   },
+   {
+    "authorId": "2217908034",
+    "name": "Yujin Tang"
+   },
+   {
+    "authorId": "2253507326",
+    "name": "Yuke Zhu"
+   },
+   {
+    "authorId": "2294926592",
+    "name": "Yunzhu Li"
+   },
+   {
+    "authorId": "1715282",
+    "name": "Yusuke Iwasawa"
+   },
+   {
+    "authorId": "2241471533",
+    "name": "Yutaka Matsuo"
+   },
+   {
+    "authorId": "152248240",
+    "name": "Zhuo Xu"
+   },
+   {
+    "authorId": "2172045711",
+    "name": "Zichen Jeff Cui"
+   }
+  ]
+ },
+ "ARXIV:2406.09246": {
+  "paperId": "8f9ceb5ffad8e7a066dfc9d9aaa5153b714740ee",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2406-09246",
+   "ArXiv": "2406.09246",
+   "DOI": "10.48550/arXiv.2406.09246",
+   "CorpusId": 270440391
+  },
+  "title": "OpenVLA: An Open-Source Vision-Language-Action Model",
+  "venue": "Conference on Robot Learning",
+  "year": 2024,
+  "citationCount": 3256,
+  "authors": [
+   {
+    "authorId": "2159987907",
+    "name": "Moo Jin Kim"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "10737060",
+    "name": "Siddharth Karamcheti"
+   },
+   {
+    "authorId": "9961095",
+    "name": "Ted Xiao"
+   },
+   {
+    "authorId": "3117588",
+    "name": "A. Balakrishna"
+   },
+   {
+    "authorId": "2286638954",
+    "name": "Suraj Nair"
+   },
+   {
+    "authorId": "102801230",
+    "name": "Rafael Rafailov"
+   },
+   {
+    "authorId": "2306251665",
+    "name": "E. Foster"
+   },
+   {
+    "authorId": "2330190570",
+    "name": "Grace Lam"
+   },
+   {
+    "authorId": "2840758",
+    "name": "Pannag R. Sanketi"
+   },
+   {
+    "authorId": "2288210223",
+    "name": "Quan Vuong"
+   },
+   {
+    "authorId": "2283843631",
+    "name": "Thomas Kollar"
+   },
+   {
+    "authorId": "2319412766",
+    "name": "Benjamin Burchfiel"
+   },
+   {
+    "authorId": "1726802",
+    "name": "Russ Tedrake"
+   },
+   {
+    "authorId": "1779671",
+    "name": "Dorsa Sadigh"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   },
+   {
+    "authorId": "2283843948",
+    "name": "Percy Liang"
+   },
+   {
+    "authorId": "2284774407",
+    "name": "Chelsea Finn"
+   }
+  ]
+ },
+ "ARXIV:2410.24164": {
+  "paperId": "7e7e59d2e247d99954081080ddd5aae93d10b9e0",
+  "externalIds": {
+   "ArXiv": "2410.24164",
+   "DBLP": "journals/corr/abs-2410-24164",
+   "DOI": "10.48550/arXiv.2410.24164",
+   "CorpusId": 273811174
+  },
+  "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+  "venue": "arXiv.org",
+  "year": 2024,
+  "citationCount": 2588,
+  "authors": [
+   {
+    "authorId": "2258959388",
+    "name": "Kevin Black"
+   },
+   {
+    "authorId": "2161343011",
+    "name": "Noah Brown"
+   },
+   {
+    "authorId": "2283848260",
+    "name": "Danny Driess"
+   },
+   {
+    "authorId": "2332926590",
+    "name": "A. Esmail"
+   },
+   {
+    "authorId": "2298901898",
+    "name": "Michael Equi"
+   },
+   {
+    "authorId": "2257346440",
+    "name": "Chelsea Finn"
+   },
+   {
+    "authorId": "2332926006",
+    "name": "Niccolo Fusai"
+   },
+   {
+    "authorId": "2332926792",
+    "name": "Lachy Groom"
+   },
+   {
+    "authorId": "1944801",
+    "name": "Karol Hausman"
+   },
+   {
+    "authorId": "2704814",
+    "name": "Brian Ichter"
+   },
+   {
+    "authorId": "2332926523",
+    "name": "S. Jakubczak"
+   },
+   {
+    "authorId": "2333409218",
+    "name": "Tim Jones"
+   },
+   {
+    "authorId": "2332976956",
+    "name": "Liyiming Ke"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   },
+   {
+    "authorId": "2332927424",
+    "name": "Adrian Li-Bell"
+   },
+   {
+    "authorId": "2332926533",
+    "name": "Mohith Mothukuri"
+   },
+   {
+    "authorId": "2286638954",
+    "name": "Suraj Nair"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "2292341452",
+    "name": "L. Shi"
+   },
+   {
+    "authorId": "2332926892",
+    "name": "James Tanner"
+   },
+   {
+    "authorId": "2288210223",
+    "name": "Quan Vuong"
+   },
+   {
+    "authorId": "2333982746",
+    "name": "Anna Walling"
+   },
+   {
+    "authorId": "2332952253",
+    "name": "Hao-Huan Wang"
+   },
+   {
+    "authorId": "3187915",
+    "name": "Ury Zhilinsky"
+   }
+  ]
+ },
+ "ARXIV:2504.16054": {
+  "paperId": "1e2a82ef5e0325a26ca0344c4f8c256c52fae7ec",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2504-16054",
+   "ArXiv": "2504.16054",
+   "DOI": "10.48550/arXiv.2504.16054",
+   "CorpusId": 277993634
+  },
+  "title": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization",
+  "venue": "arXiv.org",
+  "year": 2025,
+  "citationCount": 1734,
+  "authors": [
+   {
+    "authorId": "2356784273",
+    "name": "Physical Intelligence"
+   },
+   {
+    "authorId": "2258959388",
+    "name": "Kevin Black"
+   },
+   {
+    "authorId": "2161343011",
+    "name": "Noah Brown"
+   },
+   {
+    "authorId": "2356784408",
+    "name": "James Darpinian"
+   },
+   {
+    "authorId": "2356782366",
+    "name": "Karan Dhabalia"
+   },
+   {
+    "authorId": "2283848260",
+    "name": "Danny Driess"
+   },
+   {
+    "authorId": "2332926590",
+    "name": "A. Esmail"
+   },
+   {
+    "authorId": "2298901898",
+    "name": "Michael Equi"
+   },
+   {
+    "authorId": "2257346440",
+    "name": "Chelsea Finn"
+   },
+   {
+    "authorId": "2332926006",
+    "name": "Niccolo Fusai"
+   },
+   {
+    "authorId": "1580069611",
+    "name": "Manuel Y. Galliker"
+   },
+   {
+    "authorId": "8021910",
+    "name": "Dibya Ghosh"
+   },
+   {
+    "authorId": "2332926792",
+    "name": "Lachy Groom"
+   },
+   {
+    "authorId": "1944801",
+    "name": "Karol Hausman"
+   },
+   {
+    "authorId": "2704814",
+    "name": "Brian Ichter"
+   },
+   {
+    "authorId": "2332926523",
+    "name": "S. Jakubczak"
+   },
+   {
+    "authorId": "2333409218",
+    "name": "Tim Jones"
+   },
+   {
+    "authorId": "2332976956",
+    "name": "Liyiming Ke"
+   },
+   {
+    "authorId": "2356787296",
+    "name": "Devin LeBlanc"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   },
+   {
+    "authorId": "2332927424",
+    "name": "Adrian Li-Bell"
+   },
+   {
+    "authorId": "2332926533",
+    "name": "Mohith Mothukuri"
+   },
+   {
+    "authorId": "2286638954",
+    "name": "Suraj Nair"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "2356677628",
+    "name": "Allen Z. Ren"
+   },
+   {
+    "authorId": "2292341452",
+    "name": "L. Shi"
+   },
+   {
+    "authorId": "2302181645",
+    "name": "Laura Smith"
+   },
+   {
+    "authorId": "2060551",
+    "name": "J. Springenberg"
+   },
+   {
+    "authorId": "2106415427",
+    "name": "Kyle Stachowicz"
+   },
+   {
+    "authorId": "2332926892",
+    "name": "James Tanner"
+   },
+   {
+    "authorId": "2288210223",
+    "name": "Quan Vuong"
+   },
+   {
+    "authorId": "2029241116",
+    "name": "H. Walke"
+   },
+   {
+    "authorId": "2333982746",
+    "name": "Anna Walling"
+   },
+   {
+    "authorId": "2332952253",
+    "name": "Hao-Huan Wang"
+   },
+   {
+    "authorId": "2356801221",
+    "name": "Lili Yu"
+   },
+   {
+    "authorId": "3187915",
+    "name": "Ury Zhilinsky"
+   }
+  ]
+ },
+ "ARXIV:2409.12514": {
+  "paperId": "dc62bc6536e9e3ad80242f10f44c046e4c7bd3d1",
+  "externalIds": {
+   "ArXiv": "2409.12514",
+   "DBLP": "journals/corr/abs-2409-12514",
+   "DOI": "10.1109/LRA.2025.3544909",
+   "CorpusId": 272753287
+  },
+  "title": "TinyVLA: Toward Fast, Data-Efficient Vision-Language-Action Models for Robotic Manipulation",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2024,
+  "citationCount": 430,
+  "authors": [
+   {
+    "authorId": "2278247833",
+    "name": "Junjie Wen"
+   },
+   {
+    "authorId": "2275531481",
+    "name": "Yichen Zhu"
+   },
+   {
+    "authorId": "2278339388",
+    "name": "Jinming Li"
+   },
+   {
+    "authorId": "2277906045",
+    "name": "Minjie Zhu"
+   },
+   {
+    "authorId": "2333823781",
+    "name": "Zhibin Tang"
+   },
+   {
+    "authorId": "2112562410",
+    "name": "Kun Wu"
+   },
+   {
+    "authorId": "48559420",
+    "name": "Zhiyuan Xu"
+   },
+   {
+    "authorId": "2279764376",
+    "name": "Ning Liu"
+   },
+   {
+    "authorId": "2321805411",
+    "name": "Ran Cheng"
+   },
+   {
+    "authorId": "1684866",
+    "name": "Chaomin Shen"
+   },
+   {
+    "authorId": "2264150574",
+    "name": "Yaxin Peng"
+   },
+   {
+    "authorId": "2143808446",
+    "name": "Feifei Feng"
+   },
+   {
+    "authorId": "2277743747",
+    "name": "Jian Tang"
+   }
+  ]
+ },
+ "ARXIV:2410.07864": {
+  "paperId": "41ba8127b73abd32051a89764cb976095b1dee94",
+  "externalIds": {
+   "ArXiv": "2410.07864",
+   "DBLP": "journals/corr/abs-2410-07864",
+   "DOI": "10.48550/arXiv.2410.07864",
+   "CorpusId": 273233386
+  },
+  "title": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+  "venue": "International Conference on Learning Representations",
+  "year": 2024,
+  "citationCount": 855,
+  "authors": [
+   {
+    "authorId": "104037450",
+    "name": "Songming Liu"
+   },
+   {
+    "authorId": "2294465744",
+    "name": "Lingxuan Wu"
+   },
+   {
+    "authorId": "2342558395",
+    "name": "Bangguo Li"
+   },
+   {
+    "authorId": "2303970369",
+    "name": "Hengkai Tan"
+   },
+   {
+    "authorId": "2257328842",
+    "name": "Huayu Chen"
+   },
+   {
+    "authorId": "2241653903",
+    "name": "Zhengyi Wang"
+   },
+   {
+    "authorId": "2361735991",
+    "name": "Ke Xu"
+   },
+   {
+    "authorId": "2245088111",
+    "name": "Hang Su"
+   },
+   {
+    "authorId": "2265957067",
+    "name": "Jun Zhu"
+   }
+  ]
+ },
+ "ARXIV:2503.14734": null,
+ "ARXIV:2405.12213": {
+  "paperId": "1d2753d74025e7a71594506623be81f18b073adb",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2405-12213",
+   "ArXiv": "2405.12213",
+   "DOI": "10.48550/arXiv.2405.12213",
+   "CorpusId": 266379116
+  },
+  "title": "Octo: An Open-Source Generalist Robot Policy",
+  "venue": "Robotics: Science and Systems Conference",
+  "year": 2024,
+  "citationCount": 1779,
+  "authors": [
+   {
+    "authorId": "2302331721",
+    "name": "O. Team"
+   },
+   {
+    "authorId": "8021910",
+    "name": "Dibya Ghosh"
+   },
+   {
+    "authorId": "2029241116",
+    "name": "H. Walke"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "2258959388",
+    "name": "Kevin Black"
+   },
+   {
+    "authorId": "7264115",
+    "name": "Oier Mees"
+   },
+   {
+    "authorId": "36076404",
+    "name": "S. Dasari"
+   },
+   {
+    "authorId": "2122700519",
+    "name": "Joey Hejna"
+   },
+   {
+    "authorId": "2286880491",
+    "name": "Tobias Kreiman"
+   },
+   {
+    "authorId": "2254150689",
+    "name": "Charles Xu"
+   },
+   {
+    "authorId": "2238220544",
+    "name": "Jianlan Luo"
+   },
+   {
+    "authorId": "2281816408",
+    "name": "Y. Tan"
+   },
+   {
+    "authorId": "2840758",
+    "name": "Pannag R. Sanketi"
+   },
+   {
+    "authorId": "2288210223",
+    "name": "Quan Vuong"
+   },
+   {
+    "authorId": "9961095",
+    "name": "Ted Xiao"
+   },
+   {
+    "authorId": "1779671",
+    "name": "Dorsa Sadigh"
+   },
+   {
+    "authorId": "2257346440",
+    "name": "Chelsea Finn"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   }
+  ]
+ },
+ "ARXIV:2403.06117": {
+  "paperId": "0351de0a7b7ec349ba7f2f8c2a8f0301a07a42cc",
+  "externalIds": {
+   "ArXiv": "2403.06117",
+   "DOI": "10.1080/00268976.2024.2395439",
+   "CorpusId": 268357326
+  },
+  "title": "Manifestation of the normal intensity distribution law (NIDL) in the rovibrational emission spectrum of hydroxyl radical",
+  "venue": "Molecular Physics",
+  "year": 2024,
+  "citationCount": 2,
+  "authors": [
+   {
+    "authorId": "2266789834",
+    "name": "E. S. Medvedev"
+   },
+   {
+    "authorId": "104111289",
+    "name": "A. Ermilov"
+   },
+   {
+    "authorId": "2270381852",
+    "name": "V. G. Ushakov"
+   }
+  ]
+ },
+ "ARXIV:2502.19417": {
+  "paperId": "69afd10d387423a03617d461c3f47a5f3033cc54",
+  "externalIds": {
+   "ArXiv": "2502.19417",
+   "DBLP": "conf/icml/ShiIEKPVTWWFLDG25",
+   "DOI": "10.48550/arXiv.2502.19417",
+   "CorpusId": 276618098
+  },
+  "title": "Hi Robot: Open-Ended Instruction Following with Hierarchical Vision-Language-Action Models",
+  "venue": "International Conference on Machine Learning",
+  "year": 2025,
+  "citationCount": 248,
+  "authors": [
+   {
+    "authorId": "2292341452",
+    "name": "L. Shi"
+   },
+   {
+    "authorId": "2704814",
+    "name": "Brian Ichter"
+   },
+   {
+    "authorId": "2298901898",
+    "name": "Michael Equi"
+   },
+   {
+    "authorId": "2332976956",
+    "name": "Liyiming Ke"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "2288210223",
+    "name": "Quan Vuong"
+   },
+   {
+    "authorId": "2332926892",
+    "name": "James Tanner"
+   },
+   {
+    "authorId": "2333982746",
+    "name": "Anna Walling"
+   },
+   {
+    "authorId": "2332952253",
+    "name": "Hao-Huan Wang"
+   },
+   {
+    "authorId": "2332926006",
+    "name": "Niccolo Fusai"
+   },
+   {
+    "authorId": "2332927424",
+    "name": "Adrian Li-Bell"
+   },
+   {
+    "authorId": "2283848260",
+    "name": "Danny Driess"
+   },
+   {
+    "authorId": "2332926792",
+    "name": "Lachy Groom"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   },
+   {
+    "authorId": "2257346440",
+    "name": "Chelsea Finn"
+   }
+  ]
+ },
+ "ARXIV:2502.05485": {
+  "paperId": "f7fda04c653b44b043735cb4a3c108c84131e067",
+  "externalIds": {
+   "ArXiv": "2502.05485",
+   "DBLP": "journals/corr/abs-2502-05485",
+   "DOI": "10.48550/arXiv.2502.05485",
+   "CorpusId": 275949793
+  },
+  "title": "HAMSTER: Hierarchical Action Models For Open-World Robot Manipulation",
+  "venue": "International Conference on Learning Representations",
+  "year": 2025,
+  "citationCount": 149,
+  "authors": [
+   {
+    "authorId": "2342770333",
+    "name": "Y. Li"
+   },
+   {
+    "authorId": "2342638505",
+    "name": "Yuquan Deng"
+   },
+   {
+    "authorId": "2255687520",
+    "name": "Jesse Zhang"
+   },
+   {
+    "authorId": "2333419032",
+    "name": "J. Jang"
+   },
+   {
+    "authorId": "2120036970",
+    "name": "Marius Memmel"
+   },
+   {
+    "authorId": "1834058",
+    "name": "Caelan Reed Garrett"
+   },
+   {
+    "authorId": "2257194867",
+    "name": "Fabio Ramos"
+   },
+   {
+    "authorId": "2330398302",
+    "name": "Dieter Fox"
+   },
+   {
+    "authorId": "2342635780",
+    "name": "\u2020. AnqiLi"
+   },
+   {
+    "authorId": "2342632973",
+    "name": "\u2020. AbhishekGupta"
+   },
+   {
+    "authorId": "47989608",
+    "name": "Ankit Goyal"
+   },
+   {
+    "authorId": "2276243439",
+    "name": "Nvidia"
+   }
+  ]
+ },
+ "ARXIV:2502.19645": {
+  "paperId": "5088b84507462bf725bb4898623d1dead4c6a206",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2502-19645",
+   "ArXiv": "2502.19645",
+   "DOI": "10.48550/arXiv.2502.19645",
+   "CorpusId": 276647709
+  },
+  "title": "Fine-Tuning Vision-Language-Action Models: Optimizing Speed and Success",
+  "venue": "Robotics",
+  "year": 2025,
+  "citationCount": 840,
+  "authors": [
+   {
+    "authorId": "2159987907",
+    "name": "Moo Jin Kim"
+   },
+   {
+    "authorId": "2347538211",
+    "name": "Chelsea Finn"
+   },
+   {
+    "authorId": "2283843948",
+    "name": "Percy Liang"
+   }
+  ]
+ },
+ "ARXIV:2506.07339": {
+  "paperId": "d0f525dba7d3425e36316127424e67fe2c2fdb0d",
+  "externalIds": {
+   "DBLP": "conf/nips/BlackGL25",
+   "ArXiv": "2506.07339",
+   "DOI": "10.48550/arXiv.2506.07339",
+   "CorpusId": 279251645
+  },
+  "title": "Real-Time Execution of Action Chunking Flow Policies",
+  "venue": "Neural Information Processing Systems",
+  "year": 2025,
+  "citationCount": 208,
+  "authors": [
+   {
+    "authorId": "2258959388",
+    "name": "Kevin Black"
+   },
+   {
+    "authorId": "1580069611",
+    "name": "Manuel Y. Galliker"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   }
+  ]
+ },
+ "ARXIV:2412.08261": {
+  "paperId": "ce1120ec964019399d17a103e0431e2ddda3a43c",
+  "externalIds": {
+   "ArXiv": "2412.08261",
+   "CorpusId": 274638221
+  },
+  "title": "FLIP: Flow-Centric Generative Planning as General-Purpose Manipulation World Model",
+  "venue": "",
+  "year": 2024,
+  "citationCount": 45,
+  "authors": [
+   {
+    "authorId": "2294721059",
+    "name": "Chongkai Gao"
+   },
+   {
+    "authorId": "2334828527",
+    "name": "Haozhuo Zhang"
+   },
+   {
+    "authorId": "2284845139",
+    "name": "Zhixuan Xu"
+   },
+   {
+    "authorId": "2326255106",
+    "name": "Zhehao Cai"
+   },
+   {
+    "authorId": "2334740929",
+    "name": "Lin Shao"
+   }
+  ]
+ },
+ "ARXIV:2505.23705": {
+  "paperId": "f8a3331421b98c7d4065ecf55c4013e6306359f2",
+  "externalIds": {
+   "ArXiv": "2505.23705",
+   "DBLP": "journals/corr/abs-2505-23705",
+   "DOI": "10.48550/arXiv.2505.23705",
+   "CorpusId": 278996419
+  },
+  "title": "Knowledge Insulating Vision-Language-Action Models: Train Fast, Run Fast, Generalize Better",
+  "venue": "Neural Information Processing Systems",
+  "year": 2025,
+  "citationCount": 144,
+  "authors": [
+   {
+    "authorId": "2283848260",
+    "name": "Danny Driess"
+   },
+   {
+    "authorId": "2060551",
+    "name": "J. Springenberg"
+   },
+   {
+    "authorId": "2704814",
+    "name": "Brian Ichter"
+   },
+   {
+    "authorId": "2356801221",
+    "name": "Lili Yu"
+   },
+   {
+    "authorId": "2332927424",
+    "name": "Adrian Li-Bell"
+   },
+   {
+    "authorId": "31719101",
+    "name": "Karl Pertsch"
+   },
+   {
+    "authorId": "2356677628",
+    "name": "Allen Z. Ren"
+   },
+   {
+    "authorId": "2029241116",
+    "name": "H. Walke"
+   },
+   {
+    "authorId": "2288210223",
+    "name": "Quan Vuong"
+   },
+   {
+    "authorId": "2292341452",
+    "name": "L. Shi"
+   },
+   {
+    "authorId": "2249615151",
+    "name": "Sergey Levine"
+   }
+  ]
+ },
+ "ARXIV:2508.13073": {
+  "paperId": "dce821cddbf6a3eb435de04d9353681925aaaecf",
+  "externalIds": {
+   "ArXiv": "2508.13073",
+   "DBLP": "journals/corr/abs-2508-13073",
+   "DOI": "10.48550/arXiv.2508.13073",
+   "CorpusId": 280677209
+  },
+  "title": "Large VLM-based Vision-Language-Action Models for Robotic Manipulation: A Survey",
+  "venue": "arXiv.org",
+  "year": 2025,
+  "citationCount": 88,
+  "authors": [
+   {
+    "authorId": "2267332946",
+    "name": "Rui Shao"
+   },
+   {
+    "authorId": "2348652837",
+    "name": "Wei Li"
+   },
+   {
+    "authorId": "2374285556",
+    "name": "Lingsen Zhang"
+   },
+   {
+    "authorId": "2312273317",
+    "name": "Renshan Zhang"
+   },
+   {
+    "authorId": "2320472261",
+    "name": "Zhiyang Liu"
+   },
+   {
+    "authorId": "2355244353",
+    "name": "Ran Chen"
+   },
+   {
+    "authorId": "2258952251",
+    "name": "Liqiang Nie"
+   }
+  ]
+ },
+ "ARXIV:2505.04769": {
+  "paperId": "b2f4aa849f1e06436d4cd4b76c43413076128ba8",
+  "externalIds": {
+   "ArXiv": "2505.04769",
+   "CorpusId": 278394531
+  },
+  "title": "Vision-Language-Action (VLA) Models: Concepts, Progress, Applications and Challenges",
+  "venue": "",
+  "year": 2025,
+  "citationCount": 94,
+  "authors": [
+   {
+    "authorId": "2240132532",
+    "name": "Ranjan Sapkota"
+   },
+   {
+    "authorId": "2254149773",
+    "name": "Yang Cao"
+   },
+   {
+    "authorId": "2090274411",
+    "name": "Konstantinos I. Roumeliotis"
+   },
+   {
+    "authorId": "2301347633",
+    "name": "Manoj Karkee"
+   }
+  ]
+ },
+ "ARXIV:2504.08438": {
+  "paperId": "03bf2fcfd2fd10b55ed90a7bedbe87c96dcd6995",
+  "externalIds": {
+   "PubMedCentral": "12454101",
+   "DBLP": "journals/firai/WolfSLR25",
+   "ArXiv": "2504.08438",
+   "DOI": "10.3389/frobt.2025.1606247",
+   "CorpusId": 277740941,
+   "PubMed": "40995149"
+  },
+  "title": "Diffusion models for robotic manipulation: a survey",
+  "venue": "Frontiers Robotics AI",
+  "year": 2025,
+  "citationCount": 77,
+  "authors": [
+   {
+    "authorId": "2355081563",
+    "name": "R. Wolf"
+   },
+   {
+    "authorId": "2243367905",
+    "name": "Yitian Shi"
+   },
+   {
+    "authorId": "2351231265",
+    "name": "Sheng Liu"
+   },
+   {
+    "authorId": "2266510450",
+    "name": "R. Rayyes"
+   }
+  ]
+ },
+ "ARXIV:2402.10238": null,
+ "ARXIV:2403.09258": {
+  "paperId": "7d418ad47a274fdc5425e53b458f8a241a3d79eb",
+  "externalIds": {
+   "ArXiv": "2403.09258",
+   "DBLP": "conf/eusipco/MoulinTCVO24",
+   "DOI": "10.23919/eusipco63174.2024.10715409",
+   "CorpusId": 268384858
+  },
+  "title": "Near-Field EM-Based Multistatic Radar Range Estimation",
+  "venue": "European Signal Processing Conference",
+  "year": 2024,
+  "citationCount": 2,
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Fran\u00e7ois De Saint Moulin"
+   },
+   {
+    "authorId": "1390056529",
+    "name": "Guillaume Thiran"
+   },
+   {
+    "authorId": "2210916264",
+    "name": "Christophe Craeye"
+   },
+   {
+    "authorId": "2239921441",
+    "name": "Luc Vandendorpe"
+   },
+   {
+    "authorId": "2258049477",
+    "name": "C. Oestges"
+   }
+  ]
+ },
+ "ARXIV:2306.03716": {
+  "paperId": "25ec5ed744a30e6289203e333e13d530c25c38a7",
+  "externalIds": {
+   "ArXiv": "2306.03716",
+   "DOI": "10.1007/s10686-023-09903-x",
+   "CorpusId": 259089169
+  },
+  "title": "CAGIRE: a wide-field NIR imager for the COLIBRI 1.3 meter robotic telescope",
+  "venue": "Experimental astronomy (Print)",
+  "year": 2023,
+  "citationCount": 4,
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Alix Nouvel de la Fl\u00e8che"
+   },
+   {
+    "authorId": "2074612442",
+    "name": "J. Atteia"
+   },
+   {
+    "authorId": "2176542014",
+    "name": "J\u00e9r\u00e9mie Boy"
+   },
+   {
+    "authorId": "144938558",
+    "name": "A. Klotz"
+   },
+   {
+    "authorId": "1390437235",
+    "name": "A. Langlois"
+   },
+   {
+    "authorId": "134420776",
+    "name": "M. Larrieu"
+   },
+   {
+    "authorId": "138715133",
+    "name": "R. Mathon"
+   },
+   {
+    "authorId": "72946763",
+    "name": "H. Valentin"
+   },
+   {
+    "authorId": "2219626175",
+    "name": "Philippe Ambert"
+   },
+   {
+    "authorId": "3559605",
+    "name": "J. Cl\u00e9mens"
+   },
+   {
+    "authorId": "6749698",
+    "name": "D. Dornic"
+   },
+   {
+    "authorId": "152126373",
+    "name": "E. Kajfasz"
+   },
+   {
+    "authorId": null,
+    "name": "Jean Le Gra\u00ebt"
+   },
+   {
+    "authorId": "2277401374",
+    "name": "Olivier Llido"
+   },
+   {
+    "authorId": "92964702",
+    "name": "A. Secroun"
+   },
+   {
+    "authorId": "30842374",
+    "name": "O. Boulade"
+   },
+   {
+    "authorId": "123500311",
+    "name": "A. Bounab"
+   },
+   {
+    "authorId": "13177679",
+    "name": "G. Badano"
+   },
+   {
+    "authorId": "13296145",
+    "name": "O. Gravrand"
+   },
+   {
+    "authorId": "134695988",
+    "name": "S. Aufranc"
+   },
+   {
+    "authorId": "71047763",
+    "name": "A. Lamoure"
+   },
+   {
+    "authorId": "98132220",
+    "name": "L. Martineau"
+   },
+   {
+    "authorId": "9148185",
+    "name": "L. Rubaldo"
+   },
+   {
+    "authorId": "123148849",
+    "name": "H. Geoffray"
+   },
+   {
+    "authorId": "48482401",
+    "name": "F. Gonzalez"
+   },
+   {
+    "authorId": "2176534842",
+    "name": "S. Basa"
+   },
+   {
+    "authorId": "3257320",
+    "name": "F. Dolon"
+   },
+   {
+    "authorId": "10413204",
+    "name": "J. Floriot"
+   },
+   {
+    "authorId": "145687590",
+    "name": "S. Lombardo"
+   },
+   {
+    "authorId": "143663162",
+    "name": "S. Cuevas"
+   },
+   {
+    "authorId": "31996207",
+    "name": "A. Farah"
+   },
+   {
+    "authorId": "2052394742",
+    "name": "Jorge L Fuentes"
+   },
+   {
+    "authorId": "101951947",
+    "name": "R. Langarica"
+   },
+   {
+    "authorId": "145807072",
+    "name": "A. Watson"
+   },
+   {
+    "authorId": "32744212",
+    "name": "N. Butler"
+   }
+  ]
+ },
+ "ARXIV:2405.05941": null,
+ "ARXIV:2401.02117": {
+  "paperId": "fc3819a50705fc3cf90ab92f2a206b858fef3b19",
+  "externalIds": {
+   "ArXiv": "2401.02117",
+   "DBLP": "journals/corr/abs-2401-02117",
+   "DOI": "10.48550/arXiv.2401.02117",
+   "CorpusId": 266755740
+  },
+  "title": "Mobile ALOHA: Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation",
+  "venue": "arXiv.org",
+  "year": 2024,
+  "citationCount": 754,
+  "authors": [
+   {
+    "authorId": "89704471",
+    "name": "Zipeng Fu"
+   },
+   {
+    "authorId": "145914976",
+    "name": "Tony Zhao"
+   },
+   {
+    "authorId": "2239104473",
+    "name": "Chelsea Finn"
+   }
+  ]
+ },
+ "ARXIV:2304.10760": {
+  "paperId": "587fe81d7a50d3723781601a2e6b1b439304139b",
+  "externalIds": {
+   "ArXiv": "2304.10760",
+   "DOI": "10.1103/PhysRevA.108.063703",
+   "CorpusId": 258291819
+  },
+  "title": "Magnon squeezing by two-tone driving of a qubit in cavity-magnon-qubit systems",
+  "venue": "Physical Review A",
+  "year": 2023,
+  "citationCount": 32,
+  "authors": [
+   {
+    "authorId": "2467966084",
+    "name": "Qi Guo"
+   },
+   {
+    "authorId": "46754509",
+    "name": "Jiong Cheng"
+   },
+   {
+    "authorId": "103014816",
+    "name": "Huatang Tan"
+   },
+   {
+    "authorId": "2149869665",
+    "name": "Jie Li"
+   }
+  ]
+ },
+ "ARXIV:2310.19551": null,
+ "ARXIV:2404.03427": {
+  "paperId": "12fd259878d340663af4616aae76f3376c88a865",
+  "externalIds": {
+   "ArXiv": "2404.03427",
+   "DBLP": "conf/iros/TahirajFHYL24",
+   "DOI": "10.1109/IROS58592.2024.10801262",
+   "CorpusId": 268889298
+  },
+  "title": "GMMCalib: Extrinsic Calibration of LiDAR Sensors using GMM-based Joint Registration",
+  "venue": "IEEE/RJS International Conference on Intelligent RObots and Systems",
+  "year": 2024,
+  "citationCount": 8,
+  "authors": [
+   {
+    "authorId": "2248298383",
+    "name": "Ilir Tahiraj"
+   },
+   {
+    "authorId": "146704593",
+    "name": "F. Fent"
+   },
+   {
+    "authorId": "2220228243",
+    "name": "Philipp Hafemann"
+   },
+   {
+    "authorId": "1443789500",
+    "name": "Egon Ye"
+   },
+   {
+    "authorId": "2275486806",
+    "name": "Markus Lienkamp"
+   }
+  ]
+ },
+ "ARXIV:2406.09551": {
+  "paperId": "72d8bf66c83ed706699c0a26a3a180a4b04084d7",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2406-09551",
+   "ArXiv": "2406.09551",
+   "DOI": "10.48550/arXiv.2406.09551",
+   "CorpusId": 270521686
+  },
+  "title": "Embedding machine-learnt sub-grid variability improves climate model biases",
+  "venue": "arXiv.org",
+  "year": 2024,
+  "citationCount": 0,
+  "authors": [
+   {
+    "authorId": "2056062752",
+    "name": "Daniel Giles"
+   },
+   {
+    "authorId": "2306781977",
+    "name": "James Briant"
+   },
+   {
+    "authorId": "2306117741",
+    "name": "C. Morcrette"
+   },
+   {
+    "authorId": "2294377475",
+    "name": "S. Guillas"
+   }
+  ]
+ },
+ "ARXIV:2402.15399": {
+  "paperId": "f2adbfe8450ddb406f4082b6c75006eb0a09523c",
+  "externalIds": {
+   "ArXiv": "2402.15399",
+   "DBLP": "conf/aistats/LiuX24",
+   "DOI": "10.48550/arXiv.2402.15399",
+   "CorpusId": 267897462
+  },
+  "title": "Distributionally Robust Off-Dynamics Reinforcement Learning: Provable Efficiency with Linear Function Approximation",
+  "venue": "International Conference on Artificial Intelligence and Statistics",
+  "year": 2024,
+  "citationCount": 25,
+  "authors": [
+   {
+    "authorId": "2261450473",
+    "name": "Zhishuai Liu"
+   },
+   {
+    "authorId": "47568847",
+    "name": "Pan Xu"
+   }
+  ]
+ },
+ "ARXIV:2310.12031": {
+  "paperId": "e845840e82ed7307cdbd2ae19746debeba4482dc",
+  "externalIds": {
+   "DBLP": "journals/ijon/ZemskovaKYSP25",
+   "ArXiv": "2310.12031",
+   "DOI": "10.48550/arXiv.2310.12031",
+   "CorpusId": 259327423
+  },
+  "title": "SegmATRon: Embodied Adaptive Semantic Segmentation for Indoor Environment",
+  "venue": "Neurocomputing",
+  "year": 2023,
+  "citationCount": 7,
+  "authors": [
+   {
+    "authorId": "2062318821",
+    "name": "T. Zemskova"
+   },
+   {
+    "authorId": "2259932965",
+    "name": "M. Kichik"
+   },
+   {
+    "authorId": "2259915790",
+    "name": "Dmitry A. Yudin"
+   },
+   {
+    "authorId": "1412570582",
+    "name": "A. Staroverov"
+   },
+   {
+    "authorId": "2259915611",
+    "name": "Aleksandr I. Panov"
+   }
+  ]
+ },
+ "ARXIV:2301.04104": {
+  "paperId": "f2d952a183dfb0a1e031b8a3f535d9f8423d7a6e",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2301-04104",
+   "ArXiv": "2301.04104",
+   "DOI": "10.48550/arXiv.2301.04104",
+   "CorpusId": 255569874
+  },
+  "title": "Mastering Diverse Domains through World Models",
+  "venue": "arXiv.org",
+  "year": 2023,
+  "citationCount": 1386,
+  "authors": [
+   {
+    "authorId": "35006479",
+    "name": "Danijar Hafner"
+   },
+   {
+    "authorId": "31143488",
+    "name": "J. Pa\u0161ukonis"
+   },
+   {
+    "authorId": "2503659",
+    "name": "Jimmy Ba"
+   },
+   {
+    "authorId": "2542999",
+    "name": "T. Lillicrap"
+   }
+  ]
+ },
+ "ARXIV:2405.14085": {
+  "paperId": "5328f6c7058bec4e93b81f1e7fb87394e510c149",
+  "externalIds": {
+   "ArXiv": "2405.14085",
+   "DOI": "10.1088/2040-8986/adf8fc",
+   "CorpusId": 269981931
+  },
+  "title": "Evaluating quantumness, efficiency and cost of quantum random number generators via photon statistics",
+  "venue": "Journal of Optics",
+  "year": 2024,
+  "citationCount": 0,
+  "authors": [
+   {
+    "authorId": "2273911147",
+    "name": "Goutam Paul"
+   },
+   {
+    "authorId": "2261948579",
+    "name": "Nirupam Basak"
+   },
+   {
+    "authorId": "2302787300",
+    "name": "Soumya Das"
+   }
+  ]
+ },
+ "ARXIV:2402.15362": {
+  "paperId": "fccf6a8fe218ac5cb9c0ca4cfc20e0c78afe817a",
+  "externalIds": {
+   "ArXiv": "2402.15362",
+   "CorpusId": 267897973
+  },
+  "title": "Essential dimension of isogenies",
+  "venue": "",
+  "year": 2024,
+  "citationCount": 12,
+  "authors": [
+   {
+    "authorId": "2295730143",
+    "name": "J'anos Koll'ar"
+   },
+   {
+    "authorId": "2301471447",
+    "name": "Z. Zhuang"
+   }
+  ]
+ },
+ "ARXIV:2203.10544": {
+  "paperId": "4be23221b7fa689a33c757a3b687b835560ac4be",
+  "externalIds": {
+   "ArXiv": "2203.10544",
+   "CorpusId": 247594413
+  },
+  "title": "More on the Brownian force model: avalanche shapes, tip driven, higher $d$",
+  "venue": "",
+  "year": 2022,
+  "citationCount": 3,
+  "authors": [
+   {
+    "authorId": "3969425",
+    "name": "P. Doussal"
+   }
+  ]
+ },
+ "ARXIV:2107.04034": {
+  "paperId": "1ca5ff6555d9fc634d3858d1fda9b3de2a91b13a",
+  "externalIds": {
+   "DBLP": "conf/rss/KumarFPM21",
+   "ArXiv": "2107.04034",
+   "DOI": "10.15607/RSS.2021.XVII.011",
+   "CorpusId": 235650916
+  },
+  "title": "RMA: Rapid Motor Adaptation for Legged Robots",
+  "venue": "Robotics: Science and Systems Conference",
+  "year": 2021,
+  "citationCount": 1003,
+  "authors": [
+   {
+    "authorId": "2118069675",
+    "name": "Ashish Kumar"
+   },
+   {
+    "authorId": "89704471",
+    "name": "Zipeng Fu"
+   },
+   {
+    "authorId": "2004879394",
+    "name": "Deepak Pathak"
+   },
+   {
+    "authorId": "143751119",
+    "name": "Jitendra Malik"
+   }
+  ]
+ },
+ "ARXIV:2302.01438": {
+  "paperId": "d9871b1469b9ab147b303ed2518f090e44b1cb25",
+  "externalIds": {
+   "ArXiv": "2302.01438",
+   "DOI": "10.1142/S0217751X24500088",
+   "CorpusId": 256598255
+  },
+  "title": "Non-relativistic quantum particles interacting with pseudoharmonic-type potential under flux field in a topological defect geometry",
+  "venue": "International Journal of Modern Physics A",
+  "year": 2023,
+  "citationCount": 0,
+  "authors": [
+   {
+    "authorId": "102603694",
+    "name": "P. Rudra"
+   },
+   {
+    "authorId": "46985414",
+    "name": "Faizuddin Ahmed"
+   },
+   {
+    "authorId": "77968415",
+    "name": "H. Aounallah"
+   }
+  ]
+ }
+}

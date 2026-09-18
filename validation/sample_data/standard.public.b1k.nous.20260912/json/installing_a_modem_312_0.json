@@ -1,0 +1,1 @@
+{"task": "installing_a_modem", "instance_id": 312, "rollout_id": 0, "steps": 12380, "success": false, "agent_distance": {"base": 1.416, "left": 1.661, "right": 1.528}, "normalized_agent_distance": {"base": 0.2055, "left": 1.2836, "right": 0.9815}, "q_score": {"final": 0.75}, "time": {"simulator_steps": 12380, "simulator_time": 412.667, "normalized_time": 1.3755}}

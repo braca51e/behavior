@@ -1,0 +1,1 @@
+{"task": "store_produce", "instance_id": 308, "rollout_id": 0, "steps": 11827, "success": false, "agent_distance": {"base": 1.196, "left": 1.527, "right": 2.17}, "normalized_agent_distance": {"base": 0.6918, "left": 0.5721, "right": 0.9782}, "q_score": {"final": 0.25}, "time": {"simulator_steps": 11827, "simulator_time": 394.233, "normalized_time": 1.3142}}

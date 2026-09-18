@@ -1,0 +1,62 @@
+# b1k policy server configuration.
+# Loaded by `python -m b1k.server --config configs/server.yaml --port 8000`.
+# Relative paths are resolved against the repository root (see b1k.config).
+#
+# This is the MVP/fixture config: the VLA backend is "echo" (replays recorded
+# demo actions, CPU-only, no weights) so the full serving contract is verifiable
+# without the multi-GB pi0.5 checkpoint.  Switch `policy.backend` to "vla" +
+# `policy.checkpoint_dir` for the real fine-tuned model (design milestone M1+).
+
+host: 127.0.0.1
+port: 8000
+robot: R1Pro
+max_size: 67108864          # 64 MB obs payload cap (720^2*3 + 2*480^2*3 + depth)
+
+# Task metadata (legal at eval: BDDL + task descriptions + room prior).
+task_rooms_csv: raw/2025_misc.csv
+task_descriptions_jsonl: docs/task-descriptions-100.jsonl
+
+# Log dir for the per-episode obs-layout verification dump.
+log_dir: outputs/logs
+
+reset_on_connect: true     # each WS (re)connect is a fresh rollout
+verify_obs_layout: true    # INFO-log the obs key layout once per connection
+
+planner:
+  plans_dir: docs/plans    # mined per-task skill plans (<task_id>.json)
+  budget_mult: 1.5         # subgoal budget = p90 demo duration x this
+  stuck_steps: 900         # RETRY after this many no-progress steps (30 s)
+  retry_cap_mult: 3.0      # a subgoal may not exceed 3x demo-mean length
+  conf_floor: 0.6          # detector confidence floor
+
+progress:
+  hysteresis_frames: 3     # K consistent frames before a predicate flips
+  global_budget_mult: 1.5  # episode budget = 1.5x human mean length
+  early_stop: true         # FINISH (park) when all goal predicates satisfied
+  search_after_s: 5.0
+
+odometry:
+  fps: 30.0
+  vo_subsample: 3          # head-depth VO every 3rd frame (drift correction)
+  vo_blend_gain: 0.1       # exponential-smoothing blend gain (0..1)
+  occupancy_cell_m: 0.5
+  occupancy_radius_cells: 40
+  vo_model_path: null      # optional DPV2 weights; null = velocity-only
+
+controller:
+  chunk_requery: 16        # re-query VLA every K steps (receding horizon)
+  action_horizon: 32       # VLA output chunk length (pi05_b1k convention)
+  blend_steps: 4           # chunk-boundary blend ramp (temporal ensembling)
+  grip_deadband: 0.02      # gripper command deadband (anti-chatter)
+  base_clamp: [0.75, 0.75, 1.0]   # r1pro.yaml base output limits
+  stale_vla_s: 5.0
+
+policy:
+  backend: echo            # "echo" (MVP) | "vla" (real pi0.5) | "noop"
+  checkpoint_dir: null     # set to data/checkpoints/pi05_b1k for backend=vla
+  norm_stats_path: data/stats.json
+  device: auto             # "auto" resolves to cuda if available, else cpu
+  adapters_dir: null
+  detector_bundle_dir: null
+  demos_root: data/demos   # recorded demo action sequences (<task_id>/actions.npy)
+  seed: 0

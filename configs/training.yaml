@@ -1,0 +1,32 @@
+# Training pipeline configuration (design.md section 4.6).
+# Consumed by scripts under src/training/*.  Not read at serve time.
+
+data_root: data/demos
+stats_out: data/stats.json
+annotations_out: data/annotations.jsonl
+
+vla:
+  config_name: pi05_b1k         # OpenPI 'behavior' fork pi0.5 R1Pro config
+  out_dir: data/checkpoints/pi05_b1k
+  batch_size: 8
+  steps: 50000
+  action_horizon: 32
+  receding_horizon: 16
+  seed: 0
+  device: cuda
+  use_subgoal_conditioning: true
+
+adapters:
+  # Bottom-quartile tasks identified by self-eval (week 3, M3).
+  tasks: []
+  lora_rank: 8
+  steps: 2000
+  batch_size: 8
+
+detectors:
+  out_dir: data/detectors
+  families: []                 # empty = all predicate families
+  steps: 20000
+  batch_size: 32
+  device: cuda
+  min_positive_labels: 8

@@ -1,0 +1,1 @@
+{"task": "hanging_pictures", "instance_id": 315, "rollout_id": 0, "steps": 10027, "success": false, "agent_distance": {"base": 1.002, "left": 1.816, "right": 0.567}, "normalized_agent_distance": {"base": 1.353, "left": 0.3571, "right": 1.3024}, "q_score": {"final": 0.0}, "time": {"simulator_steps": 10027, "simulator_time": 334.233, "normalized_time": 1.1141}}

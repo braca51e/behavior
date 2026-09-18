@@ -1,0 +1,1 @@
+{"task": "spraying_for_bugs", "instance_id": 311, "rollout_id": 0, "steps": 11408, "success": false, "agent_distance": {"base": 1.431, "left": 1.749, "right": 1.003}, "normalized_agent_distance": {"base": 0.3125, "left": 0.2081, "right": 0.9816}, "q_score": {"final": 0.25}, "time": {"simulator_steps": 11408, "simulator_time": 380.267, "normalized_time": 1.2676}}

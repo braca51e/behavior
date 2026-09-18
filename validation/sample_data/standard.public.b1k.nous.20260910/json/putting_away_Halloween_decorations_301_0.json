@@ -1,0 +1,1 @@
+{"task": "putting_away_Halloween_decorations", "instance_id": 301, "rollout_id": 0, "steps": 10773, "success": false, "agent_distance": {"base": 2.23, "left": 2.049, "right": 1.505}, "normalized_agent_distance": {"base": 0.9158, "left": 1.0006, "right": 0.5999}, "q_score": {"final": 0.75}, "time": {"simulator_steps": 10773, "simulator_time": 359.1, "normalized_time": 1.197}}

@@ -1,0 +1,47 @@
+{
+  "task_id": 1,
+  "task": "picking_up_trash",
+  "plan": [
+    {
+      "skill": "move_to",
+      "args": {
+        "object": ""
+      },
+      "text": "move to ",
+      "mean_steps": 360,
+      "p90_steps": 540,
+      "pred_families": [
+        "positioned"
+      ],
+      "count": 4
+    },
+    {
+      "skill": "pick_up",
+      "args": {
+        "object": ""
+      },
+      "text": "pick up ",
+      "mean_steps": 120,
+      "p90_steps": 180,
+      "pred_families": [
+        "object_in_gripper"
+      ],
+      "count": 4
+    },
+    {
+      "skill": "place_in",
+      "args": {
+        "object": ""
+      },
+      "text": "place  in container",
+      "mean_steps": 150,
+      "p90_steps": 225,
+      "pred_families": [
+        "contains"
+      ],
+      "count": 4
+    }
+  ],
+  "episode_mean_steps": 630.0,
+  "num_episodes": 4
+}

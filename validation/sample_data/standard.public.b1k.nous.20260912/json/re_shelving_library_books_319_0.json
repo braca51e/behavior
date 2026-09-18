@@ -1,0 +1,1 @@
+{"task": "re_shelving_library_books", "instance_id": 319, "rollout_id": 0, "steps": 10669, "success": false, "agent_distance": {"base": 0.635, "left": 1.701, "right": 0.983}, "normalized_agent_distance": {"base": 0.6952, "left": 0.8836, "right": 0.828}, "q_score": {"final": 0.75}, "time": {"simulator_steps": 10669, "simulator_time": 355.633, "normalized_time": 1.1854}}

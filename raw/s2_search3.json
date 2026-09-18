@@ -1,0 +1,336 @@
+{
+ "GR00T N1: An Open Foundation Model for Generalist Humanoid Robots": null,
+ "DexGraspNet: Generative Dexterous Grasping": null,
+ "Genie: Generative Interactive Environments": {
+  "paperId": "c064de2c71ebc5cf05493f49dc312b033c36b3b9",
+  "externalIds": {
+   "DBLP": "conf/icml/BruceDEPS0LMSAA24",
+   "ArXiv": "2402.15391",
+   "DOI": "10.48550/arXiv.2402.15391",
+   "CorpusId": 267897982
+  },
+  "title": "Genie: Generative Interactive Environments",
+  "venue": "International Conference on Machine Learning",
+  "year": 2024,
+  "citationCount": 798,
+  "authors": [
+   {
+    "authorId": "2286344472",
+    "name": "Jake Bruce"
+   },
+   {
+    "authorId": "2286305249",
+    "name": "Michael Dennis"
+   },
+   {
+    "authorId": "2268732203",
+    "name": "Ashley Edwards"
+   },
+   {
+    "authorId": "1410302742",
+    "name": "Jack Parker-Holder"
+   },
+   {
+    "authorId": "2468060457",
+    "name": "Yuge Shi"
+   },
+   {
+    "authorId": "2286317624",
+    "name": "Edward Hughes"
+   },
+   {
+    "authorId": "40227832",
+    "name": "M. Lai"
+   },
+   {
+    "authorId": "38792754",
+    "name": "Aditi Mavalankar"
+   },
+   {
+    "authorId": "2188779988",
+    "name": "Richie Steigerwald"
+   },
+   {
+    "authorId": "2293394525",
+    "name": "Chris Apps"
+   },
+   {
+    "authorId": "3152281",
+    "name": "Y. Aytar"
+   },
+   {
+    "authorId": "33931249",
+    "name": "Sarah Bechtle"
+   },
+   {
+    "authorId": "145124447",
+    "name": "Feryal M. P. Behbahani"
+   },
+   {
+    "authorId": "2297673118",
+    "name": "Stephanie Chan"
+   },
+   {
+    "authorId": "2801204",
+    "name": "N. Heess"
+   },
+   {
+    "authorId": "2287795688",
+    "name": "Lucy Gonzalez"
+   },
+   {
+    "authorId": "2217144",
+    "name": "Simon Osindero"
+   },
+   {
+    "authorId": "1955694",
+    "name": "Sherjil Ozair"
+   },
+   {
+    "authorId": "2315316001",
+    "name": "Scott E. Reed"
+   },
+   {
+    "authorId": "2107958221",
+    "name": "Jingwei Zhang"
+   },
+   {
+    "authorId": "7912420",
+    "name": "Konrad Zolna"
+   },
+   {
+    "authorId": "2263705770",
+    "name": "Jeff Clune"
+   },
+   {
+    "authorId": "1737568",
+    "name": "Nando de Freitas"
+   },
+   {
+    "authorId": "2286734040",
+    "name": "Satinder Singh"
+   },
+   {
+    "authorId": "1389854357",
+    "name": "Tim Rocktaschel"
+   }
+  ]
+ },
+ "NaVid: A Generalist Vision-Language-Action Model": null,
+ "Genesis: A Generative and Universal Physics Simulator": null,
+ "Deploying Ten Thousand Robots: Scalable Imitation Learning for Lifelong Multi-Agent Path Finding": null,
+ "PolyTouch: A Robust Multi-Modal Tactile Sensor for Contact-Rich Manipulation": null,
+ "Human-Agent Joint Learning for Efficient Robot Manipulation Skill Acquisition": null,
+ "No Plan but Everything under Control: Robustly Solving Sequential Tasks": {
+  "paperId": "dfee860df1f1a028b23984bdf4c410d0a5f422c0",
+  "externalIds": {
+   "DBLP": "conf/icra/MengersB25",
+   "ArXiv": "2503.01732",
+   "DOI": "10.1109/ICRA55743.2025.11127552",
+   "CorpusId": 276774518
+  },
+  "title": "No Plan but Everything Under Control: Robustly Solving Sequential Tasks with Dynamically Composed Gradient Descent",
+  "venue": "IEEE International Conference on Robotics and Automation",
+  "year": 2025,
+  "citationCount": 10,
+  "authors": [
+   {
+    "authorId": "2221122954",
+    "name": "Vito Mengers"
+   },
+   {
+    "authorId": "2282967698",
+    "name": "Oliver Brock"
+   }
+  ]
+ },
+ "Do You Know Where Your Camera Is? View-Invariant Policy Learning with Camera Conditioning": {
+  "paperId": "0f579ad3c9fe2da70a2c9a0b1951d71d422b8218",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2510-02268",
+   "ArXiv": "2510.02268",
+   "DOI": "10.48550/arXiv.2510.02268",
+   "CorpusId": 281724545
+  },
+  "title": "Do You Know Where Your Camera Is? View-Invariant Policy Learning with Camera Conditioning",
+  "venue": "arXiv.org",
+  "year": 2025,
+  "citationCount": 15,
+  "authors": [
+   {
+    "authorId": "2220962414",
+    "name": "Tianchong Jiang"
+   },
+   {
+    "authorId": "2363151434",
+    "name": "Jingtian Ji"
+   },
+   {
+    "authorId": "2300143331",
+    "name": "Xiangshan Tan"
+   },
+   {
+    "authorId": "2150470767",
+    "name": "Jiading Fang"
+   },
+   {
+    "authorId": "2395672703",
+    "name": "Anand Bhattad"
+   },
+   {
+    "authorId": "2171907555",
+    "name": "V. Guizilini"
+   },
+   {
+    "authorId": "2294174360",
+    "name": "Matthew R. Walter"
+   }
+  ]
+ },
+ "Improving Vision-Language-Action Model with Online Reinforcement Learning": null,
+ "BEHAVIOR-1K: A Large-Scale Benchmark for Learning Housekeeping Policies": null,
+ "RoboCasa: Large-Scale Simulation of Everyday Tasks for Generalist Robots": null,
+ "LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning": null,
+ "DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset": null,
+ "HumanPlus: Humanoid Shadowing and Imitation from Humans": null,
+ "OmniH2O: Learning Human-to-Humanoid Retargeting for Bimanual Tasks": null,
+ "HIL-SERL: Imitating Human Demonstrations for Robot Manipulation": {
+  "paperId": "4dbb5ada86dcfe36eb2aff90116e99a9e21757eb",
+  "externalIds": {
+   "ArXiv": "2608.15088",
+   "CorpusId": 291172307
+  },
+  "title": "Max-Q Selective Imitation for Human-in-the-Loop Online Robot Learning",
+  "venue": "",
+  "year": 2026,
+  "citationCount": 0,
+  "authors": [
+   {
+    "authorId": "2334215224",
+    "name": "Zihang Wang"
+   },
+   {
+    "authorId": "2458610350",
+    "name": "Yishan Wang"
+   }
+  ]
+ },
+ "DexMimicGen: Scaling Robot Learning with Affordable Human Demonstrations": {
+  "paperId": "9c6b8a6eef623256c41c33000fb6cd4da1ffeadd",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2603-07691",
+   "ArXiv": "2603.07691",
+   "DOI": "10.48550/arXiv.2603.07691",
+   "CorpusId": 286377676
+  },
+  "title": "RoboPCA: Pose-centered Affordance Learning from Human Demonstrations for Robot Manipulation",
+  "venue": "arXiv.org",
+  "year": 2026,
+  "citationCount": 1,
+  "authors": [
+   {
+    "authorId": "2340946617",
+    "name": "Zhan-Qi Xiao"
+   },
+   {
+    "authorId": "2108681349",
+    "name": "Ruiping Wang"
+   },
+   {
+    "authorId": "2118026024",
+    "name": "Xilin Chen"
+   }
+  ]
+ },
+ "AnyTeleop: A General Vision-Based Dexterous Teleoperation System": null,
+ "Rewind: Language-Guided Rewards Teach Robot Policies without New Demonstrations": null,
+ "Robo-DM: Data Management for Large Robot Datasets": null,
+ "ALOHA 2: An Enhanced Low-Cost Hardware for Bimanual Imitation Learning": null,
+ "RT-1: Robotics Transformer for Real-World Control at Scale": null,
+ "Gato: A Generalist Agent": null,
+ "Executing Code-as-Policies for Robot Task Planning and Control": null,
+ "Vision-and-Language Navigation across Diverse Real Environments: Scene Graph Instructions": {
+  "paperId": "c1c7f3eb815c3ed026baa11a188cc5e5fb41c9cd",
+  "externalIds": {
+   "ArXiv": "2509.13733",
+   "DBLP": "journals/corr/abs-2509-13733",
+   "DOI": "10.48550/arXiv.2509.13733",
+   "CorpusId": 281333007
+  },
+  "title": "FSR-VLN: Fast and Slow Reasoning for Vision-Language Navigation with Hierarchical Multi-modal Scene Graph",
+  "venue": "arXiv.org",
+  "year": 2025,
+  "citationCount": 20,
+  "authors": [
+   {
+    "authorId": "2279319816",
+    "name": "Xiaolin Zhou"
+   },
+   {
+    "authorId": "2350680075",
+    "name": "Tingyang Xiao"
+   },
+   {
+    "authorId": "2332597209",
+    "name": "Liu Liu"
+   },
+   {
+    "authorId": "2374489377",
+    "name": "Yucheng Wang"
+   },
+   {
+    "authorId": "2362290681",
+    "name": "Maiyue Chen"
+   },
+   {
+    "authorId": "2367565250",
+    "name": "Xinrui Meng"
+   },
+   {
+    "authorId": "2333518293",
+    "name": "Xinjie Wang"
+   },
+   {
+    "authorId": "2354198426",
+    "name": "Wei Feng"
+   },
+   {
+    "authorId": "2350672341",
+    "name": "Wei Sui"
+   },
+   {
+    "authorId": "2267501979",
+    "name": "Zhizhong Su"
+   }
+  ]
+ },
+ "3D Diffuser Actor: Policy Diffusion for 3D Bimanual Manipulation": {
+  "paperId": "97fc977b8d167ff648c5c6672aea4d05f98fd79e",
+  "externalIds": {
+   "DBLP": "conf/corl/KeGF24",
+   "ArXiv": "2402.10885",
+   "DOI": "10.48550/arXiv.2402.10885",
+   "CorpusId": 267740176
+  },
+  "title": "3D Diffuser Actor: Policy Diffusion with 3D Scene Representations",
+  "venue": "Conference on Robot Learning",
+  "year": 2024,
+  "citationCount": 376,
+  "authors": [
+   {
+    "authorId": "2261188396",
+    "name": "Tsung-Wei Ke"
+   },
+   {
+    "authorId": "3070188",
+    "name": "Nikolaos Gkanatsios"
+   },
+   {
+    "authorId": "1705557",
+    "name": "Katerina Fragkiadaki"
+   }
+  ]
+ },
+ "Deep Equivariant Multi-Agent Control Barrier Functions": null,
+ "Control Barrier Functions: Applications of Nonlinear Safety-Critical Control to Autonomous Robotics Systems": null
+}
