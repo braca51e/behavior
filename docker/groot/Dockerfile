@@ -2,14 +2,13 @@
 #
 # Host needs ONLY Docker + NVIDIA Container Toolkit. No conda, no uv on the host.
 #
-# Build:
-#   docker build -t b1k-groot -f docker/groot/Dockerfile docker/groot
-# Or:
+# Build (BuildKit recommended — caches large NVIDIA wheels across retries):
 #   scripts/docker/build_groot.sh
 #
 # NOTE: nvidia/Cosmos-Reason2-2B is gated — pass HF_TOKEN and accept the gate
 # on Hugging Face before first train.
 
+# syntax=docker/dockerfile:1.7
 FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -17,6 +16,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
+    # Large wheels from pypi.nvidia.com often timeout at the default 30s.
+    UV_HTTP_TIMEOUT=600 \
+    UV_CONCURRENT_DOWNLOADS=4 \
     GIT_LFS_SKIP_SMUDGE=1 \
     GROOT_DIR=/opt/Isaac-GR00T \
     DATASET_PATH=/data/demos \
@@ -38,8 +40,11 @@ WORKDIR /opt
 RUN git clone --depth 1 https://github.com/wensi-ai/Isaac-GR00T.git Isaac-GR00T
 
 WORKDIR /opt/Isaac-GR00T
-RUN uv sync --frozen --python 3.10 \
-    && uv pip install --python .venv/bin/python websockets huggingface_hub
+# Retry: torch+cu128 pulls multi-GB nvidia-* wheels; flaky CDNs are common.
+# BuildKit cache keeps successful wheel downloads across failed attempts.
+COPY install_deps.sh /tmp/install_deps.sh
+RUN --mount=type=cache,target=/root/.cache/uv \
+    chmod +x /tmp/install_deps.sh && /tmp/install_deps.sh && rm -f /tmp/install_deps.sh
 
 ENV VIRTUAL_ENV=/opt/Isaac-GR00T/.venv \
     PATH="/opt/Isaac-GR00T/.venv/bin:${PATH}" \

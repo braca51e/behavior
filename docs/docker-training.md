@@ -296,6 +296,7 @@ docker run --rm -it --gpus all \
 | OOM on 16 GB | Lower `BATCH_SIZE` (π0.5) or `GLOBAL_BATCH_SIZE` (GR00T); close other GPU apps |
 | GR00T 401 / gated model | Accept HF gates + `export HF_TOKEN=…` |
 | `scripts/b1k` missing in image | Rebuild from `wensi-ai/Isaac-GR00T` (challenge fork), not a generic NVIDIA GR00T tree |
+| `uv sync` timeout on `nvidia-cusparse-cu12` / pypi.nvidia.com | Flaky CDN while pulling multi‑GB CUDA wheels. Re-run `scripts/docker/build_groot.sh` (BuildKit caches successful downloads; Dockerfile retries 6× with `UV_HTTP_TIMEOUT=600`) |
 | Norm-stats / checkpoints not on host | Confirm `CKPT_ROOT` mount; browse with `find data/checkpoints -type d \| head` |
 | Eval can’t connect | `curl localhost:8000/healthz`; serve must bind `0.0.0.0` (GR00T entrypoint does; π0.5 uses OpenPI’s server) |
 | Still need this repo’s System-2 server | After training, either use OpenPI/GR00T `serve_b1k.py` **or** wire weights into `configs/server.yaml` `policy.backend: vla` (OpenPI integration seam) |
