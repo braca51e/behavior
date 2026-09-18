@@ -28,9 +28,8 @@ export HF_CACHE=$HOME/.cache/huggingface
 # ---- once per demo tree ----
 scripts/docker/download_demos.sh 0     # task 0 = turning_on_radio → data/demos/
 ls data/demos/meta/info.json           # MUST exist
-scripts/docker/train_groot.sh deploy-modality
 
-# ---- train (reuses HF cache + demos on disk) ----
+# ---- train (auto-runs deploy-modality if meta/modality.json is missing) ----
 scripts/docker/train_groot.sh train
 # Checkpoints → data/checkpoints/groot/b1k-turning_on_radio/checkpoint-<step>/
 ```
@@ -137,12 +136,15 @@ ls data/demos/data/chunk-000 | head
 
 Full dataset is ~3.27 TB (100 chunks). Start with chunk `0` only.
 
-### C. Deploy modality metadata
+### C. Deploy modality (automatic on train)
+
+GR00T needs `data/demos/meta/modality.json`. Either:
 
 ```bash
 scripts/docker/train_groot.sh deploy-modality
-# writes meta/modality.json into the demo tree (required by GR00T)
 ```
+
+or just run `train` — the wrapper creates `modality.json` if it is missing.
 
 ### D. Train
 
@@ -275,7 +277,8 @@ Skip training entirely: organizers publish a `turning_on_radio` checkpoint on th
 
 | Symptom | Fix |
 |---|---|
-| `FAIL: missing …/meta/info.json` | `scripts/docker/download_demos.sh 0` then `deploy-modality` then `train` |
+| `FAIL: missing …/meta/info.json` | `scripts/docker/download_demos.sh 0` then `train` |
+| `FileNotFoundError: …/meta/modality.json` | `scripts/docker/train_groot.sh deploy-modality` (or re-run `train` — it auto-deploys now) |
 | `FileNotFoundError: 'hf'` on download | `pip install -U 'huggingface_hub[cli]'` then re-run `download_demos.sh` |
 | `Invalid user token` / `401` gated repo | New Read token; accept Cosmos + GR00T gates; `HF_TOKEN` must be valid (`whoami` preflight). Revoke any token you pasted into chat |
 | Website says access granted, still 401 | Bad/expired `HF_TOKEN` overrides login — unset and export a fresh token |

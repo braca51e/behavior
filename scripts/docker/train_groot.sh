@@ -23,8 +23,20 @@ if [[ "$CMD" == "train" || "$CMD" == "deploy-modality" ]]; then
   if [[ ! -f "$DATA_ROOT/meta/info.json" ]]; then
     echo "FAIL: missing $DATA_ROOT/meta/info.json (no demos on host)" >&2
     echo "  Run:  scripts/docker/download_demos.sh 0" >&2
-    echo "  Then: scripts/docker/train_groot.sh deploy-modality" >&2
     echo "  Then: scripts/docker/train_groot.sh train" >&2
+    exit 1
+  fi
+fi
+
+# train needs meta/modality.json — write it automatically if missing.
+if [[ "$CMD" == "train" && ! -f "$DATA_ROOT/meta/modality.json" ]]; then
+  echo "+ missing meta/modality.json — running deploy-modality first"
+  docker run --rm --gpus all \
+    -v "$DATA_ROOT:/data/demos" \
+    -e "DATASET_PATH=/data/demos" \
+    "$TAG" deploy-modality
+  if [[ ! -f "$DATA_ROOT/meta/modality.json" ]]; then
+    echo "FAIL: deploy-modality did not create $DATA_ROOT/meta/modality.json" >&2
     exit 1
   fi
 fi
