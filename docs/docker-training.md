@@ -204,23 +204,80 @@ Current global step: 0
 Checkpoints appear under `data/checkpoints/groot/b1k-<TASK_NAME>/` as steps hit
 `--save-steps` (default 1500 in the entrypoint).
 
-### E. Serve + eval
+### E. Serve + eval (your trained ckpt **or** organizer-provided)
+
+**Policy = Docker** (`serve`). **Sim = host** (`behavior392` / OmniGibson).  
+Free the GPU if a train job is still running.
+
+#### E.1 Point `PATH_TO_CKPT` at weights
+
+**A — checkpoint you trained**
 
 ```bash
-# pick a step directory written under CKPT_ROOT
 ls data/checkpoints/groot/b1k-turning_on_radio/
-
 export PATH_TO_CKPT=$PWD/data/checkpoints/groot/b1k-turning_on_radio/checkpoint-XXXX
-scripts/docker/train_groot.sh serve
-# EXPECT: listening on 0.0.0.0:8000
 ```
 
-On the host (second terminal), OmniGibson eval — same as the visual pilot:
+**B — organizer-provided `turning_on_radio` (no training)**  
+Table + links: [Provided checkpoints](https://behavior.stanford.edu/challenge/baselines.html#provided-checkpoints)
+
+| Stack | Google Drive |
+|---|---|
+| π0.5 | https://drive.google.com/file/d/1KojwNUz0HVwU3Ww2SVh3NKt-4asuI3y2/view?usp=sharing |
+| GR00T N1.7 | https://drive.google.com/file/d/1OXNm3SPLvWOSJR1e8In6xHMHxOYDp789/view?usp=sharing |
+
+```bash
+mkdir -p data/checkpoints/groot/provided
+# download + unzip the GR00T archive into that tree, then:
+export PATH_TO_CKPT=$PWD/data/checkpoints/groot/provided/<unzipped-dir>
+# must contain the model files the server expects (often a checkpoint-* folder)
+ls "$PATH_TO_CKPT"
+```
+
+#### E.2 Serve (Docker)
+
+```bash
+export HF_TOKEN=...   # may still be needed for gated backbone pieces
+export HF_CACHE=$HOME/.cache/huggingface
+export PATH_TO_CKPT=...   # absolute path
+scripts/docker/train_groot.sh serve
+# EXPECT: listening on 0.0.0.0:8000 ; curl -s localhost:8000/healthz → 200
+```
+
+For π0.5 provided/trained weights use `scripts/docker/train_pi05.sh serve` instead.
+
+#### E.3 Eval on the host (pick a mode)
 
 ```bash
 conda activate behavior392
 export PYTHONNOUSERSITE=1 OMNI_KIT_ACCEPT_EULA=YES
+```
 
+| Goal | Flags |
+|---|---|
+| **Headless + MP4** (no Isaac window; watch video after) | `--headless --write-video` |
+| **LIVE Isaac window** | `--no-headless` (optional `--write-video` if you also want an MP4) |
+
+**Headless + video (recommended on servers / Brev):**
+
+```bash
+python -m omnigibson.eval.eval \
+  --task-name turning_on_radio \
+  --host 127.0.0.1 --port 8000 \
+  --instance-indices 0 --num-rollouts 1 \
+  --env-wrapper omnigibson.eval.wrappers.RGBDFullResWrapper \
+  --output-dir outputs/groot_eval \
+  --max-steps 2000 \
+  --headless \
+  --write-video
+
+ls outputs/groot_eval/videos/
+ffplay outputs/groot_eval/videos/turning_on_radio_*.mp4   # or vlc …
+```
+
+**LIVE window:**
+
+```bash
 python -m omnigibson.eval.eval \
   --task-name turning_on_radio \
   --host 127.0.0.1 --port 8000 \
@@ -230,6 +287,8 @@ python -m omnigibson.eval.eval \
   --max-steps 2000 \
   --no-headless
 ```
+
+Do **not** use `scripts/run_visual_pilot.sh` for provided/trained GR00T — that script serves this repo’s **echo** MVP, not `b1k-groot`.
 
 ---
 
@@ -251,7 +310,8 @@ export TASK_NAME=turning_on_radio
 scripts/docker/train_pi05.sh serve
 ```
 
-Then the same OmniGibson eval command as GR00T (§E), pointed at `:8000`.
+Then the same OmniGibson eval commands as GR00T (§E.3), pointed at `:8000`
+(`--headless --write-video` or `--no-headless`).
 
 ---
 
@@ -299,10 +359,6 @@ docs/docker-training.md      # this file
 | `torchrun … train_b1k.py` (GR00T) | `train_groot.sh train` |
 | `python … serve_b1k.py` (GR00T) | `train_groot.sh serve` |
 
-Skip training entirely: organizers publish a `turning_on_radio` checkpoint on the
-[baselines page](https://behavior.stanford.edu/challenge/baselines.html#provided-checkpoints)
-→ download → `serve` → eval.
-
 ---
 
 ## Troubleshooting
@@ -322,7 +378,9 @@ Skip training entirely: organizers publish a `turning_on_radio` checkpoint on th
 | OOM | Lower `GLOBAL_BATCH_SIZE` (GR00T) or `BATCH_SIZE` (π0.5) |
 | Flash-attn / float32 spam at startup | Harmless if you also see `Casting fp32 inputs back to torch.bfloat16` and then `loss` logs |
 | Want LIVE window during **train** | Training has no scene UI — only **eval** is visual (`--no-headless`) |
+| Want video without a GUI | Eval with `--headless --write-video`, then `ffplay outputs/…/videos/*.mp4` |
 | Eval can’t connect | `curl localhost:8000/healthz`; serve binds `0.0.0.0` |
+| W&B stays offline | `export WANDB_MODE=online WANDB_API_KEY=…` then re-run `train` (`train_groot.sh` forwards both). Default is offline. |
 
 ---
 
@@ -334,8 +392,10 @@ Skip training entirely: organizers publish a `turning_on_radio` checkpoint on th
 - [ ] `download_demos.sh 0` → `data/demos/meta/info.json` exists  
 - [ ] GR00T: gates accepted + `HF_TOKEN` passes whoami  
 - [ ] GR00T: `train` (auto `deploy-modality` if needed) shows `loss` logs  
-- [ ] π0.5: `norm-stats` then `train`  
-- [ ] `serve` + host OmniGibson eval  
+- [ ] Optional: `WANDB_MODE=online` + `WANDB_API_KEY` for live metrics  
+- [ ] `serve` with trained **or** [provided](https://behavior.stanford.edu/challenge/baselines.html#provided-checkpoints) ckpt  
+- [ ] Host eval: `--headless --write-video` (MP4) and/or `--no-headless` (LIVE)  
+- [ ] π0.5: `norm-stats` then `train` (same serve/eval pattern)  
 
 **After a green train:** wire into this repo’s serving stack or package a
 submission — see `docs/solution.md` and `docs/gpu-simulation.md`.

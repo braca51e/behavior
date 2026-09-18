@@ -37,8 +37,10 @@ GPU, simulator, or the 3.27 TB demo set** — that is the design's
 > **Train π0.5 / GR00T without host conda/uv?** Start with the **TL;DR** in
 > [`docs/docker-training.md`](docs/docker-training.md) — build image → download
 > demos → (GR00T: HF token + deploy-modality) → `train` → `serve` → host eval.
-> Demos, checkpoints, and Hugging Face models persist under `data/` (or
-> `HF_CACHE`) so re-runs do not re-download.
+> Also covers **W&B online**, **organizer-provided checkpoints**, and
+> **headless eval with MP4** (`--headless --write-video`). Demos, checkpoints,
+> and Hugging Face models persist under `data/` (or `HF_CACHE`) so re-runs do
+> not re-download.
 > `docs/challenge-spec.md` is the authoritative requirements spec;
 > `docs/design.md` is the strategy rationale.
 
