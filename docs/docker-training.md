@@ -123,13 +123,18 @@ scripts/docker/
 docs/docker-training.md # this file
 ```
 
-Mounts used by the wrappers:
+Mounts used by the wrappers (everything stays on the **host**; containers are
+`--rm` but re-runs reuse these dirs — no re-download of demos or HF weights):
 
 | Host path | Container | Purpose |
 |---|---|---|
-| `DATA_ROOT` (default `data/demos`) | `/data/demos` | LeRobot demos |
-| `CKPT_ROOT` | `/checkpoints` | Norm assets + checkpoints |
-| `~/.cache/huggingface` | `/root/.cache/huggingface` | HF / model cache |
+| `DATA_ROOT` (default `data/demos`) | `/data/demos` | LeRobot demos (`download_demos.sh`) |
+| `CKPT_ROOT` (default `data/checkpoints/{pi05,groot}`) | `/checkpoints` | Norm assets + training checkpoints |
+| `HF_CACHE` (default `data/cache/huggingface`) | `/root/.cache/huggingface` | HF models (Cosmos, GR00T, tokenizers, …) |
+
+Wrappers print the three paths on every launch. Override with `DATA_ROOT` /
+`CKPT_ROOT` / `HF_CACHE` if you want a shared machine-wide cache
+(e.g. `HF_CACHE=$HOME/.cache/huggingface`).
 
 ---
 
@@ -294,10 +299,10 @@ docker run --rm -it --gpus all \
 |---|---|
 | Want LIVE Isaac window during train | Training has no scene UI — only **eval serve** is visual; use `--no-headless` on host eval |
 | OOM on 16 GB | Lower `BATCH_SIZE` (π0.5) or `GLOBAL_BATCH_SIZE` (GR00T); close other GPU apps |
-| GR00T 401 / gated model | Accept HF gates + `export HF_TOKEN=…` |
+| GR00T 401 / gated model | Accept HF gates + live `HF_TOKEN`. `HF_TOKEN` **overrides** `hf auth login` — a revoked/typo token always 401s even if the web UI says you have access. Check with `hf auth whoami` inside `b1k-groot` before train. |
 | `scripts/b1k` missing in image | Rebuild from `wensi-ai/Isaac-GR00T` (challenge fork), not a generic NVIDIA GR00T tree |
 | `uv sync` timeout on `nvidia-cusparse-cu12` / pypi.nvidia.com | Flaky CDN while pulling multi‑GB CUDA wheels. Re-run `scripts/docker/build_groot.sh` (BuildKit caches successful downloads; Dockerfile retries 6× with `UV_HTTP_TIMEOUT=600`) |
-| Norm-stats / checkpoints not on host | Confirm `CKPT_ROOT` mount; browse with `find data/checkpoints -type d \| head` |
+| Missing `meta/info.json` under demos | Run `scripts/docker/download_demos.sh 0` into `DATA_ROOT` (default `data/demos`), then `scripts/docker/train_groot.sh deploy-modality`, then `train` |
 | Eval can’t connect | `curl localhost:8000/healthz`; serve must bind `0.0.0.0` (GR00T entrypoint does; π0.5 uses OpenPI’s server) |
 | Still need this repo’s System-2 server | After training, either use OpenPI/GR00T `serve_b1k.py` **or** wire weights into `configs/server.yaml` `policy.backend: vla` (OpenPI integration seam) |
 

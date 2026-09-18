@@ -22,7 +22,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
     GIT_LFS_SKIP_SMUDGE=1 \
     GROOT_DIR=/opt/Isaac-GR00T \
     DATASET_PATH=/data/demos \
-    REPO_ID=behavior-1k/2026-challenge-demos
+    REPO_ID=behavior-1k/2026-challenge-demos \
+    HF_HOME=/root/.cache/huggingface \
+    HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface \
+    TRANSFORMERS_CACHE=/root/.cache/huggingface \
+    HF_HUB_CACHE=/root/.cache/huggingface
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl git git-lfs \
@@ -54,7 +58,8 @@ WORKDIR /opt/Isaac-GR00T
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-VOLUME ["/data/demos", "/checkpoints", "/root/.cache"]
+# Runtime mounts (host paths via train_*.sh): demos, checkpoints, HF model cache.
+VOLUME ["/data/demos", "/checkpoints", "/root/.cache/huggingface"]
 
 EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

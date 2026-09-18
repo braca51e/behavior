@@ -20,7 +20,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
     REPO_ID=behavior-1k/2026-challenge-demos \
     DATASET_PATH=/data/demos \
     OPENPI_DIR=/opt/openpi \
-    XLA_PYTHON_CLIENT_MEM_FRACTION=0.85
+    OPENPI_DATA_HOME=/checkpoints \
+    XLA_PYTHON_CLIENT_MEM_FRACTION=0.85 \
+    HF_HOME=/root/.cache/huggingface \
+    HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface \
+    TRANSFORMERS_CACHE=/root/.cache/huggingface \
+    HF_HUB_CACHE=/root/.cache/huggingface
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl git git-lfs python3 python3-venv \
@@ -51,10 +56,8 @@ WORKDIR /opt/openpi
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Mounts expected at runtime:
-#   -v $DATA_ROOT:/data/demos
-#   -v $CKPT_ROOT:/checkpoints
-VOLUME ["/data/demos", "/checkpoints", "/root/.cache"]
+# Runtime mounts (host paths via train_*.sh): demos, checkpoints, HF model cache.
+VOLUME ["/data/demos", "/checkpoints", "/root/.cache/huggingface"]
 
 EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

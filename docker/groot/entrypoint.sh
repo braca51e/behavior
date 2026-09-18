@@ -47,8 +47,24 @@ case "$cmd" in
     exec python scripts/b1k/deploy_modality.py "$DATASET_PATH" "$@"
     ;;
   train)
-    if [[ -z "${HF_TOKEN:-}" ]]; then
-      echo "WARN: HF_TOKEN unset — gated backbone download will likely fail." >&2
+    if [[ -z "${HF_TOKEN:-}" && -z "${HUGGING_FACE_HUB_TOKEN:-}" ]]; then
+      echo "FAIL: set HF_TOKEN (gated Cosmos-Reason2-2B + GR00T-N1.7-3B)" >&2
+      exit 1
+    fi
+    # Propagate under both env names; reject bad tokens before a long train start.
+    export HF_TOKEN="${HF_TOKEN:-$HUGGING_FACE_HUB_TOKEN}"
+    export HUGGING_FACE_HUB_TOKEN="${HUGGING_FACE_HUB_TOKEN:-$HF_TOKEN}"
+    if ! hf auth whoami >/dev/null; then
+      echo "FAIL: HF_TOKEN is invalid. HF_TOKEN overrides cached login — fix/export a live token." >&2
+      exit 1
+    fi
+    if [[ ! -f "$DATASET_PATH/meta/info.json" ]]; then
+      echo "FAIL: missing $DATASET_PATH/meta/info.json" >&2
+      echo "  Download demos first, e.g. on the host:" >&2
+      echo "    scripts/docker/download_demos.sh 0" >&2
+      echo "  Then: scripts/docker/train_groot.sh deploy-modality" >&2
+      echo "  Mount expects DATA_ROOT → /data/demos with meta/ + data/chunk-*/" >&2
+      exit 1
     fi
     mkdir -p /checkpoints
     # Single-GPU path; multi-GPU uses torchrun when NUM_GPUS>1.

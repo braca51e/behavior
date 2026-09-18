@@ -1,30 +1,49 @@
 #!/usr/bin/env bash
 # Train / serve GR00T N1.7 via the b1k-groot image.
 #
+# Demos, checkpoints, and HF models persist on the host under data/ (see
+# scripts/docker/_persist_paths.sh). Re-runs reuse the cache — no re-download.
+#
 #   export HF_TOKEN=hf_xxx   # required (gated Cosmos backbone)
-#   DATA_ROOT=data/demos CKPT_ROOT=data/checkpoints/groot \
-#     scripts/docker/train_groot.sh deploy-modality
+#   scripts/docker/train_groot.sh deploy-modality
 #   scripts/docker/train_groot.sh train
 #   PATH_TO_CKPT=... scripts/docker/train_groot.sh serve
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 
 TAG="${TAG:-b1k-groot}"
-DATA_ROOT="${DATA_ROOT:-$PWD/data/demos}"
-CKPT_ROOT="${CKPT_ROOT:-$PWD/data/checkpoints/groot}"
-HF_CACHE="${HF_CACHE:-$HOME/.cache/huggingface}"
+CKPT_DEFAULT=groot
+# shellcheck source=scripts/docker/_persist_paths.sh
+source "$(dirname "$0")/_persist_paths.sh"
+
 CMD="${1:-help}"
 shift || true
-
-mkdir -p "$DATA_ROOT" "$CKPT_ROOT" "$HF_CACHE"
 
 if [[ "$CMD" == "train" && -z "${HF_TOKEN:-}" ]]; then
   echo "FAIL: export HF_TOKEN (gated nvidia/Cosmos-Reason2-2B + GR00T-N1.7-3B)" >&2
   exit 1
 fi
 
+# HF_TOKEN wins over cached hf auth login — a revoked/typo'd token always 401s.
+if [[ "$CMD" == "train" ]]; then
+  echo "+ preflight: hf auth whoami (HF_TOKEN must be a live Read token)"
+  if ! docker run --rm -e HF_TOKEN -e HUGGING_FACE_HUB_TOKEN="$HF_TOKEN" \
+      -e HF_HOME=/root/.cache/huggingface \
+      -v "$HF_CACHE:/root/.cache/huggingface" \
+      "$TAG" shell -c 'hf auth whoami'; then
+    echo "FAIL: HF_TOKEN is invalid or expired." >&2
+    echo "  1) Revoke old tokens at https://huggingface.co/settings/tokens" >&2
+    echo "  2) Create a new Read token (do not paste it into chat)" >&2
+    echo "  3) export HF_TOKEN=hf_...   # fresh value, no quotes/spaces" >&2
+    echo "  4) Confirm: docker run --rm -e HF_TOKEN $TAG shell -c 'hf auth whoami'" >&2
+    exit 1
+  fi
+fi
+
 extra=()
-[[ -n "${HF_TOKEN:-}" ]] && extra+=(-e "HF_TOKEN=$HF_TOKEN")
+if [[ -n "${HF_TOKEN:-}" ]]; then
+  extra+=(-e "HF_TOKEN=$HF_TOKEN" -e "HUGGING_FACE_HUB_TOKEN=$HF_TOKEN")
+fi
 [[ -n "${EXP_NAME:-}" ]] && extra+=(-e "EXP_NAME=$EXP_NAME")
 [[ -n "${TASK_NAME:-}" ]] && extra+=(-e "TASK_NAME=$TASK_NAME")
 [[ -n "${NUM_GPUS:-}" ]] && extra+=(-e "NUM_GPUS=$NUM_GPUS")
@@ -41,6 +60,10 @@ exec docker run --rm -it --gpus all \
   -v "$CKPT_ROOT:/checkpoints" \
   -v "$HF_CACHE:/root/.cache/huggingface" \
   -e "DATASET_PATH=/data/demos" \
+  -e "HF_HOME=/root/.cache/huggingface" \
+  -e "HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface" \
+  -e "TRANSFORMERS_CACHE=/root/.cache/huggingface" \
+  -e "HF_HUB_CACHE=/root/.cache/huggingface" \
   "${extra[@]}" \
   "${ports[@]}" \
   "$TAG" "$CMD" "$@"
