@@ -1,229 +1,189 @@
-# Docker training for challenge baselines (π0.5 + GR00T) — no host conda/uv
+# Train π0.5 / GR00T with Docker (no host conda / uv)
 
-**Official source of truth for the algorithms:**  
-[BEHAVIOR Challenge Baselines — Train](https://behavior.stanford.edu/challenge/baselines.html#train)
+**Official algorithms:** [BEHAVIOR Challenge Baselines — Train](https://behavior.stanford.edu/challenge/baselines.html#train)
 
-**What this repo adds:** two Docker images that bake the official OpenPI and
-Isaac-GR00T training stacks at **build time**, so on the host you only need:
-
-- Docker Engine + [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-- A GPU
-- The LeRobot demo chunks on disk
-
-You do **not** install `conda`, `uv`, or a local OpenPI/GR00T venv on the host.
+**What this doc is:** a copy-paste path that works on a GPU box (e.g. Brev).  
+You only need Docker + NVIDIA Container Toolkit + a GPU. Training runs **inside**
+`b1k-pi05` / `b1k-groot`. OmniGibson LIVE eval stays on the host (`behavior392`).
 
 ---
 
-## 1. Why these images exist
-
-The official walkthrough forces two host-side package managers:
-
-| Official step | Host pain |
-|---|---|
-| OpenPI / GR00T setup | `uv sync` + project venvs + submodules |
-| OmniGibson eval | separate `conda` env (`behavior` / `behavior392`) + Isaac Sim |
-
-That split is intentional in the challenge design (policy server ↔ simulator
-over WebSocket), but it is painful to reproduce on a laptop.
-
-**Our split (same architecture, less pain):**
-
-```
-┌────────────────────────────┐         WS :8000         ┌──────────────────────────┐
-│  Docker: b1k-pi05          │ ◀──────────────────────▶ │  Host: behavior392       │
-│  or b1k-groot              │   (msgpack obs/action)   │  OmniGibson eval / LIVE  │
-│  TRAIN + SERVE only        │                          │  (already set up here)   │
-└────────────────────────────┘                          └──────────────────────────┘
-```
-
-| Workload | Where | Image / env |
-|---|---|---|
-| Fine-tune π0.5 | Docker | `b1k-pi05` |
-| Fine-tune GR00T N1.7 | Docker | `b1k-groot` |
-| Serve trained policy | Docker | same images (`serve`) |
-| Simulate / score / LIVE window | **Host** | `conda activate behavior392` (Isaac Sim does not belong in these slim train images) |
-| This repo’s `echo` MVP | Host or existing `Dockerfile` | not for real Q |
-
-**Why not one mega-image with Isaac Sim?** Isaac Sim 5.1 + assets is tens of
-GB, needs the NVIDIA EULA, and GUI/`DISPLAY` plumbing fights containers. The
-challenge itself expects OmniGibson **outside** the policy container
-(see root `Dockerfile` comments). Keep sim on the host env you already have.
-
-**Why bake `uv` into the image?** So *you* never run it. Build once; runtime
-`PATH` is already the project `.venv`.
-
----
-
-## 2. What you train (and why)
-
-Both baselines learn from the same public demos:
-[`behavior-1k/2026-challenge-demos`](https://huggingface.co/datasets/behavior-1k/2026-challenge-demos)
-(LeRobot v3.0, ~3.27 TB full; download **one chunk** to pilot).
-
-### 2.1 π0.5 (OpenPI `behavior` fork)
-
-| | |
-|---|---|
-| **Why** | Official VLA baseline; this repo’s `policy.backend: vla` path targets the same family |
-| **Code** | [`wensi-ai/openpi` @ `behavior`](https://github.com/wensi-ai/openpi) |
-| **Config** | `pi05_b1k` — R1Pro, 32-step action horizon, base weights `gs://openpi-assets/checkpoints/pi05_base/params` |
-| **Does** | Fine-tunes π0.5 on challenge demos; serves WebSocket policy for the evaluator |
-| **Good when** | You want the primary challenge baseline / VLA route |
-
-Flow:
-
-1. **Norm stats** — dataset mean/std for actions/state (required before train).
-2. **Train** — `scripts/b1k/train_b1k.py pi05_b1k …`
-3. **Serve** — `scripts/b1k/serve_b1k.py` on port 8000.
-4. **Eval** — host `omnigibson.eval.eval` → that port (same as `LIVE=1` pilot).
-
-### 2.2 GR00T N1.7 (Isaac-GR00T challenge fork)
-
-| | |
-|---|---|
-| **Why** | Second official baseline; strong alternative VLA stack |
-| **Code** | [`wensi-ai/Isaac-GR00T`](https://github.com/wensi-ai/Isaac-GR00T) |
-| **Base** | `nvidia/GR00T-N1.7-3B` + gated backbone [`nvidia/Cosmos-Reason2-2B`](https://huggingface.co/nvidia/Cosmos-Reason2-2B) |
-| **Does** | Fine-tunes projector + diffusion action head (vision/LLM frozen); 16-step horizon; R1Pro via `examples/b1k/r1pro.py` |
-| **Good when** | You want the GR00T baseline or a second opinion vs π0.5 |
-
-Flow:
-
-1. **Accept HF gates** + set `HF_TOKEN`.
-2. **deploy-modality** — write `meta/modality.json` into the demo tree.
-3. **Train** — `scripts/b1k/train_b1k.py …`
-4. **Serve** — `scripts/b1k/serve_b1k.py` on port 8000.
-5. **Eval** — same host OmniGibson client as π0.5.
-
-### 2.3 Skip training?
-
-Organizers ship a ready checkpoint for `turning_on_radio` (π0.5 and GR00T) on
-the [baselines page](https://behavior.stanford.edu/challenge/baselines.html#provided-checkpoints).
-Download → `serve` with that path → eval. Training is only required when you
-want your own weights / more tasks.
-
----
-
-## 3. Layout in this repo
-
-```
-docker/
-  pi05/
-    Dockerfile          # clones OpenPI behavior, uv sync at build, PATH=.venv
-    entrypoint.sh       # norm-stats | train | serve | shell
-  groot/
-    Dockerfile          # clones wensi-ai/Isaac-GR00T, uv sync at build
-    entrypoint.sh       # deploy-modality | train | serve | shell
-scripts/docker/
-  build_pi05.sh
-  build_groot.sh
-  download_demos.sh
-  train_pi05.sh         # thin docker run wrapper
-  train_groot.sh
-docs/docker-training.md # this file
-```
-
-Mounts used by the wrappers (everything stays on the **host**; containers are
-`--rm` but re-runs reuse these dirs — no re-download of demos or HF weights):
-
-| Host path | Container | Purpose |
-|---|---|---|
-| `DATA_ROOT` (default `data/demos`) | `/data/demos` | LeRobot demos (`download_demos.sh`) |
-| `CKPT_ROOT` (default `data/checkpoints/{pi05,groot}`) | `/checkpoints` | Norm assets + training checkpoints |
-| `HF_CACHE` (default `data/cache/huggingface`) | `/root/.cache/huggingface` | HF models (Cosmos, GR00T, tokenizers, …) |
-
-Wrappers print the three paths on every launch. Override with `DATA_ROOT` /
-`CKPT_ROOT` / `HF_CACHE` if you want a shared machine-wide cache
-(e.g. `HF_CACHE=$HOME/.cache/huggingface`).
-
----
-
-## 4. One-time host prerequisites
+## TL;DR — GR00T (most common path)
 
 ```bash
-# NVIDIA driver + Docker + GPU runtime
-nvidia-smi
-docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
-# EXPECT: same GPU visible inside the container
+cd ~/behavior   # or your clone
+git pull
+
+# ---- once per machine ----
+scripts/docker/build_groot.sh          # long; retries NVIDIA wheel downloads
+pip install -U 'huggingface_hub[cli]'  # for demo download without `hf` CLI
+
+# Accept gates in the browser (same HF account as the token):
+#   https://huggingface.co/nvidia/Cosmos-Reason2-2B
+#   https://huggingface.co/nvidia/GR00T-N1.7-3B
+export HF_TOKEN=hf_...                 # NEW Read token — never paste into chat
+# Optional: reuse an existing HF cache instead of data/cache/huggingface
+export HF_CACHE=$HOME/.cache/huggingface
+
+# ---- once per demo tree ----
+scripts/docker/download_demos.sh 0     # task 0 = turning_on_radio → data/demos/
+ls data/demos/meta/info.json           # MUST exist
+scripts/docker/train_groot.sh deploy-modality
+
+# ---- train (reuses HF cache + demos on disk) ----
+scripts/docker/train_groot.sh train
+# Checkpoints → data/checkpoints/groot/b1k-turning_on_radio/checkpoint-<step>/
 ```
 
-Optional: `hf` CLI on the host only for downloading demos (or use
-`scripts/docker/download_demos.sh`, which falls back to this repo’s Python
-downloader).
+**Different task:** download that task’s chunk, then  
+`TASK_NAME=<task_name> scripts/docker/train_groot.sh train`  
+(default `TASK_NAME` is `turning_on_radio`).
 
 ---
 
-## 5. Download demos (pilot = task 0)
+## TL;DR — π0.5
 
 ```bash
-cd /home/luis/Documents/Behavior_Challenge
-chmod +x scripts/docker/*.sh
-
-# Optional: hf auth login   # or export HF_TOKEN=...
-scripts/docker/download_demos.sh 0
-# EXPECT: data/demos/data/chunk-000/ … + meta/ + videos/
-```
-
-Full 100-task dump is multi-TB — start with one chunk.
-
----
-
-## 6. Build the images (once)
-
-```bash
-# π0.5 — long first build (clone + uv sync + CUDA stack)
 scripts/docker/build_pi05.sh
-# EXPECT: "built b1k-pi05"
+pip install -U 'huggingface_hub[cli]'
+scripts/docker/download_demos.sh 0
+ls data/demos/meta/info.json
 
-# GR00T — similarly long
-scripts/docker/build_groot.sh
-# EXPECT: "built b1k-groot"
+export EXP_NAME=turning_on_radio_pilot
+scripts/docker/train_pi05.sh norm-stats
+BATCH_SIZE=8 scripts/docker/train_pi05.sh train
+# Checkpoints under data/checkpoints/pi05/ …
 ```
-
-Build uses `uv` **inside Docker only**. Host never needs `uv`.
 
 ---
 
-## 7. Train π0.5 (step by step)
+## What stays on disk (do not re-download)
 
-Defaults are sized for a **single ~16–24 GB GPU** (`BATCH_SIZE=8`). The official
-doc uses `batch_size=64` on large multi-GPU boxes — override when you have the
-VRAM.
+Containers use `--rm`. **All durable data is on the host.** Wrappers print the
+three mounts every run:
+
+| Host (defaults) | Container | Contents |
+|---|---|---|
+| `data/demos/` | `/data/demos` | LeRobot demos (`meta/info.json`, `data/chunk-000/`, videos) |
+| `data/checkpoints/groot/` or `…/pi05/` | `/checkpoints` | Training checkpoints + OpenPI assets |
+| `data/cache/huggingface/` | `/root/.cache/huggingface` | Cosmos / GR00T / tokenizers |
+
+Override any path:
 
 ```bash
 export DATA_ROOT=$PWD/data/demos
-export CKPT_ROOT=$PWD/data/checkpoints/pi05
-export EXP_NAME=turning_on_radio_pilot
-# export HF_TOKEN=...   # optional but recommended
-
-# 1) Norm stats (writes under the OpenPI outputs tree / mounted cache)
-scripts/docker/train_pi05.sh norm-stats
-
-# 2) Fine-tune
-BATCH_SIZE=8 scripts/docker/train_pi05.sh train
-# Checkpoints: typically under CKPT_ROOT / OpenPI outputs/checkpoints/pi05_b1k/$EXP_NAME/<step>
+export CKPT_ROOT=$PWD/data/checkpoints/groot
+export HF_CACHE=$HOME/.cache/huggingface   # share with other projects
 ```
 
-Find a step dir:
+After the first successful model download, later `train` runs should **not**
+re-fetch multi‑GB weights (they may still touch small config files).
+
+---
+
+## Prerequisites (once)
+
+1. **GPU + Docker**
 
 ```bash
-find data/checkpoints/pi05 -type d -name '*000*' | head
-# set PATH_TO_CKPT to a concrete step directory
+nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
 ```
 
-Serve:
+2. **Build the image you need** (host never runs `uv` / `conda` for these stacks)
 
 ```bash
-export PATH_TO_CKPT=/absolute/path/to/step_dir
-export TASK_NAME=turning_on_radio
-scripts/docker/train_pi05.sh serve
-# EXPECT: listening on :8000; curl localhost:8000/healthz → 200
+scripts/docker/build_groot.sh   # → image b1k-groot
+# and/or
+scripts/docker/build_pi05.sh    # → image b1k-pi05
 ```
 
-Eval on the host (second terminal) — same contract as the visual pilot:
+GR00T build can take a long time (multi‑GB CUDA wheels from `pypi.nvidia.com`).
+It retries automatically; re-run if the CDN times out.
+
+3. **Demo download helper on the host**
 
 ```bash
-source ~/miniconda3/etc/profile.d/conda.sh
+pip install -U 'huggingface_hub[cli]'
+```
+
+`scripts/docker/download_demos.sh` uses the `hf` CLI if present, otherwise the
+Python `huggingface_hub` API. No host conda required.
+
+---
+
+## Step-by-step: GR00T N1.7
+
+### A. Hugging Face access
+
+| Step | Detail |
+|---|---|
+| Gates | Open both model pages and accept access **with the same account** as your token |
+| Token | Create a **Read** token at https://huggingface.co/settings/tokens |
+| Export | `export HF_TOKEN=hf_...` in the shell that runs train (**do not commit or paste tokens**) |
+| Verify | `train_groot.sh train` preflights `hf auth whoami` — must print your username |
+
+`HF_TOKEN` **overrides** any cached `hf auth login`. A revoked or typo’d token
+always returns `401` even if the website says “You have been granted access”.
+
+### B. Download demos (task 0 = `turning_on_radio`)
+
+```bash
+scripts/docker/download_demos.sh 0
+# EXPECT:
+ls data/demos/meta/info.json
+ls data/demos/data/chunk-000 | head
+```
+
+Full dataset is ~3.27 TB (100 chunks). Start with chunk `0` only.
+
+### C. Deploy modality metadata
+
+```bash
+scripts/docker/train_groot.sh deploy-modality
+# writes meta/modality.json into the demo tree (required by GR00T)
+```
+
+### D. Train
+
+```bash
+export HF_TOKEN=hf_...
+export HF_CACHE=$HOME/.cache/huggingface   # optional
+scripts/docker/train_groot.sh train
+```
+
+Defaults inside the container:
+
+| Env | Default | Meaning |
+|---|---|---|
+| `TASK_NAME` | `turning_on_radio` | Experiment / data association name |
+| `EXP_NAME` | `b1k-$TASK_NAME` | Checkpoint folder name |
+| `NUM_GPUS` | `1` | `>1` switches to `torchrun` |
+| `GLOBAL_BATCH_SIZE` | `128` | Official doc uses `2048` on 8 big GPUs |
+| `MAX_STEPS` | `150000` | Cap training steps |
+
+Examples:
+
+```bash
+TASK_NAME=picking_up_trash scripts/docker/train_groot.sh train
+NUM_GPUS=2 GLOBAL_BATCH_SIZE=256 scripts/docker/train_groot.sh train
+MAX_STEPS=5000 scripts/docker/train_groot.sh train   # short pilot
+```
+
+### E. Serve + eval
+
+```bash
+# pick a step directory written under CKPT_ROOT
+ls data/checkpoints/groot/b1k-turning_on_radio/
+
+export PATH_TO_CKPT=$PWD/data/checkpoints/groot/b1k-turning_on_radio/checkpoint-XXXX
+scripts/docker/train_groot.sh serve
+# EXPECT: listening on 0.0.0.0:8000
+```
+
+On the host (second terminal), OmniGibson eval — same as the visual pilot:
+
+```bash
 conda activate behavior392
 export PYTHONNOUSERSITE=1 OMNI_KIT_ACCEPT_EULA=YES
 
@@ -232,90 +192,111 @@ python -m omnigibson.eval.eval \
   --host 127.0.0.1 --port 8000 \
   --instance-indices 0 --num-rollouts 1 \
   --env-wrapper omnigibson.eval.wrappers.RGBDFullResWrapper \
-  --output-dir outputs/pi05_eval \
+  --output-dir outputs/groot_eval \
   --max-steps 2000 \
-  --no-headless          # LIVE window; omit and use --headless for MP4-only
+  --no-headless
 ```
-
-Or point this repo’s echo pilot script at an already-running server (serve first,
-then run evaluator only).
 
 ---
 
-## 8. Train GR00T N1.7 (step by step)
+## Step-by-step: π0.5
 
 ```bash
-# 1) Accept the gate on Hugging Face for:
-#    https://huggingface.co/nvidia/Cosmos-Reason2-2B
-#    https://huggingface.co/nvidia/GR00T-N1.7-3B
-export HF_TOKEN=hf_xxx
+scripts/docker/build_pi05.sh
+scripts/docker/download_demos.sh 0
 
-export DATA_ROOT=$PWD/data/demos
-export CKPT_ROOT=$PWD/data/checkpoints/groot
+export EXP_NAME=turning_on_radio_pilot
+# export HF_TOKEN=...   # recommended for HF assets
+
+scripts/docker/train_pi05.sh norm-stats          # required once
+BATCH_SIZE=8 scripts/docker/train_pi05.sh train  # raise if you have VRAM
+
+find data/checkpoints/pi05 -type d | head
+export PATH_TO_CKPT=/absolute/path/to/step_dir
 export TASK_NAME=turning_on_radio
-
-# 2) Deploy modality config into the demo tree
-scripts/docker/train_groot.sh deploy-modality
-
-# 3) Fine-tune (1 GPU defaults; raise NUM_GPUS / GLOBAL_BATCH_SIZE on big boxes)
-NUM_GPUS=1 GLOBAL_BATCH_SIZE=128 scripts/docker/train_groot.sh train
-# Checkpoints → data/checkpoints/groot/b1k-turning_on_radio/checkpoint-<step>/
-
-# 4) Serve
-export PATH_TO_CKPT=$PWD/data/checkpoints/groot/b1k-turning_on_radio/checkpoint-XXXX
-scripts/docker/train_groot.sh serve
+scripts/docker/train_pi05.sh serve
 ```
 
-Eval: identical OmniGibson command as §7 (point at `:8000`).
+Then the same OmniGibson eval command as GR00T (§E), pointed at `:8000`.
 
 ---
 
-## 9. How the entrypoints map to the official CLI
+## Architecture (why two places)
 
-| Official (baselines.html) | This image |
-|---|---|
-| `uv run scripts/compute_norm_stats.py pi05_b1k …` | `b1k-pi05 norm-stats` |
-| `uv run scripts/b1k/train_b1k.py pi05_b1k …` | `b1k-pi05 train` |
-| `uv run scripts/b1k/serve_b1k.py …` | `b1k-pi05 serve` |
-| `python scripts/b1k/deploy_modality.py $DATA_ROOT` | `b1k-groot deploy-modality` |
-| `torchrun … scripts/b1k/train_b1k.py …` | `b1k-groot train` (`NUM_GPUS>1` uses `torchrun`) |
-| `python scripts/b1k/serve_b1k.py …` | `b1k-groot serve` |
-
-Raw `docker run` examples (wrappers just set mounts):
-
-```bash
-docker run --rm -it --gpus all \
-  -v $PWD/data/demos:/data/demos \
-  -v $PWD/data/checkpoints/pi05:/checkpoints \
-  -v $HOME/.cache/huggingface:/root/.cache/huggingface \
-  b1k-pi05 train
+```
+┌────────────────────────────┐         WS :8000         ┌──────────────────────────┐
+│  Docker: b1k-pi05          │ ◀──────────────────────▶ │  Host: behavior392       │
+│  or b1k-groot              │   (msgpack obs/action)   │  OmniGibson eval / LIVE  │
+│  TRAIN + SERVE only        │                          │                          │
+└────────────────────────────┘                          └──────────────────────────┘
 ```
 
----
-
-## 10. Honest limits / troubleshooting
-
-| Issue | Fix |
+| Workload | Where |
 |---|---|
-| Want LIVE Isaac window during train | Training has no scene UI — only **eval serve** is visual; use `--no-headless` on host eval |
-| OOM on 16 GB | Lower `BATCH_SIZE` (π0.5) or `GLOBAL_BATCH_SIZE` (GR00T); close other GPU apps |
-| GR00T 401 / gated model | Accept HF gates + live `HF_TOKEN`. `HF_TOKEN` **overrides** `hf auth login` — a revoked/typo token always 401s even if the web UI says you have access. Check with `hf auth whoami` inside `b1k-groot` before train. |
-| `scripts/b1k` missing in image | Rebuild from `wensi-ai/Isaac-GR00T` (challenge fork), not a generic NVIDIA GR00T tree |
-| `uv sync` timeout on `nvidia-cusparse-cu12` / pypi.nvidia.com | Flaky CDN while pulling multi‑GB CUDA wheels. Re-run `scripts/docker/build_groot.sh` (BuildKit caches successful downloads; Dockerfile retries 6× with `UV_HTTP_TIMEOUT=600`) |
-| Missing `meta/info.json` under demos | Run `scripts/docker/download_demos.sh 0` into `DATA_ROOT` (default `data/demos`), then `scripts/docker/train_groot.sh deploy-modality`, then `train` |
-| Eval can’t connect | `curl localhost:8000/healthz`; serve must bind `0.0.0.0` (GR00T entrypoint does; π0.5 uses OpenPI’s server) |
-| Still need this repo’s System-2 server | After training, either use OpenPI/GR00T `serve_b1k.py` **or** wire weights into `configs/server.yaml` `policy.backend: vla` (OpenPI integration seam) |
+| Fine-tune π0.5 / GR00T | Docker (`b1k-pi05` / `b1k-groot`) |
+| Serve policy on `:8000` | Same Docker image (`serve`) |
+| LIVE Isaac / score Q | Host conda `behavior392` |
+| This repo’s `echo` MVP | Host / root `Dockerfile` (not for real Q) |
+
+Isaac Sim is **not** in the train images (size, EULA, GUI). That matches the
+challenge’s policy-server ↔ simulator split.
 
 ---
 
-## 11. Checklist
+## Repo layout
 
-- [ ] `docker run --gpus all … nvidia-smi` works  
-- [ ] `scripts/docker/download_demos.sh 0` populated `data/demos/data/chunk-000`  
-- [ ] `scripts/docker/build_pi05.sh` and/or `build_groot.sh` finished  
-- [ ] π0.5: `norm-stats` then `train` then `serve` + host eval  
-- [ ] GR00T: HF gates + `deploy-modality` then `train` then `serve` + host eval  
-- [ ] (Optional) compare Q vs the provided Drive checkpoints on the baselines page  
+```
+docker/pi05/     Dockerfile + entrypoint (norm-stats | train | serve)
+docker/groot/    Dockerfile + entrypoint (deploy-modality | train | serve)
+scripts/docker/
+  build_pi05.sh / build_groot.sh
+  download_demos.sh
+  train_pi05.sh / train_groot.sh
+  _persist_paths.sh          # shared DATA_ROOT / CKPT_ROOT / HF_CACHE
+docs/docker-training.md      # this file
+```
 
-**Next after a green train:** package submission / wire into this repo’s serving
-stack — see `docs/solution.md` and `docs/gpu-simulation.md`.
+| Official CLI (baselines.html) | This repo |
+|---|---|
+| `uv run … compute_norm_stats.py pi05_b1k` | `train_pi05.sh norm-stats` |
+| `uv run … train_b1k.py pi05_b1k` | `train_pi05.sh train` |
+| `uv run … serve_b1k.py` | `train_pi05.sh serve` |
+| `python … deploy_modality.py $DATA` | `train_groot.sh deploy-modality` |
+| `torchrun … train_b1k.py` (GR00T) | `train_groot.sh train` |
+| `python … serve_b1k.py` (GR00T) | `train_groot.sh serve` |
+
+Skip training entirely: organizers publish a `turning_on_radio` checkpoint on the
+[baselines page](https://behavior.stanford.edu/challenge/baselines.html#provided-checkpoints)
+→ download → `serve` → eval.
+
+---
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| `FAIL: missing …/meta/info.json` | `scripts/docker/download_demos.sh 0` then `deploy-modality` then `train` |
+| `FileNotFoundError: 'hf'` on download | `pip install -U 'huggingface_hub[cli]'` then re-run `download_demos.sh` |
+| `Invalid user token` / `401` gated repo | New Read token; accept Cosmos + GR00T gates; `HF_TOKEN` must be valid (`whoami` preflight). Revoke any token you pasted into chat |
+| Website says access granted, still 401 | Bad/expired `HF_TOKEN` overrides login — unset and export a fresh token |
+| Re-downloads multi‑GB models every run | Confirm mount line `persist HF models … → /root/.cache/huggingface`; set `HF_CACHE` to the dir that already has the blobs |
+| `uv sync` timeout (`nvidia-cusparse` / pypi.nvidia.com) | Re-run `build_groot.sh` (BuildKit cache + retries) |
+| OOM | Lower `GLOBAL_BATCH_SIZE` (GR00T) or `BATCH_SIZE` (π0.5) |
+| Want LIVE window during **train** | Training has no scene UI — only **eval** is visual (`--no-headless`) |
+| Eval can’t connect | `curl localhost:8000/healthz`; serve binds `0.0.0.0` |
+
+---
+
+## Checklist
+
+- [ ] `docker … nvidia-smi` sees the GPU  
+- [ ] `b1k-groot` and/or `b1k-pi05` image built  
+- [ ] `pip install 'huggingface_hub[cli]'`  
+- [ ] `download_demos.sh 0` → `data/demos/meta/info.json` exists  
+- [ ] GR00T: gates accepted + `HF_TOKEN` passes whoami  
+- [ ] GR00T: `deploy-modality` then `train`  
+- [ ] π0.5: `norm-stats` then `train`  
+- [ ] `serve` + host OmniGibson eval  
+
+**After a green train:** wire into this repo’s serving stack or package a
+submission — see `docs/solution.md` and `docs/gpu-simulation.md`.

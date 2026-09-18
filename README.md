@@ -34,9 +34,11 @@ GPU, simulator, or the 3.27 TB demo set** — that is the design's
 > `docs/visual-pilot-step-by-step.md`** — full step-by-step from driver check
 > through `behavior392` install, `echo` policy serve, OmniGibson eval, and
 > watching the MP4 (`scripts/run_visual_pilot.sh`).
-> **Train π0.5 / GR00T without host conda/uv? Read
-> `docs/docker-training.md`** — Docker images that bake the official baseline
-> stacks (`docker/pi05`, `docker/groot`) and how to train + serve + eval.
+> **Train π0.5 / GR00T without host conda/uv?** Start with the **TL;DR** in
+> [`docs/docker-training.md`](docs/docker-training.md) — build image → download
+> demos → (GR00T: HF token + deploy-modality) → `train` → `serve` → host eval.
+> Demos, checkpoints, and Hugging Face models persist under `data/` (or
+> `HF_CACHE`) so re-runs do not re-download.
 > `docs/challenge-spec.md` is the authoritative requirements spec;
 > `docs/design.md` is the strategy rationale.
 
@@ -168,9 +170,13 @@ tie-breaker engine).
 
 ## Real training / evaluation (GPU box)
 
-The heavy path is fully scaffolded in `src/training` and `src/evalharness`; it
-needs conda + the BEHAVIOR-1K v3.9.2 clone + the demo dataset. `scripts/bootstrap.sh`
-prints the exact sequence:
+**Preferred for official π0.5 / GR00T baselines (no host conda/uv for train):**  
+follow the TL;DR in [`docs/docker-training.md`](docs/docker-training.md)
+(`build_*` → `download_demos.sh` → `train_*` → `serve` → host OmniGibson eval).
+
+The path below is this repo’s **quarantined** `src/training` scaffold (System‑2
+assets, detectors, etc.). It still needs conda + BEHAVIOR-1K for sim eval.
+`scripts/bootstrap.sh` prints the exact sequence:
 
 ```bash
 # clone + envs (BEHAVIOR-1K v3.9.2)
