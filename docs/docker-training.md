@@ -30,7 +30,10 @@ scripts/docker/download_demos.sh 0     # task 0 = turning_on_radio → data/demo
 ls data/demos/meta/info.json           # MUST exist
 
 # ---- train (auto-runs deploy-modality if meta/modality.json is missing) ----
+# Wrapper uses --shm-size=16g (needed for video DataLoader; override SHM_SIZE=…)
 scripts/docker/train_groot.sh train
+# Healthy: "Starting training…" then {'loss': …} every few steps (~2s/it on 1 GPU)
+# Full default is MAX_STEPS=150000 (~days). Pilot: MAX_STEPS=5000 scripts/docker/train_groot.sh train
 # Checkpoints → data/checkpoints/groot/b1k-turning_on_radio/checkpoint-<step>/
 ```
 
@@ -163,6 +166,7 @@ Defaults inside the container:
 | `NUM_GPUS` | `1` | `>1` switches to `torchrun` |
 | `GLOBAL_BATCH_SIZE` | `128` | Official doc uses `2048` on 8 big GPUs |
 | `MAX_STEPS` | `150000` | Cap training steps |
+| `SHM_SIZE` | `16g` | Docker `/dev/shm` for DataLoader video cache |
 
 Examples:
 
@@ -170,7 +174,28 @@ Examples:
 TASK_NAME=picking_up_trash scripts/docker/train_groot.sh train
 NUM_GPUS=2 GLOBAL_BATCH_SIZE=256 scripts/docker/train_groot.sh train
 MAX_STEPS=5000 scripts/docker/train_groot.sh train   # short pilot
+SHM_SIZE=32g scripts/docker/train_groot.sh train     # if shm bus-errors persist
 ```
+
+### What “healthy” looks like
+
+Ignore these **warnings** (normal on this stack):
+
+- Flash Attention 2 / `float32` → then `Casting fp32 inputs back to torch.bfloat16`
+- Albumentations update nag, DiT `FutureWarning`, `TRANSFORMERS_CACHE` deprecation
+- Brev: `Permission denied` under `/ephemeral/cache/huggingface` while demos still land in `data/demos/`
+
+You want:
+
+```text
+INFO - Starting training...
+Current global step: 0
+{'loss': 1.13…, 'grad_norm': …, 'learning_rate': …}
+  0%| … | 20/150000 [… ~2s/it]
+```
+
+Checkpoints appear under `data/checkpoints/groot/b1k-<TASK_NAME>/` as steps hit
+`--save-steps` (default 1500 in the entrypoint).
 
 ### E. Serve + eval
 
@@ -288,6 +313,7 @@ Skip training entirely: organizers publish a `turning_on_radio` checkpoint on th
 | Re-downloads multi‑GB models every run | Confirm mount line `persist HF models … → /root/.cache/huggingface`; set `HF_CACHE` to the dir that already has the blobs |
 | `uv sync` timeout (`nvidia-cusparse` / pypi.nvidia.com) | Re-run `build_groot.sh` (BuildKit cache + retries) |
 | OOM | Lower `GLOBAL_BATCH_SIZE` (GR00T) or `BATCH_SIZE` (π0.5) |
+| Flash-attn / float32 spam at startup | Harmless if you also see `Casting fp32 inputs back to torch.bfloat16` and then `loss` logs |
 | Want LIVE window during **train** | Training has no scene UI — only **eval** is visual (`--no-headless`) |
 | Eval can’t connect | `curl localhost:8000/healthz`; serve binds `0.0.0.0` |
 
@@ -300,7 +326,7 @@ Skip training entirely: organizers publish a `turning_on_radio` checkpoint on th
 - [ ] `pip install 'huggingface_hub[cli]'`  
 - [ ] `download_demos.sh 0` → `data/demos/meta/info.json` exists  
 - [ ] GR00T: gates accepted + `HF_TOKEN` passes whoami  
-- [ ] GR00T: `deploy-modality` then `train`  
+- [ ] GR00T: `train` (auto `deploy-modality` if needed) shows `loss` logs  
 - [ ] π0.5: `norm-stats` then `train`  
 - [ ] `serve` + host OmniGibson eval  
 
