@@ -34,6 +34,9 @@ GPU, simulator, or the 3.27 TB demo set** — that is the design's
 > `docs/visual-pilot-step-by-step.md`** — full step-by-step from driver check
 > through `behavior392` install, `echo` policy serve, OmniGibson eval, and
 > watching the MP4 (`scripts/run_visual_pilot.sh`).
+> **Train π0.5 / GR00T without host conda/uv? Read
+> `docs/docker-training.md`** — Docker images that bake the official baseline
+> stacks (`docker/pi05`, `docker/groot`) and how to train + serve + eval.
 > `docs/challenge-spec.md` is the authoritative requirements spec;
 > `docs/design.md` is the strategy rationale.
 

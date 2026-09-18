@@ -3,6 +3,8 @@
 **Companion docs:** [`solution.md`](solution.md) (full solution & submission guide —
 read §1–§5 first) · [`visual-pilot-step-by-step.md`](visual-pilot-step-by-step.md)
 (end-to-end one-task visual pilot with `echo` + MP4) ·
+[`docker-training.md`](docker-training.md) (π0.5 / GR00T train+serve Docker,
+no host conda/uv) ·
 [`gpu-commands-verified.md`](gpu-commands-verified.md)
 (2026-09-14 verified-command notes with captured outputs) ·
 [`../README.md`](../README.md) (repo tour) ·
