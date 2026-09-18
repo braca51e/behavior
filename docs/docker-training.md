@@ -280,6 +280,7 @@ Skip training entirely: organizers publish a `turning_on_radio` checkpoint on th
 | `FAIL: missing …/meta/info.json` | `scripts/docker/download_demos.sh 0` then `train` |
 | `FileNotFoundError: …/meta/modality.json` | `scripts/docker/train_groot.sh deploy-modality` (or re-run `train` — it auto-deploys now) |
 | `Python.h: No such file` / Triton `gcc` fail during train | Image missing Python headers. Rebuild: `scripts/docker/build_groot.sh` (image now includes `python3.10-dev` + `build-essential`). Demos/HF cache stay on host — no re-download |
+| `Video backend 'torchcodec' is not available` | Image missing FFmpeg shared libs for torchcodec. Rebuild `build_groot.sh` (Dockerfile installs `ffmpeg` + libav*). Build now smoke-tests `import torchcodec` |
 | `FileNotFoundError: 'hf'` on download | `pip install -U 'huggingface_hub[cli]'` then re-run `download_demos.sh` |
 | `Invalid user token` / `401` gated repo | New Read token; accept Cosmos + GR00T gates; `HF_TOKEN` must be valid (`whoami` preflight). Revoke any token you pasted into chat |
 | Website says access granted, still 401 | Bad/expired `HF_TOKEN` overrides login — unset and export a fresh token |

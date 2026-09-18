@@ -21,3 +21,21 @@ if [ "$ok" -ne 1 ]; then
 fi
 
 uv pip install --python .venv/bin/python websockets huggingface_hub
+
+# Fail the image build if video decoding cannot load (saves a long train setup).
+.venv/bin/python - <<'PY'
+import importlib.util
+import sys
+
+spec = importlib.util.find_spec("torchcodec")
+if spec is None:
+    raise SystemExit("FAIL: torchcodec not installed after uv sync")
+try:
+    import torchcodec  # noqa: F401
+    print("+ torchcodec import OK:", getattr(torchcodec, "__version__", "?"))
+except Exception as e:
+    raise SystemExit(
+        f"FAIL: torchcodec import broken ({e}). "
+        "Need system FFmpeg shared libs in the image."
+    ) from e
+PY

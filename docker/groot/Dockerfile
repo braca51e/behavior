@@ -30,8 +30,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl git git-lfs \
-        build-essential \
+        build-essential pkg-config \
         python3.10 python3.10-dev python3.10-venv python3-pip \
+        # torchcodec (GR00T video demos) needs FFmpeg shared libs at import time
+        ffmpeg \
+        libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev \
     && rm -rf /var/lib/apt/lists/* \
     && git lfs install --system \
     && ln -sf /usr/bin/python3.10 /usr/local/bin/python \
@@ -53,7 +56,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 ENV VIRTUAL_ENV=/opt/Isaac-GR00T/.venv \
     PATH="/opt/Isaac-GR00T/.venv/bin:${PATH}" \
-    PYTHONPATH=/opt/Isaac-GR00T
+    PYTHONPATH=/opt/Isaac-GR00T \
+    # Triton JIT cache (writable in container)
+    TRITON_CACHE_DIR=/tmp/triton_cache
 
 WORKDIR /opt/Isaac-GR00T
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
