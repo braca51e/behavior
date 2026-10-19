@@ -281,6 +281,48 @@ Two boxes Nov 1–Feb 10 ≈ 200 GPU-days capacity. One box ≈ 100: Ideas 1 + 2
 
 Each must stand alone; shared protocol/strata/policies halve the writing cost of papers 2 and 3.
 
+## Kickoff — how the team starts (week of Oct 20)
+
+### Reading order for a new team member
+1. `README.md` → `docs/docker-training.md` (get GR00T serve + `scripts/docker/eval.sh` running on the organizer `turning_on_radio` checkpoint; this is the smoke test for everything else).
+2. This document, §0 first, then the idea you own.
+3. `docs/challenge-spec.md` §6 (instance ids, Q math) and `docs/design.md` §4 (planner/watchdog architecture the research arms wrap).
+4. The three papers your idea is positioned against ([1][2] for Idea 1; [1][3][4] for Idea 2; [6][11][14] for Idea 3). Read them before writing code.
+
+### Assumptions this plan rests on that nobody has measured yet — verify in week 1
+
+| # | Assumption | How to verify | Owner | If false |
+|---|---|---|---|---|
+| A1 | Two-container eval (`train_groot.sh serve` + `eval.sh`) produces an official JSON + MP4 for the organizer checkpoint | Run it once, headless, on the Brev box; archive the JSON | infra | Every matrix is blocked — fix first |
+| A2 | ~50 full-length episodes / GPU-day with policy and sim on one GPU | Time 5 consecutive `eval.sh` runs incl. scene load; record `episodes/day` in `docs/research/throughput.md` | infra | Re-scale all matrices by the measured ratio; decide on the second box |
+| A3 | Demo-composition instances (C-seen) are evaluable: either demo instance files (ids 1–200) exist in `OMNIGIBSON_DATA_PATH`, or public 301–320 overlap in composition | Inspect `task_instance_id` in `meta/episodes` vs. the instance files in the sim image | Idea 1 | Define C-seen as public 301–320 and C-unseen as hidden 321–340; state the weaker definition in the paper |
+| A4 | Privileged state (goal predicates, poses, held objects, contacts, rooms) is readable from a custom `--env-wrapper` inside `stanfordvl/behavior:3.9.2` | Write the 40-line logger stub, run 1 episode, open the parquet | Idea 1 | Fall back to parsing the official per-predicate JSON (coarser onset times) |
+| A5 | Per-frame `task_index` changes are honoured by the GR00T LeRobot v3 loader | Unit test across a segment boundary | Idea 2 | Use `V-both` with the task text and inject skill text via a second language field |
+| A6 | K = 8 batched flow-matching samples fit the 30 Hz / 16-step re-query budget on the box | `scripts/bench_k_samples.sh` | Idea 3 | K = 4; if still over budget, D-disp becomes offline-only |
+| A7 | Released artifacts (videos, labels) are license-compatible with the demo dataset terms | Read the HF dataset card license | all | Release labels + parquet only, not videos |
+
+### Work breakdown (first four weeks)
+
+| Ticket | Deliverable | Depends on | Idea | Target |
+|---|---|---|---|---|
+| T1 | A1 done; `docs/research/throughput.md` with A2 numbers | — | shared | Oct 23 |
+| T2 | `src/research/sim/privileged_logger.py` + `EVAL_WRAPPER` in `eval.sh`; 1 parquet from 1 episode (A4) | T1 | shared | Oct 27 |
+| T3 | `src/research/anatomy/label_failures.py` + `tests/test_label_failures.py` (10-class schema of [2]) | T2 | 1 | Oct 31 |
+| T4 | `src/research/common/run_matrix.py` (resumable) + `analyze_common.py` (bootstrap CI over official JSONs) | T1 | shared | Oct 31 |
+| T5 | GR00T backend in `src/b1k/policy/vla.py`; watchdog arm serves the organizer checkpoint end-to-end | T1 | shared | Nov 3 |
+| T6 | `src/training/concat_tasks.py`; 20-task download started (disk ≥ 2 TB) | A3 | 1 | Nov 3 |
+| T7 | `src/training/skill_relabel.py` + loader test (A5); relabeled `turning_on_radio` | — | 2 | Oct 31 |
+| T8 | 5k-step V-task vs V-skill pilot finetunes + 20 oracle-switched episodes each → **G1-Idea 2 (Nov 10)** | T2, T5, T7 | 2 | Nov 10 |
+| T9 | K-sample decoding + feature tap + `bench_k_samples.sh` (A6); 60 labeled episodes → **G0-Idea 3 (Nov 8)** | T2, T3, T5 | 3 | Nov 8 |
+| T10 | 40-episode seen/unseen pilot on organizer checkpoints with labels → first ΔQ number | T2, T3, T4 | 1 | Oct 31 |
+| T11 | GR00T + π0.5 20-task finetunes launched; detectors trained → **G1-Idea 1 (Nov 15)** | T6 | 1 | Nov 15 |
+| T12 | Decision: rent second box (yes if A2 < 60 eps/day and all three ideas are go) | T1 | lead | Oct 24 |
+
+Suggested staffing for a 2–3 person team: one owner per idea; the shared tickets (T1, T2, T4, T5) go to whoever owns Idea 1 since its matrix is the substrate. Every ticket lands as a PR to `main` with a one-paragraph result note in `docs/research/log.md` (create on first use). Nothing in `src/research/` may be imported from `src/b1k/` — the challenge serving path must stay unchanged and onboard-only.
+
+### Definition of "ready to run a matrix"
+A1–A4 verified, T2–T5 merged, the organizer-checkpoint pilot (T10) produced labeled JSONs, and the per-episode output directory records image digest, checkpoint hash, instance ids, seeds and git SHA.
+
 ## Backup idea
 
 **"Which 50 demos?"** — demo selection for long-horizon finetuning: budgets {25, 50, 100, 200} × rules {random, max layout diversity via `task_instance_id`, shortest duration} × 5 tasks; 60 finetunes × 5k steps ≈ 15 GPU-days + 1,200 short episodes ≈ 10. Comet [5] scaled *tasks*; nobody has scaled *demos per task* with a diversity criterion on BEHAVIOR. Low method risk.

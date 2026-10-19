@@ -1,5 +1,7 @@
 # Research Scope — Three House-Scale VLA Ideas for IROS 2027 (Final)
 
+> **SUPERSEDED (2026-10-19).** Despite the title, this is no longer the operative scope: preconditions A (GPU cluster) and B (physical robot) were not met, and the Oct-2026 literature check removed several novelty claims. **Use [`research-plan-2027.md`](research-plan-2027.md).**
+
 **Date:** 2026-09-13 · **For:** the research team deciding what to start immediately
 **Synthesizes:** `docs/icra-iros-2027-trends.md` (literature/gap map, 63 verified sources), `docs/icra-iros-2027-ideas.md` (scoped ideas), `docs/feasibility-assessment-2027.md` (grounded feasibility review). Where the ideas doc and the feasibility review disagree (compute estimates), the feasibility review wins — it re-derived the numbers from the v3.9.2 evaluator constants.
 

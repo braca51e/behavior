@@ -1,4 +1,6 @@
 # Feasibility Assessment — 3 ICRA/IROS 2027 Research Ideas
+
+> **SUPERSEDED (2026-10-19).** Historical review of the Sep-2026 ideas. Its compute correction (13.5 sim-FPS, ~20 min/episode) still holds and is carried into the current plan; its go/no-go verdicts and gates do not. **Use [`research-plan-2027.md`](research-plan-2027.md).**
 **Task:** `t_0423f72f` (feasibility + robotics scope) → feeds `t_f4013e5a` (final scope doc, writer).
 **Reviewed:** `/home/luis/behavior_challenge/docs/icra-iros-2027-ideas.md` (3 ideas), grounded against the repo's real code, the BEHAVIOR-1K 2026 challenge spec, the v3.9.2 evaluator constants, and the live 20k-demo dataset schema.
 **Date:** 2026-09-13 (robotics-engineer). Verdicts are go/no-go per idea + the smallest credible experiment (MVE) for each.

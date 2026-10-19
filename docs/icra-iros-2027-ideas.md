@@ -1,5 +1,7 @@
 # Three Scoped Research Ideas for ICRA/IROS 2027-28 (BEHAVIOR House-Scale Manipulation)
 
+> **SUPERSEDED (2026-10-19).** Historical draft. Assumes a 4–8 GPU cluster and a physical R1Pro (neither available) and predates Behavior-Skill, "How VLAs (Really) Work", CycleVLA, and SAFE/PFD overlap. **Use [`research-plan-2027.md`](research-plan-2027.md).**
+
 **For:** task `t_aeffa76c` (3 scoped ideas) → consumed by `t_0423f72f` (feasibility, robotics-engineer) and `t_f4013e5a` (final scope doc, writer).
 **Written:** 2026-09-13 by ml-researcher.
 **Inputs:** `docs/icra-iros-2027-trends.md` (trend/gap map, 63 verified sources; gaps cited as Gx.y), `docs/design.md` + `docs/solution.md` (challenge architecture and real asset numbers), `raw/` (v3.9.2 evaluator sources, r1pro.yaml).

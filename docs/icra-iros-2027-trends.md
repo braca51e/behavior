@@ -1,5 +1,7 @@
 # ICRA/IROS 2027: Active Research Themes and Open Gaps (2022–2026 Literature Map)
 
+> **Still valid as background (venue facts, reviewer bar, 63 sources through Sep 2026).** For the 2026 BEHAVIOR-specific overlap (Behavior-Skill, Huawei failure study, Semantic Handoff, CycleVLA, SAFE/PFD) see §0 and the references of [`research-plan-2027.md`](research-plan-2027.md).
+
 **Prepared for:** task `t_aeffa76c` (3 scoped ICRA/IROS research ideas) and the 2026 BEHAVIOR Challenge effort in this repo.
 **Compiled:** 2026-09-12 by ml-researcher.
 **Method:** systematic scan of (a) ICRA 2025 & ICRA 2026 & IROS 2025 & IROS 2026 award finalists/winner lists, (b) 40+ arXiv preprints 2022–2026 (metadata + citation counts via Semantic Scholar), (c) two 2025 survey papers (VLA survey, humanoid loco-manipulation survey), (d) official CFP/schedule pages for ICRA 2027 and IROS 2027. Every citation below was verified against a live page; see the References section.
