@@ -1,257 +1,319 @@
 # Research Plan 2027 — Three Publishable Ideas Built on This Repo
 
-**Date:** 2026-10-19 · **Target venues:** IROS 2027 (paper deadline **Mar 1, 2027**, Florence) as the primary target; ICRA 2028 (deadline ~Sep 15, 2027) as the second slot; CoRL 2027 (~May/June 2027) as an alternative for Idea 3.
-**Supersedes** `docs/icra-iros-2027-ideas.md` / `docs/icra-iros-2027-final-scope.md` where they conflict. Those documents assumed a 4–8 GPU cluster and a physical R1Pro. **Neither exists.** This plan is sized to what we actually have today:
+**Date:** 2026-10-19 (rev. 2, after literature overlap check) · **Target venues:** IROS 2027 (paper deadline **Mar 1, 2027**, Florence) primary; ICRA 2028 (~Sep 15, 2027) second slot; CoRL 2027 (~May/June 2027) alternative for Idea 3.
+**Supersedes** `docs/icra-iros-2027-ideas.md` / `docs/icra-iros-2027-final-scope.md`. Those assumed a 4–8 GPU cluster and a physical R1Pro; **neither exists**, and several of their novelty claims have since been taken by published work (§0). This plan is sized to what we have and positioned against what exists as of today.
 
 | Asset we have today | Where |
 |---|---|
-| One single-GPU Docker-only node (Brev) that trains GR00T N1.7 (`scripts/docker/train_groot.sh`, measured ~2.3 s/it at global batch 128) and serves it on :8000 | `docker/groot/`, `docs/docker-training.md` |
+| One single-GPU Docker-only node (Brev) that trains GR00T N1.7 (`scripts/docker/train_groot.sh`, ~2.3 s/it at global batch 128) and serves it on :8000 | `docker/groot/`, `docs/docker-training.md` |
 | π0.5 Docker train/serve path | `docker/pi05/`, `scripts/docker/train_pi05.sh` |
 | Two-container evaluation (policy container ↔ `stanfordvl/behavior:3.9.2` sim container), headless with video | `scripts/docker/eval.sh` |
-| Organizer-provided single-task checkpoints (π0.5 and GR00T, `turning_on_radio`) → a zero-training starting point | `docs/docker-training.md` §E.1 |
-| 2026 challenge demos: 200 teleop episodes/task, LeRobot v3.0, RGB+depth+proprio, per-episode **language skill-segment annotations**, `task_instance_id` per episode | `src/training/download.py`, `src/training/lerobot_io.py` |
+| Organizer-provided single-task checkpoints (π0.5 and GR00T, `turning_on_radio`) → zero-training starting point | `docs/docker-training.md` §E.1 |
+| 2026 challenge demos: 200 teleop episodes/task, LeRobot v3.0, RGB+depth+proprio, per-episode language skill-segment annotations, `task_instance_id` per episode | `src/training/download.py`, `src/training/lerobot_io.py` |
 | 40 official test instances per task (ids 301–340), per-rollout JSON with `q_score.final` (partial credit over BDDL goal predicates) | `docs/challenge-spec.md` §6 |
-| A deterministic planner/watchdog stack: 31-skill taxonomy, plan miner, subgoal progress state machine (CONTINUE/ADVANCE/RETRY/REPLAN/SEARCH/FINISH), predicate tracker with hysteresis, odometry + occupancy frontier, chunk blending, receding-horizon controller | `src/b1k/planner/*`, `src/b1k/perception/*`, `src/b1k/policy/chunking.py`, `src/b1k/controller.py` |
-| Eval harness that reproduces official scoring, multi-port fan-out, aggregation/report | `src/evalharness/*` |
+| Deterministic planner/watchdog stack: 31-skill taxonomy, plan miner, progress state machine (CONTINUE/ADVANCE/RETRY/REPLAN/SEARCH/FINISH), predicate tracker with hysteresis, odometry + occupancy frontier, chunk blending, receding-horizon controller | `src/b1k/planner/*`, `src/b1k/perception/*`, `src/b1k/policy/chunking.py`, `src/b1k/controller.py` |
+| Eval harness reproducing official scoring, multi-port fan-out, aggregation/report | `src/evalharness/*` |
 | Training seams: predicate-detector trainer (privileged teacher), LoRA adapters, skill-annotation parser | `src/training/detector_train.py`, `adapters.py`, `skill_annotations.py` |
 
-**The one number that sizes everything.** The sim runs at ~13.5 FPS with 150–300 s scene load; a 2,000-step episode is ~5–8 min of wall-clock, a full-length (~16k-step) episode ~20–25 min. Policy and sim share the one GPU. Realistic sustained throughput: **~100 short or ~50 full-length episodes per GPU-day**. Every matrix below is sized against that and fits in **Oct 20, 2026 → Feb 10, 2027 (~110 GPU-days)** if we rent a second identical box for the evaluation waves (recommended, ~$1.5–3k total). Without a second box, run Idea 1 + Idea 2 to IROS and push Idea 3 to ICRA 2028.
+**The one number that sizes everything.** Sim runs at ~13.5 FPS plus 150–300 s scene load; a full-length (~16k-step) episode is ~20–25 min wall-clock with policy and sim sharing one GPU. Sustained throughput: **~50 full-length episodes per GPU-day**. All matrices below fit in **Oct 20, 2026 → Feb 10, 2027** if we rent a second identical box for the evaluation waves (~$1.5–3k). Without it: Ideas 1 + 2 to IROS, Idea 3 to ICRA 2028.
 
-**No real robot.** All three ideas are sim-only by design and are written so the abstract never carries a real-world claim (the top reviewer rejection reason). Each has a durable released artifact (dataset / protocol / code) so it survives the "no novel contribution" desk screen.
+**No real robot.** All three ideas are sim-only by design; abstracts never carry real-world claims. Each releases a durable artifact (labeler / datasets / protocol / code).
 
 ---
 
-## Idea 1 — *Anatomy of Failure*: a skill-level failure benchmark for house-scale VLA policies
+## 0. Novelty check (literature as of 2026-10-19)
 
-**Type:** benchmark + diagnostic study. **Venue:** IROS 2027. **Verdict: GO — primary. Start now.**
+Searched arXiv/web for each idea's headline claim. Findings that change the plan:
+
+| Prior work | What it did | Collides with | What remains open (and is now our claim) |
+|---|---|---|---|
+| **Behavior-Skill** [1] (Aug 31, 2026) | Skill-level benchmark on BEHAVIOR-1K: 235k skill instances, 34 skill types, π0.5 + GR00T N1.7; evaluates each skill **in isolation from a restored intermediate state**; shows skill-conditioned training beats task-conditioned (+6.0 / +5.6 TSCR) | Idea 1 (skill-level profiles), Idea 2 (skill vs task conditioning) | Authors state they "do not cover task planning, automatic decomposition, or sequential dependencies" and name sequential evaluation as future work. Our Idea 2 is exactly that: **closed-loop, sequential execution with the switching signal controlled**. |
+| **How VLAs (Really) Work** [2] (Apr 2026, Huawei) | 8 experts hand-label 500 episodes (50 tasks × 10) of the 2025 winner into a **10-class failure taxonomy**; reproducibility and trial-variance study; progress-aware metric variants | Idea 1 (taxonomy) | Manual, one policy, test instances only. Open: **automatic privileged-state labeling at 10× scale**, **seen-vs-unseen instance generalization**, two policy families, and an **intervention arm** (what is fixable without retraining). We adopt their 10 classes as the human-annotation schema and report κ against it. |
+| **Semantic Handoff** [3] (Jul 2026, SimpleAI) | π0.5 skill checkpoints chained by an agent + VLM verifier (advance/retry/replan) on BEHAVIOR-1K; snapshot-start vs chained-start comparison; failure attribution to grounding / execution / readiness | Idea 1 (watchdog arm), Idea 2 (gating), Idea 3 (VLM trigger) | A system with a learned verifier; no oracle/onboard/open-loop decomposition, no controlled conditioning ablation, no detector-family comparison. Their VLM verifier becomes a **baseline gating/trigger arm** in Ideas 2 and 3. |
+| **RLC 1st-place report** [4], **Comet 2nd-place report** [5] (Dec 2025) | RLC: System-2 stage tracking (learned onboard progress), multi-sample flow matching at training, hand correction rules; Comet: task-coverage scaling (1→7→10→50 tasks), RFT with perturbed initial poses | Idea 2 (stage tracking ≈ onboard gating), Idea 3 (multi-sample) | Neither measures instance-level generalization or attributes failures automatically. RLC stage tracking becomes a **gating baseline** in Idea 2. |
+| **CycleVLA** [6] (Jan 2026), **CARE** [7], **FAR** [8], **AgentChord** [9], **ProAct-VLM** [10] (2026) | Proactive failure prediction + backtracking + **MBR decoding** (= medoid chunk selection); stage-conditioned corrective data; failure-aware retry; task-graph recovery branches; pre-failure VLM replanning. All on LIBERO/tabletop/short real tasks, binary success | Idea 3 (medoid "free lunch", recovery ladder) | MBR/medoid is **known** — we report it as a baseline, not a contribution. None evaluates on multi-minute mobile bimanual tasks with partial credit, none compares detector *families* under one trigger-matched recovery protocol. |
+| **SAFE** [11], **FAIL-Detect** [12], **FIPER** [13], **PFD** [14], **Diff-DAgger** [15] (2024–2026) | Runtime failure detectors: VLA internal features (SAFE, with K-sample action variance as a weaker baseline), OOD + flow-density (FAIL-Detect), OOD + action entropy (FIPER), low-rank weight perturbation beating stochastic sampling (PFD), diffusion-loss vs ensemble disagreement (Diff-DAgger: disagreement confounds multimodality) | Idea 3's original "dispersion is a novel alarm" claim | Dispersion is **not** novel and is known to be weaker than internal-feature / perturbation signals. Open: **do any of these signals convert into Q at house scale**, with what lead time, on which failure classes? Idea 3 becomes a comparative detection→recovery study. |
+| **ATOM-Bench** [16] (Jun 2026, real-world tabletop) | Atomic vs held-out compositional tasks; Atomic Score / Compositional Failure Share | Idea 2 H3 (compositional held-out) | Real tabletop, no mobile/long-horizon. Compositional held-out on BEHAVIOR with controlled switching is open. |
+| **AtomVLA** [17], **RoboTwin hierarchical study** [18], **HiRoC** [19], **Anticipation-VLA** [20], **Steerable Policies** [21] | Subtask-instruction ablations on LIBERO-Long (+2.2 pts), RoboTwin oracle subtask prompts (45.4→53.8 %), hierarchical post-training, subgoal generation, richer command interfaces | Idea 2 H1 | All use oracle or learned switching without isolating *when-to-switch* from *what-to-say*. Our oracle/onboard/open-loop/shuffled design is the missing control. |
+| **Silent-failure observability** [22], **SSC** [23], **RoboMD** [24] | Privileged-state labeling on ALOHA; structured subtask labels on BEHAVIOR; RL-driven vulnerability discovery | Idea 1 methodology | Supporting, not competing: cite as precedent for privileged-state labeling and structured skill annotation. |
+
+**Net effect.** Idea 1 narrows from "first failure taxonomy" to **automatic attribution + instance-generalization gap + fixability**; Idea 2 narrows from "does skill conditioning help" (answered: yes, in isolation) to **does it survive closed-loop sequencing, and is the bottleneck what-to-say or when-to-switch**; Idea 3 drops the dispersion-novelty claim and becomes **"Do runtime failure detectors pay for themselves at house scale?"** — a detector-family comparison measured in recovered Q. All three remain publishable; the bar is now "clean controlled measurement nobody has run" rather than "first to look".
+
+---
+
+## Idea 1 — *Where the Demos End*: automatic failure attribution and the instance-generalization gap of house-scale VLA policies
+
+**Type:** measurement study + released labeler. **Venue:** IROS 2027. **Verdict: GO — primary. Start now.**
 
 ### 1.1 The claim
 
-> Nobody has measured *what* limits VLA policies on multi-minute, mobile, bimanual household tasks. We show that for two state-of-the-art open policy families (π0.5, GR00T N1.7) on BEHAVIOR-1K, (i) most Q-loss comes from a small number of **robustness** failure classes (stuck loops, search failure, wrong object) rather than low-level skill execution; (ii) the loss is concentrated in navigation-heavy and multi-skill tasks; (iii) a simple **no-retrain watchdog** recovers a measurable fraction of it. We release the labeled rollouts, the auto-labeler, and the protocol.
+> Hand-labeled failure studies of BEHAVIOR-1K policies exist for one policy on a few hundred episodes [2]. We replace expert viewing with an **automatic attribution pipeline** driven by privileged simulator state (goal predicates, poses, grasps, room occupancy) that labels every rollout step into the 10-class taxonomy of [2] plus onset time and active skill, validated at κ ≥ 0.7 against blind human labels. We use it to answer two questions nobody has measured: (i) how much Q is lost moving from instances whose object/layout composition appears in the demos to the official unseen instances, and in which skill strata; (ii) which failure classes a no-retrain watchdog recovers. Two policy families (π0.5, GR00T N1.7), 20 tasks, ~1,400 labeled episodes released.
 
-Falsifiable hypotheses:
+Hypotheses:
 
-- **H1** ≥ 50 % of the Q-loss relative to a per-skill "best-case" reference is attributable to robustness classes (`stuck_loop`, `search_fail`, `goal_forget`, `wrong_object`), not `skill_exec_fail`.
-- **H2** Q drops ≥ 10 points (0–100 scale) from *seen* instances (demo layouts) to *unseen* official instances, and the drop is ≥ 2× larger on navigation-heavy / ≥ 4-skill tasks than on single-room, ≤ 3-skill tasks.
-- **H3** The watchdog (Idea 1's intervention arm, no retraining) recovers ≥ 20 % of the robustness-attributable gap in both mean and worst-case (min-over-task) Q.
-
-Why it is publishable: it is the first empirical decomposition of long-horizon VLA failure at house scale (gap G1.5 in `docs/icra-iros-2027-trends.md`), it releases a ~1.5k-episode labeled dataset nobody else has, and it is policy-agnostic (two policy families).
+- **H1** The automatic labeler agrees with blind human annotation at κ ≥ 0.7 on the 10-class schema of [2] (≥ 0.8 after collapsing to 5 super-classes).
+- **H2** Q drops ≥ 10 points (0–100) from seen-composition to unseen instances; the drop is ≥ 2× larger on multi-room / ≥ 4-skill tasks than on single-room / ≤ 3-skill tasks, and is dominated by navigation-failure and semantic-confusion classes rather than grasp failure.
+- **H3** The watchdog (RETRY/REPLAN/SEARCH, no retraining) recovers ≥ 20 % of the Q lost to {abrupt termination, execution-order confusion, navigation failure} and < 5 % of the Q lost to {grasp, placement, improper handling} — i.e. the fixability map separates "planning-side" from "data-side" loss.
 
 ### 1.2 Experimental design
 
-**Tasks (20).** Stratify the 100 tasks by mined skill-plan statistics (`src/b1k/planner/mine_plans_cli.py` output): 5 single-room ≤ 3 skills (e.g. `turning_on_radio`), 5 single-room ≥ 4 skills, 5 multi-room navigation-heavy, 5 bimanual/articulated-heavy. The stratification table is Table 1 of the paper and is produced by one script (`src/research/anatomy/select_tasks.py` → `docs/research/anatomy_tasks.json`).
+**Tasks (20).** Stratify the 100 tasks by mined skill-plan statistics (`src/b1k/planner/mine_plans_cli.py`): 5 single-room ≤ 3 skills, 5 single-room ≥ 4 skills, 5 multi-room navigation-heavy, 5 bimanual/articulated-heavy. Script `src/research/anatomy/select_tasks.py` → `docs/research/anatomy_tasks.json` (Table 1 of the paper).
 
 **Policies (3 arms).**
 
-| Arm | What | How we get it |
+| Arm | What | How |
 |---|---|---|
-| P-GR00T | GR00T N1.7 multi-task finetune on the 20 tasks | `train_groot.sh train` on a 20-task concatenated dataset (see 1.4). ~50k steps ≈ 32 h once. For `turning_on_radio` we also report the organizer checkpoint as a sanity row. |
-| P-π0.5 | π0.5 multi-task finetune on the same 20 tasks, same demo count | `train_pi05.sh train`, same data split. |
-| P-GR00T+WD | P-GR00T served through the repo's watchdog (`progress.py` RETRY/REPLAN/SEARCH) with **trained** predicate detectors | The intervention arm for H3. Same checkpoint as P-GR00T — the only difference is the wrapper. |
+| P-GR00T | GR00T N1.7 multi-task finetune on the 20 tasks | `train_groot.sh train` on a concatenated dataset (1.3); ~50k steps ≈ 32 h once. Organizer `turning_on_radio` checkpoint reported as a sanity row |
+| P-π0.5 | π0.5 multi-task finetune, same split | `train_pi05.sh train` |
+| P-GR00T+WD | P-GR00T served through `progress.py` with trained predicate detectors | H3 arm; same checkpoint, wrapper differs only |
 
-**Instance conditions (2).** C-seen = instances whose object/layout composition matches the demo episodes (link via `task_instance_id` in `meta/episodes/*.parquet`; evaluate on those instance files if present in `OMNIGIBSON_DATA_PATH`, else on the public set 301–320 whose composition overlaps). C-unseen = official hidden instances 321–340. State precisely in the paper that demo instances (1–200) and test instances (301–340) are disjoint by id; "seen" is defined by **composition overlap**, not id.
+**Instance conditions (2).** C-seen = instances whose composition matches demo episodes (via `task_instance_id` in `meta/episodes/*.parquet`; evaluate on those instance files if available in `OMNIGIBSON_DATA_PATH`, else on public 301–320 with composition overlap). C-unseen = hidden 321–340. State in the paper that demo instances (1–200) and test instances (301–340) are disjoint by id; "seen" is composition overlap, not id. This axis is absent from [1], [2], [4], [5].
 
-**Matrix.** 20 tasks × 2 conditions × 10 instances × 3 arms = **1,200 episodes** + 200 repeat episodes (same instance, 2 extra rollouts on 5 tasks) to quantify sim nondeterminism. Full-length episodes (official 1.5× human-mean budget). ≈ **1,400 × ~20 min ≈ 470 GPU-h ≈ 20 GPU-days.**
+**Matrix.** 20 tasks × 2 conditions × 10 instances × 3 arms = 1,200 episodes + 200 repeats (sim-nondeterminism estimate, following [2]'s variance finding). Full-length. ≈ **470 GPU-h ≈ 20 GPU-days.**
 
-**Failure taxonomy (auto-labeled from privileged sim state, legal at analysis time).**
+**Labeler rules (privileged, analysis-time only), mapped to the schema of [2]:**
 
-| Label | Rule (computed from the per-step privileged log) |
+| Class [2] | Automatic rule |
 |---|---|
-| `stuck_loop` | no goal-predicate change **and** base displacement < 0.5 m **and** gripper state unchanged for > 30 s inside a skill budget |
-| `search_fail` | target object's room never entered (robot pose vs. room polygons from `src/b1k/perception/rooms.py`) before timeout |
-| `goal_forget` | a goal predicate that was satisfied becomes unsatisfied and is never re-satisfied |
-| `wrong_object` | grasp event on an object not in the BDDL goal nor in the mined plan for the active skill |
-| `skill_exec_fail` | robot within 1 m of the right object, ≥ 2 grasp attempts, predicate never flips |
-| `transition_error` | predicate flips in the wrong order relative to the mined plan (e.g. container closed before item placed) |
-| `timeout_clean` | none of the above; ran out of time while making monotone progress |
+| Grasp failure | ≥ 2 gripper-close events within 0.3 m of a goal object, no `held` transition |
+| Improper object handling | `held` object dropped (held → not held) outside any goal receptacle |
+| Placement failure | object released inside 0.5 m of goal receptacle, goal predicate not satisfied |
+| Skill failure (articulated/state) | robot within 1 m of target, ≥ 10 s of arm motion, predicate never flips |
+| Semantic confusion (wrong object) | grasp of an object not in the BDDL goal nor in the mined plan |
+| Navigation failure | target room never entered (pose vs. `rooms.py` polygons) or base displacement < 0.5 m for > 30 s mid-plan |
+| Collision | contact events with non-task objects above impulse threshold (OmniGibson contact API) |
+| Execution-order confusion | predicate flips out of order w.r.t. mined plan (e.g. door closed before item placed) |
+| Task confusion | ≥ 2 skills executed that belong to a different task's mined plan |
+| Abrupt termination | no action-norm change and no predicate change for > 60 s with budget remaining |
 
-Validation: 2 annotators label 300 random episodes from video (`--write-video` output) blind to the auto label; report Cohen's κ (gate: ≥ 0.7, else collapse to 5 classes).
+Validation: 2 annotators blind-label 300 random episodes from `--write-video` output using [2]'s instructions; report κ (gate H1).
 
-**Metrics.** Q (official math, n per cell, 95 % bootstrap CI), task success rate, time score, **per-skill success** (31 skills × 20 tasks, binomial CI), horizon-decay curve (Q vs. number of skills remaining), ΔQ(seen−unseen) per stratum, failure-class frequency per arm, **fixability map** = per class: ΔQ(P-GR00T+WD − P-GR00T). Worst-case Q = min over tasks.
+**Metrics.** Q (official math, n per cell, bootstrap CI), task success, time score, per-skill success (31 skills × 20 tasks), horizon-decay (Q vs. skills remaining), ΔQ(seen−unseen) per stratum, failure-class frequency per arm and condition, fixability map ΔQ(P-GR00T+WD − P-GR00T) per class, worst-case (min-over-task) Q, labeler κ.
 
-### 1.3 What to implement (repo-specific)
+### 1.3 What to implement
 
-1. **Privileged per-step logger inside the sim container** — `src/research/sim/privileged_logger.py`: a subclass of `omnigibson.eval.wrappers.RGBDFullResWrapper` that, at every step, appends `{step, t, goal_predicates: {name: bool}, robot_base_pose, gripper_l/r, held_objects, nearest_goal_object_dist, room_id}` to a Parquet file in `/out/<task>_<inst>_<roll>.priv.parquet`. Mounted into the eval container with `-v $PWD/src:/work/src -e PYTHONPATH=/work` and selected via `--env-wrapper research.sim.privileged_logger.PrivilegedLoggerWrapper`. Add an `EVAL_WRAPPER` env var to `scripts/docker/eval.sh`.
-2. **Auto-labeler** — `src/research/anatomy/label_failures.py`: reads the `.priv.parquet` + mined plan (`docs/plans/<task>.json`) → one `labels.jsonl` row per episode with the class, onset step, and the skill active at onset. Pure pandas/numpy, CPU, unit-tested on synthetic traces (`tests/test_label_failures.py`).
-3. **Multi-task dataset builder** — `src/training/concat_tasks.py`: builds a LeRobot v3 dataset pointing at the 20 downloaded chunks (symlink videos, concatenate `meta/episodes`, re-index `task_index`) so `train_b1k.py` sees one dataset. Reuse `download_demos.sh <ids...>`.
-4. **Trained predicate detectors** — run `src/training/detector_train.py` on the 20 tasks (privileged teacher labels from `labels.py`); export `data/detectors/<family>.pt`; `TrainedPredicateModel` already loads them. Gate: per-family F1 ≥ 0.85 held-out.
-5. **Watchdog serving arm** — the `b1k.server` path already does this when `policy.backend: vla` + detectors are configured (`configs/server.yaml`). Add a GR00T backend to `src/b1k/policy/vla.py` (`_act_vla` → HTTP/websocket call to the GR00T serve container or in-process `Gr00tPolicy`). The watchdog's RETRY = immediate re-query, REPLAN = re-derive remaining subgoals from BDDL goal minus satisfied predicates, SEARCH = frontier-biased base velocity override from `odometry.py`.
-6. **Matrix runner** — `src/research/anatomy/run_matrix.py`: enumerates (task, condition, instance, arm) → calls `scripts/docker/eval.sh` with `EVAL_WRAPPER`, `OUT_DIR=outputs/anatomy/<arm>/<task>/...`, resumable (skips done JSONs). One process per GPU box.
-7. **Analysis notebook/script** — `src/research/anatomy/analyze.py`: joins official JSONs (`q_score.final`, per-predicate satisfaction) with `labels.jsonl` → all tables/figures; bootstrap CIs; writes `paper/figs/*.pdf`.
-8. **Release** — HF dataset `b1k-anatomy` (labels + priv parquet + videos) and the labeler code.
+1. `src/research/sim/privileged_logger.py` — subclass of `omnigibson.eval.wrappers.RGBDFullResWrapper` writing per-step `{step, goal_predicates, base_pose, gripper_l/r, held_objects, contacts, nearest_goal_dist, room_id}` to `/out/<task>_<inst>_<roll>.priv.parquet`. Mounted with `-v $PWD/src:/work/src -e PYTHONPATH=/work`; add `EVAL_WRAPPER` env var to `scripts/docker/eval.sh`.
+2. `src/research/anatomy/label_failures.py` — rules above → `labels.jsonl` (class, onset step, active skill). CPU, unit-tested on synthetic traces (`tests/test_label_failures.py`).
+3. `src/training/concat_tasks.py` — 20-task LeRobot v3 dataset (symlinked videos, concatenated `meta/episodes`, re-indexed `task_index`).
+4. Trained detectors via `src/training/detector_train.py` → `data/detectors/<family>.pt`; gate F1 ≥ 0.85 held-out.
+5. GR00T backend in `src/b1k/policy/vla.py` (`_act_vla` → in-process `Gr00tPolicy` or call to the serve container) so the watchdog wraps the same checkpoint.
+6. `src/research/common/run_matrix.py` — resumable (task, condition, instance, arm) enumerator over `eval.sh`; `manifest.csv`.
+7. `src/research/anatomy/analyze.py` — joins official JSONs with `labels.jsonl`; all tables/figures with bootstrap CIs.
+8. Release: HF dataset `b1k-anatomy` (labels + priv parquet + videos) + labeler.
 
-### 1.4 Testing / gates / timeline
+### 1.4 Gates / timeline
 
-| When | Milestone | Gate (go/no-go) |
+| When | Milestone | Gate |
 |---|---|---|
-| Oct 20–31 | Logger + labeler on the organizer `turning_on_radio` checkpoint, 40 episodes (20 seen/20 unseen), both policies | Pipeline runs end-to-end in Docker; first ΔQ(seen−unseen) number; labeler produces non-degenerate class histogram |
-| Nov 1–15 | 20-task data download (~0.7 TB), `concat_tasks.py`, GR00T 20-task finetune (50k steps ≈ 32 h), π0.5 finetune; detectors trained | **G1 (Nov 15):** 5-task pilot (100 episodes) shows ΔQ(seen−unseen) ≥ 5 on ≥ 1 policy **and** ≥ 3 failure classes each ≥ 10 % frequency. Else: redesign conditions (add BDDL-resampled perturbations) before scaling |
-| Nov 16–Dec 31 | Full 1,400-episode matrix (20 GPU-days; 10 if two boxes) | **G2 (Dec 31):** taxonomy κ ≥ 0.7 on 300-episode audit |
-| Jan 1–Jan 31 | Analysis, fixability map, figures | **G3 (Jan 31):** H1/H2 hold directionally; if H3 fails, the paper is still a benchmark + decomposition paper (reframe title, drop H3) |
-| Feb 1–Mar 1 | Draft, internal review, **submit IROS 2027** | 8 pages incl. references; video ≤ 180 s from `--write-video` output |
+| Oct 20–31 | Logger + labeler on organizer `turning_on_radio` checkpoints, 40 episodes (20 seen / 20 unseen) | Pipeline runs in Docker end-to-end; non-degenerate class histogram; first ΔQ(seen−unseen) |
+| Nov 1–15 | 20-task download (~0.7 TB), `concat_tasks.py`, GR00T + π0.5 finetunes, detectors | **G1 (Nov 15):** 5-task pilot (100 eps): ΔQ(seen−unseen) ≥ 5 on ≥ 1 policy **and** 50-episode κ ≥ 0.6. Else: add BDDL-resampled perturbation instances / refine rules before scaling |
+| Nov 16–Dec 31 | Full 1,400-episode matrix | **G2 (Dec 31):** κ ≥ 0.7 on 300-episode audit |
+| Jan 1–31 | Analysis, fixability map | **G3:** H2 holds directionally; if H3 null, the paper is labeler + generalization gap (still novel vs. [2]) |
+| Feb 1–Mar 1 | Draft, **submit IROS 2027** | |
 
-**Risks.** (a) Both policies collapse to ~0 Q on unseen instances → no separation; caught at G1 on 100 episodes. (b) Finetunes are weak (Q < 0.1 everywhere) → use the organizer checkpoints on the tasks they cover and reduce to a 10-task matrix. (c) Disk: 20 tasks ≈ 0.7 TB demos + videos; budget 2 TB on the box.
+**Risks.** (a) Both policies ≈ 0 Q on unseen → no separation (G1 catches on 100 eps). (b) Weak finetunes → use organizer checkpoints on their tasks, 10-task matrix. (c) Reviewer: "incremental over [2]" → answer is scale (1,400 vs 500 episodes, automatic), the instance axis, two policy families, and the intervention arm; cite [2] as the schema we validate against.
 
 ---
 
-## Idea 2 — *Mind the Interface*: does skill-level language conditioning help house-scale VLAs, and where does the hierarchy break?
+## Idea 2 — *What to Say vs. When to Switch*: does skill-level conditioning survive closed-loop sequential execution?
 
-**Type:** controlled method study (training-side + runtime), the "brain ↔ cerebellum interface" evaluation that the literature lacks (gap G1.5). **Venue:** IROS 2027 (co-submission) or ICRA 2028 if the finetunes slip. **Verdict: GO — second.**
+**Type:** controlled method study. **Venue:** IROS 2027 (co-submission) or ICRA 2028. **Verdict: GO — second.**
 
 ### 2.1 The claim
 
-> Hierarchical VLA systems (Hi Robot, HAMSTER, π0.5's own high-level/low-level split) assume that conditioning the low-level policy on a *sub-goal* instruction ("open the cabinet") rather than the *task* instruction ("put the groceries away") improves long-horizon execution — but no one has measured this with the progress signal held fixed. Using BEHAVIOR-1K's 270k language skill-segment annotations, we train task-conditioned and skill-conditioned variants of the same VLA on identical data, and evaluate them under three progress-gating regimes — **oracle** (privileged predicate ADVANCE), **onboard** (trained detectors + hysteresis), and **open-loop** (demo p50 time budgets). This isolates three quantities: the value of skill conditioning itself, the cost of imperfect progress detection, and the residual low-level execution gap.
+> Behavior-Skill [1] shows skill-conditioned training improves isolated skill execution on BEHAVIOR-1K (+6 points), and hierarchical VLA systems [3, 4, 17–21] assume the gain carries into full tasks. But in closed-loop execution the low-level policy is only as good as the signal that tells it *which* sub-goal is active. We train task-, skill-, shuffled-skill- and both-conditioned variants of the same VLA on identical data and evaluate **full sequential tasks** under four switching regimes — **oracle** (privileged predicate flip), **onboard-detector** (trained predicate classifiers), **learned stage tracker** (RLC-style [4]), **open-loop** (demo p50 budgets) — plus a VLM-verifier regime [3] as a system baseline. This decomposes task Q into *interface value* (what to say), *switching cost* (when to switch), and *execution residual*, and tests compositional generalization to held-out tasks built from seen skills.
 
 Hypotheses:
 
-- **H1** Skill-conditioned + oracle gating beats task-conditioned by ≥ 10 Q points on ≥ 4-skill tasks and ≤ 3 points on ≤ 3-skill tasks (the benefit scales with horizon).
-- **H2** Onboard gating recovers ≥ 60 % of the oracle gain; open-loop timing recovers < 30 % (i.e. *when* to switch matters more than *what* to say).
-- **H3** Skill-conditioned policies generalize better across tasks sharing skills: on 5 **held-out tasks** composed of seen skills, skill-conditioned Q ≥ 2× task-conditioned Q.
-- **H4** (negative control) Shuffled skill text (wrong but well-formed sub-goals) performs no better than task conditioning — the gain comes from the semantics, not from a shorter prompt.
-
-Why publishable: it is a clean controlled experiment with an oracle upper bound; H3 is a genuine compositional-generalization result on a public benchmark; it reuses the repo's planner stack as the "brain" and reports where the interface breaks.
+- **H1** Skill-conditioned + oracle switching beats task-conditioned by ≥ 8 Q points on ≥ 4-skill tasks and ≤ 3 on ≤ 3-skill tasks; the gain in full tasks is **smaller** than [1]'s isolated-skill gain (sequencing eats part of it — the quantity we report).
+- **H2** Switching matters more than wording: open-loop switching recovers < 30 % of the oracle gain; onboard detectors ≥ 60 %; learned stage tracking between them. Late/early switch time (vs. oracle) explains ≥ 50 % of the variance in per-episode Q loss.
+- **H3** On 5 held-out tasks composed of seen skills, skill-conditioned Q ≥ 2× task-conditioned Q (compositional reuse; cf. ATOM-Bench [16] real-tabletop result).
+- **H4** Shuffled skill text ≈ task conditioning (semantics, not prompt length, carry the gain).
 
 ### 2.2 Experimental design
 
-**Tasks.** 15 training tasks (reuse Idea 1's strata; 5 per stratum excluding the bimanual one) + 5 held-out tasks whose mined plans use only skills present in the training 15 (`select_tasks.py --heldout-by-skill-coverage`).
+**Tasks.** 15 training tasks (Idea 1 strata minus bimanual) + 5 held-out tasks whose mined plans use only skills in the training 15 (`select_tasks.py --heldout-by-skill-coverage`).
 
-**Policies (one base model: GR00T N1.7; π0.5 replicated on 5 tasks for policy-agnosticism).**
+**Variants (GR00T N1.7; π0.5 replicated on 5 tasks).**
 
 | Variant | Training language field |
 |---|---|
-| V-task | the dataset's task instruction (as today) |
-| V-skill | per-frame skill-segment text from the annotations, rendered through `skill_tax.render_text` (canonical 31-skill templates with the object slot filled) |
-| V-skill-shuffled | same segmentation, skill text drawn from a *different* segment of the same episode (H4 control) |
-| V-both | `"<task>. Now: <skill>"` (tests whether task context is additive) |
+| V-task | dataset task instruction |
+| V-skill | per-frame skill-segment text via `skill_tax.render_text` |
+| V-skill-shuffled | same segmentation, text from a different segment of the same episode |
+| V-both | `"<task>. Now: <skill>"` |
 
-All variants: identical demos, identical steps (50k), identical hyper-parameters; one GR00T finetune ≈ 32 h → **4 variants ≈ 5.5 GPU-days** (+ 2 π0.5 variants ≈ 3 GPU-days).
+Identical demos / steps (50k) / hyper-parameters. 4 GR00T finetunes ≈ 5.5 GPU-days; 2 π0.5 ≈ 3.
 
-**Gating regimes at eval (for V-skill / V-both / V-shuffled).**
+**Switching regimes (for skill-conditioned variants).**
 
 | Regime | ADVANCE signal | Implementation |
 |---|---|---|
-| G-oracle | privileged BDDL predicate flip for the active skill's exit family | the sim-side `PrivilegedLoggerWrapper` publishes predicate state to the policy over a side-channel (extra WebSocket message); the policy server's `progress.py` consumes it instead of the detector map |
-| G-onboard | `PredicateTracker` over trained detectors (3-frame hysteresis) | existing `src/b1k/perception/detectors/state.py` |
-| G-openloop | advance after the mined p50 skill duration from demo statistics | `TaskPlanner` budgets only, detectors disabled |
-| (V-task has no gating) | — | — |
+| S-oracle | privileged predicate flip of active skill's exit family | sim-side `PrivilegedLoggerWrapper` publishes predicate state on a side-channel; `progress.py` consumes it |
+| S-onboard | `PredicateTracker` over trained detectors | existing `detectors/state.py` |
+| S-stage | learned stage head on VLA features + voting (reimplementation of [4]) | small MLP on backbone pooled features, trained on demo segment labels |
+| S-openloop | mined p50 skill duration | `TaskPlanner` budgets, detectors off |
+| S-vlm (system baseline) | VLM verifier advance/retry/replan as in [3] | Qwen-VL on head + wrist frames every 2 s |
 
-**Matrix.** 20 tasks (15 train + 5 held-out) × 10 unseen instances × {V-task, V-skill×3 regimes, V-both×G-onboard, V-shuffled×G-oracle} = 20 × 10 × 6 = **1,200 episodes** ≈ 17 GPU-days (full-length) — or 9 GPU-days capped at 2× the human mean. π0.5 replication: 5 tasks × 10 × 3 arms = 150 episodes.
+**Matrix.** 20 tasks × 10 unseen instances × {V-task; V-skill × {oracle, onboard, stage, openloop}; V-both × onboard; V-shuffled × oracle; V-skill × vlm} = 20 × 10 × 8 = **1,600 episodes** ≈ 22 GPU-days full-length (12 if capped at 2× human mean). π0.5 replication: 5 × 10 × 3 = 150.
 
-**Metrics.** Q (primary), per-skill success, **sub-goal switching accuracy** (G-onboard ADVANCE time − oracle ADVANCE time; precision/recall of ADVANCE events), horizon-decay curves per variant, held-out-task Q (H3), and the decomposition Q(V-skill, oracle) − Q(V-task) = *interface value*; Q(oracle) − Q(onboard) = *detection cost*; 1 − Q(oracle) = *execution residual*.
+**Metrics.** Q, per-skill success, **switch-time error** (ADVANCE − oracle flip; precision/recall of ADVANCE events), horizon-decay per variant, held-out Q (H3), decomposition: Q(skill, oracle) − Q(task) = interface value; Q(oracle) − Q(regime) = switching cost; 1 − Q(oracle) = execution residual. Report alongside [1]'s TSCR on the same tasks where available.
 
-### 2.3 What to implement (repo-specific)
+### 2.3 What to implement
 
-1. **Skill relabeler** — `src/training/skill_relabel.py`: for each episode, read the annotation segments via `lerobot_io` (already parses `annotation_path`), map each segment to a canonical skill (`skill_annotations.py` already does this; log unmatched fragments), render text, and write a derived LeRobot v3 dataset in which `task_index` changes per segment and `meta/tasks.parquet` holds the skill texts. Videos are symlinked, not copied. Flags: `--mode {task,skill,shuffled,both}`.
-2. **GR00T data config** — `examples/b1k/r1pro.py` uses the per-frame `task_index` → language already; verify the loader honours per-frame changes (it does for LeRobot v3; add a unit test reading 3 frames across a segment boundary).
-3. **Eval-time subgoal prompting** — `src/b1k/policy/vla.py:_act_vla` already receives `subgoal_text`; wire the GR00T backend so the language sent each query is the active `Subgoal.text`. Re-query immediately on ADVANCE (`controller.py` already honours `requery=True`).
-4. **Oracle side-channel** — extend `src/b1k/protocol.py` with an optional `privileged` field (only present in research runs; the server refuses it when `--strict-onboard` is set so the challenge path stays legal). Sim wrapper fills it from BDDL state.
-5. **Open-loop budgets** — `src/b1k/planner/miner.py` already stores per-skill duration stats; expose p50 in `MinedPlan` and add `progress.py` mode `openloop`.
-6. **Switching-accuracy metric** — `src/research/interface/switch_metrics.py`: aligns ADVANCE events (from server logs) with oracle flips (from priv parquet).
-7. Reuse Idea 1's matrix runner and analysis scaffolding (`run_matrix.py --study interface`).
+1. `src/training/skill_relabel.py` — per-frame `task_index` rewrite from annotation segments (`lerobot_io`, `skill_annotations.py`), `meta/tasks.parquet` with skill texts, symlinked videos; `--mode {task,skill,shuffled,both}`.
+2. Loader test: 3 frames across a segment boundary get different language in `examples/b1k/r1pro.py` data config.
+3. `src/b1k/policy/vla.py` — GR00T backend sends `Subgoal.text` per query; `controller.py` already re-queries on ADVANCE.
+4. `src/b1k/protocol.py` — optional `privileged` field; server refuses it under `--strict-onboard` (challenge path stays legal).
+5. `progress.py` — `switch: {oracle, onboard, stage, openloop, vlm}`; `miner.py` exposes p50/p90 durations.
+6. `src/research/interface/stage_head.py` — RLC-style stage classifier + voting; `src/research/interface/vlm_verifier.py` — [3]-style verifier.
+7. `src/research/interface/switch_metrics.py` — aligns ADVANCE events with oracle flips.
+8. Reuse `run_matrix.py --study interface`.
 
-### 2.4 Testing / gates / timeline
+### 2.4 Gates / timeline
 
 | When | Milestone | Gate |
 |---|---|---|
-| Oct 20–Nov 10 | `skill_relabel.py` + loader test; relabel `turning_on_radio`; **5k-step pilot finetunes** of V-task vs V-skill (≈ 3 h each); 20 episodes each with G-oracle | **G1 (Nov 10):** V-skill+oracle ≥ V-task by any positive margin on the pilot, and the relabeler covers ≥ 90 % of segments with a canonical skill. If V-skill is *worse*, debug prompt format before scaling (try V-both) |
-| Nov 11–Dec 10 | 15-task relabeled datasets; 4 GR00T variants at 50k steps (5.5 GPU-days, interleave with Idea 1's matrix on the second box) | finetune losses comparable across variants (sanity) |
-| Dec 11–Jan 20 | 1,200-episode matrix + π0.5 replication | **G2 (Jan 20):** H1 directionally true on ≥ 10 of 15 tasks; if H2 fails (onboard ≈ open-loop) the detection-cost finding is itself the result — keep the paper, retitle |
-| Jan 21–Feb 15 | Analysis, decomposition figures | **G3:** H3 held-out result; if null, report as a boundary result in §Limitations |
-| Feb 15–Mar 1 | Draft + **submit IROS 2027** (or ICRA 2028 if G2 slipped past Jan 31) | |
+| Oct 20–Nov 10 | `skill_relabel.py` + loader test; relabel `turning_on_radio`; 5k-step pilots V-task vs V-skill (~3 h each); 20 episodes each under S-oracle | **G1 (Nov 10):** V-skill+oracle > V-task by any margin; relabeler covers ≥ 90 % of segments. If V-skill is worse, debug prompt format / try V-both before scaling |
+| Nov 11–Dec 10 | 15-task relabeled datasets; 4 GR00T variants at 50k; stage head; detectors (shared with Idea 1) | losses comparable across variants |
+| Dec 11–Jan 25 | 1,600-episode matrix + π0.5 replication | **G2 (Jan 25):** H1 directionally on ≥ 10/15 tasks; if H2 inverts (openloop ≈ onboard) that *is* the finding — retitle |
+| Jan 26–Feb 15 | Analysis, decomposition figures | **G3:** H3; null → Limitations |
+| Feb 15–Mar 1 | Draft + **submit IROS 2027** (ICRA 2028 if G2 slips past Feb 1) | |
 
-**Risks.** (a) GR00T ignores the language field after single-task finetuning (known for small-data finetunes) → H1 null; the 5k-step pilot detects this for ~6 GPU-h; mitigation: V-both, freeze fewer backbone layers, or add the language-dropout trick. (b) Annotation coverage < 90 % → extend the 31-skill taxonomy regexes (`skill_tax.py`), log in paper. (c) Compute collision with Idea 1 → that is why the second box is recommended.
+**Risks.** (a) GR00T ignores language after small-data finetune → 5k-step pilot catches it (~6 GPU-h); mitigate with V-both, fewer frozen layers, language dropout. (b) Annotation coverage < 90 % → extend `skill_tax.py` regexes, log in paper. (c) Reviewer: "[1] already showed skill conditioning helps" → our abstract states the isolated result as the premise and the closed-loop decomposition as the contribution.
 
 ---
 
-## Idea 3 — *Disagreement Is a Free Alarm*: flow-matching sample dispersion as a predictive failure signal and a zero-retrain recovery trigger
+## Idea 3 — *Do Runtime Failure Detectors Pay for Themselves at House Scale?* A trigger-matched detection→recovery study
 
-**Type:** runtime algorithm, policy-agnostic, cheap to train (CPU), rides on Idea 1's substrate. **Venue:** ICRA 2028 (or IROS 2027 if Idea 1's matrix finishes by Dec 31 and the pilot gate passes). **Verdict: CONDITIONAL GO — pilot in November, commit on gate.**
+**Type:** comparative empirical study of runtime monitors, policy-agnostic, rides on Idea 1's substrate. **Venue:** ICRA 2028 (IROS 2027 stretch). **Verdict: CONDITIONAL GO — pilot in November, commit on gate.**
 
 ### 3.1 The claim
 
-> Both baseline VLAs decode actions by flow matching from Gaussian noise. Sampling K action chunks per query and measuring their dispersion costs one extra batched action-head pass (the VLM backbone runs once) and gives an **intrinsic, label-free uncertainty signal**. We show that on house-scale tasks this dispersion — combined with the receding-horizon chunk disagreement already computed in `chunking.py` — predicts sub-skill failure **≥ 5 s before** the predicate-level evidence appears, outperforming post-hoc progress watchdogs, and that a trigger-matched recovery ladder driven by the predictive signal raises Q over the same ladder driven by the post-hoc rule.
+> Runtime failure detectors for generative policies — internal-feature probes [11], OOD/density scores [12, 13], weight-perturbation disagreement [14], action-sample dispersion [11, 15], progress rules, and VLM verifiers [3, 6] — are evaluated on tabletop tasks with binary success and a "stop or ask for help" action. Nobody has asked whether any of them **convert into recovered partial credit on multi-minute mobile bimanual tasks**. We run six detector families through one trigger-matched recovery ladder on BEHAVIOR-1K and report, per family and per failure class: AUROC/AP at 3/5/10 s lead, false-alarm rate, latency, and **ΔQ over no-intervention and over the post-hoc progress rule**. Detector quality and recovery value turn out to be different rankings — that is the paper.
 
 Hypotheses:
 
-- **H1** A detector on {K-sample dispersion, chunk-boundary disagreement, progress velocity, proprio deviation} reaches AUROC ≥ 0.80 at 5 s lead on held-out *tasks* (not just held-out episodes); dispersion alone ≥ 0.70.
-- **H2** Predictive-trigger ladder beats the post-hoc rule-trigger ladder (identical ladder, identical budgets) by ≥ 3 Q points and no-intervention by ≥ 6, with false-alarm rate < 15 %.
-- **H3** Transfer: a detector trained on GR00T features loses < 5 AUROC points when applied to π0.5 (feature set is policy-agnostic by construction).
-- **H4** **Medoid chunk selection** (execute the K-sample medoid instead of a single sample) alone gives +1–3 Q at zero extra latency beyond the batched pass — a "free lunch" baseline we must beat and report.
+- **H1** Internal-feature (SAFE-style) and perturbation (PFD-style) detectors reach AUROC ≥ 0.80 at 5 s lead on held-out tasks; dispersion alone ≤ 0.70 (replicating [11, 14] at house scale).
+- **H2** At least one predictive trigger beats the post-hoc progress rule by ≥ 3 Q and no-intervention by ≥ 6 Q with false-alarm < 15 %; the gain is concentrated in {navigation, execution-order, abrupt-termination} classes and ≈ 0 for grasp/placement classes (recovery ladder cannot fix data-side failures — ties to Idea 1 H3).
+- **H3** Detection rank ≠ recovery rank: the best-AUROC family is not the best-ΔQ family (lead time and false-alarm cost dominate AUROC once a ladder is attached).
+- **H4** Features that are policy-agnostic (dispersion, progress, proprio) transfer GR00T→π0.5 with < 5 AUROC loss; internal-feature probes do not transfer without retraining.
 
-Positioning: SAFE (2025) and FAIL-Detect (2025) learn failure detectors from VLA internal features on short tabletop tasks; neither reports lead time at multi-minute horizons, partial-credit recovery value, or a trigger-matched intervention comparison. Cite them explicitly and compare to an internal-feature probe as a baseline.
+MBR/medoid chunk selection [6] is included as a **known** zero-trigger baseline, not a contribution.
 
 ### 3.2 Experimental design
 
-**Features (all onboard, < 10 ms CPU/step).**
-(i) K-sample dispersion: per-horizon-step std across K = 8 chunks, summarized as mean/max over the 16-step horizon and per action group (base, torso, arms, grippers); (ii) chunk-boundary disagreement: ‖old_tail − new_head‖ from `blend_chunks`; (iii) progress velocity: predicate flips/s vs mined p90 budget (from `progress.py`); (iv) proprio deviation from per-skill demo mean/std (`src/training/stats.py`); (v) odometry displacement over the last 10 s (`odometry.py`); (vi) skill id + plan position + predicates remaining. Logged every step to `features.parquet` next to the episode JSON.
+**Detector families (all onboard, logged every step to `features.parquet`).**
 
-**Labels.** From Idea 1's `labels.jsonl`: positive at step t if a failure class onset occurs in (t, t + lead] with lead ∈ {3, 5, 10} s, for the currently active skill; episodes with `timeout_clean` and successes supply negatives. Sensitivity table over lead and over the stuck-window definition.
+| Family | Signal | Source |
+|---|---|---|
+| D-rule | zero predicate delta over stuck window (existing watchdog) | `progress.py` |
+| D-disp | K = 8 flow-matching samples: per-horizon std, per action group; + chunk-boundary residual | `uncertainty.py`, `chunking.py` |
+| D-feat | linear/MLP probe on action-head last-layer features (SAFE [11]) | GR00T / openpi hooks |
+| D-pert | low-rank weight perturbation disagreement (PFD [14]), K = 4 | hook on action-head attention weights |
+| D-prog | progress-velocity + proprio-deviation + odometry features, GBDT | `progress.py`, `stats.py`, `odometry.py` |
+| D-vlm | VLM verifier every 2 s (CycleVLA / Semantic-Handoff style [3, 6]) | `vlm_verifier.py` (shared with Idea 2) |
+| D-oracle | privileged label | upper bound |
 
-**Models.** Primary: gradient-boosted trees (LightGBM) + a 3 s temporal MLP, trained on CPU; probe: a linear probe on GR00T backbone features (SAFE-style baseline); ablations leave-one-channel-out; **oracle** (privileged) upper bound, labeled as such.
+**Labels.** From Idea 1's `labels.jsonl`: positive at step t if a failure onset occurs in (t, t + lead], lead ∈ {3, 5, 10} s, for the active skill; successes and clean timeouts are negatives. Sensitivity table over lead and stuck-window definition.
 
-**Recovery ladder (identical for both triggers).** L1 RETRY (re-query with fresh noise) → L2 REPLAN (remaining subgoals from goal minus satisfied) → L3 SEARCH (frontier-biased base override) → L4 reset-to-safe-pose. Budget-capped at 1.5× p90 like the existing watchdog. Trigger A: existing rule (zero predicate delta over the stuck window). Trigger B: detector probability > τ for ≥ 1 s (τ picked on the pilot for 10 % false alarms).
+**Recovery ladder (identical for all triggers).** L1 RETRY (fresh-noise re-query) → L2 REPLAN (remaining subgoals from goal − satisfied) → L3 SEARCH (frontier-biased base override) → L4 safe pose. Budget-capped at 1.5× p90. Trigger = detector score > τ for ≥ 1 s, τ set on the pilot at 10 % false alarms per family.
 
-**Matrix.** Detector training: Idea 1's 1,400 episodes (already have features if the tap is in place before the matrix starts — **do this first**). Intervention: 20 tasks × 10 unseen instances × {none, medoid-only, rule-ladder, predictive-ladder, oracle-ladder} = **1,000 episodes** ≈ 14 GPU-days full-length. Transfer: 5 tasks × 10 × 2 arms on π0.5 = 100 episodes.
+**Matrix.** Detector training: Idea 1's 1,400 episodes with the feature tap live (zero marginal sim cost). Intervention: 20 tasks × 10 unseen instances × {none, medoid-only, D-rule, D-disp, D-feat, D-pert, D-prog, D-vlm, D-oracle} = **1,800 episodes** ≈ 25 GPU-days full-length (reduce to 6 arms / 1,200 episodes if single box). Transfer: 5 tasks × 10 × {D-disp, D-feat} on π0.5 = 100.
 
-### 3.3 What to implement (repo-specific)
+**Metrics.** AUROC/AP vs lead (task-grouped CV), false-alarm/hour, lead-time distribution, ms/step latency (K ∈ {1,4,8,16}), ΔQ per arm with CI, ΔQ per failure class (Idea 1 labels), worst-case Q, transfer loss.
 
-1. **Batched K-sample decoding** — in the GR00T serving path (`serve_b1k.py` policy wrapper, or our `src/b1k/policy/vla.py` GR00T backend): run the backbone once, tile the embeddings K times along the batch dim, sample K noise tensors, run the flow-matching action head once (batch K), return `(K, 16, 23)`. Same for π0.5 (`openpi` `sample_actions` with `rng` split K ways). Flag `--k-samples 8`. Measure latency; it must stay under the 30 Hz step budget with chunk re-query every 16 steps.
-2. **Feature tap** — `src/b1k/policy/uncertainty.py`: dispersion statistics + medoid selection; `chunking.py` returns the boundary residual (one-line change); `controller.py` logs a feature row per step to `features.parquet` via a non-blocking writer.
-3. **Detector training** — `src/research/alarm/train_detector.py` (LightGBM + MLP; task-grouped CV; AUROC/AP vs lead; calibration), `tests/test_alarm_features.py` on synthetic streams.
-4. **Trigger plumbing** — `progress.py` gets a `trigger: {rule, predictive, oracle}` option; the predictive trigger consumes `uncertainty.py` output; the ladder code is shared, so H2 is trigger-matched by construction.
-5. **Latency report** — `scripts/bench_k_samples.sh`: ms per query for K ∈ {1, 4, 8, 16} on the box; goes in the paper.
-6. Reuse Idea 1's `run_matrix.py --study alarm` and analysis code.
+### 3.3 What to implement
 
-### 3.4 Testing / gates / timeline
+1. Batched K-sample decoding in the GR00T serve path (backbone once, action head batch K) and π0.5 (`sample_actions` with split rng); flag `--k-samples`. Latency bench `scripts/bench_k_samples.sh`.
+2. `src/b1k/policy/uncertainty.py` — dispersion stats + medoid; `chunking.py` returns boundary residual; `controller.py` writes a feature row per step (non-blocking).
+3. Feature hooks: action-head last-layer pooled features (D-feat); low-rank perturbation wrapper (D-pert) — both as forward hooks, off by default.
+4. `src/research/alarm/train_detectors.py` — per-family detector (LightGBM / linear / MLP), task-grouped CV, calibration; `tests/test_alarm_features.py`.
+5. `progress.py` — `trigger: {rule, predictive:<family>, oracle}`; shared ladder.
+6. Reuse `run_matrix.py --study alarm`, `vlm_verifier.py` from Idea 2.
+
+### 3.4 Gates / timeline
 
 | When | Milestone | Gate |
 |---|---|---|
-| Oct 25–Nov 8 | K-sample decoding + feature tap on the organizer `turning_on_radio` checkpoints (both policies); latency bench; 60 episodes with features + priv labels | **G0 (Nov 8):** K = 8 fits the step budget; dispersion distribution differs between eventually-failed and successful episodes (Mann-Whitney p < 0.01 on 60 episodes). If no separation → stop; fold the medoid-selection result into Idea 1 as a paragraph |
-| Nov 9–Dec 31 | Features logged during Idea 1's full matrix (zero marginal sim cost); detector trained task-grouped | **G1 (Dec 31):** AUROC ≥ 0.70 at 3 s on held-out tasks **and** predictive-trigger beats rule-trigger on a 5-task, 100-episode probe. Else: publish the detector-only result as a workshop paper and defer |
-| Jan 1–Feb 10 | 1,000-episode intervention matrix (needs the second box, or runs Feb–Apr for ICRA 2028) | **G2:** H2 margin ≥ 3 Q on ≥ 12/20 tasks |
+| Oct 25–Nov 8 | K-sample + hooks on organizer checkpoints (both policies); latency bench; 60 episodes with features + labels | **G0 (Nov 8):** K = 8 fits the 30 Hz / 16-step re-query budget; ≥ 2 families separate failed vs. successful episodes (Mann-Whitney p < 0.01). If none → stop; fold into Idea 1 |
+| Nov 9–Dec 31 | Features logged through Idea 1's matrix; detectors trained | **G1 (Dec 31):** best family AUROC ≥ 0.70 at 3 s held-out tasks **and** a predictive trigger beats D-rule on a 5-task / 100-episode probe. Else: detector-comparison-only workshop paper |
+| Jan 1–Feb 10 | Intervention matrix (second box) — or Feb–Apr for ICRA 2028 | **G2:** H2 on ≥ 12/20 tasks |
 | IROS path | Feb 10–Mar 1 draft | only if G2 done by Feb 10 |
-| ICRA 2028 path | Mar–Aug 2027: add π0.5 transfer, lead-time sensitivity, longer matrix; submit ~Sep 15, 2027 | |
+| ICRA 2028 path | Mar–Aug 2027: full 9 arms, π0.5 transfer, lead sensitivity; submit ~Sep 15, 2027 | |
 
-**Risks.** (a) The post-hoc watchdog already recovers most of the recoverable gap → H2 null; the 100-episode probe at G1 catches this before 1,000 episodes are spent, and the detection + lead-time result (H1) plus medoid "free lunch" (H4) still make a workshop/short paper. (b) Flow-matching samples collapse to near-identical chunks after finetuning (low dispersion everywhere) → check at G0; fall back to dropout-MC or two checkpoints as the ensemble. (c) Latency: K = 8 may not fit on a smaller GPU → K = 4.
+**Risks.** (a) D-rule already recovers most recoverable Q → H2 null; the G1 probe catches it before 1,800 episodes; H1/H3/H4 still make a comparison paper. (b) Flow samples collapse after finetuning (low dispersion) → documented, D-pert and D-feat carry. (c) Reviewer: "SAFE/CycleVLA did this" → neither measured ΔQ at house scale or compared families under one ladder; our Related Work says so with their numbers.
 
 ---
 
-## Shared infrastructure to build first (weeks of Oct 20 and Oct 27)
+## Shared infrastructure (weeks of Oct 20 and Oct 27)
 
-These unblock all three ideas and should be done before any large run:
-
-1. `src/research/sim/privileged_logger.py` + `EVAL_WRAPPER` support in `scripts/docker/eval.sh` (Idea 1.3.1).
-2. `src/research/anatomy/label_failures.py` with tests (Idea 1.3.2).
-3. `src/research/common/run_matrix.py` (resumable; one JSON per episode; writes `manifest.csv`) and `analyze_common.py` (bootstrap CI, Q math from `src/evalharness/aggregate.py`).
-4. GR00T backend in `src/b1k/policy/vla.py` so the watchdog/prompting/trigger arms wrap the same checkpoint (Ideas 1–3).
-5. Feature tap + K-sample decoding (Idea 3.3.1–2) — **before** Idea 1's matrix so the matrix doubles as Idea 3's training data.
-6. `src/training/concat_tasks.py` and `src/training/skill_relabel.py` (Ideas 1, 2).
-7. Reproducibility discipline from day one: every run records image digests (`docker inspect --format '{{.Id}}'`), checkpoint hashes, instance ids, seeds, and git SHA into the episode JSON directory; the paper's "n per cell" tables are generated, never typed.
+1. `src/research/sim/privileged_logger.py` + `EVAL_WRAPPER` in `scripts/docker/eval.sh`.
+2. `src/research/anatomy/label_failures.py` + tests (10-class schema of [2]).
+3. `src/research/common/run_matrix.py`, `analyze_common.py` (bootstrap CI; Q math from `src/evalharness/aggregate.py`).
+4. GR00T backend in `src/b1k/policy/vla.py`.
+5. Feature tap + K-sample decoding + feature hooks — **before** Idea 1's matrix so it doubles as Idea 3's training data.
+6. `src/training/concat_tasks.py`, `src/training/skill_relabel.py`.
+7. `src/research/interface/vlm_verifier.py` (shared baseline for Ideas 2 and 3).
+8. Reproducibility: every run records image digest, checkpoint hash, instance ids, seeds, git SHA into the output dir; n-per-cell tables are generated, never typed.
 
 ## Compute and money (single node + one rented twin)
 
 | Item | GPU-days |
 |---|---|
-| Idea 1 finetunes (GR00T 20-task, π0.5 20-task) | 3 |
-| Idea 1 matrix (1,400 full-length episodes) | 20 |
-| Idea 2 finetunes (4 GR00T + 2 π0.5 variants) | 8.5 |
-| Idea 2 matrix (1,350 episodes) | 17 |
-| Idea 3 intervention matrix (1,100 episodes) | 15 |
-| Pilots, re-runs, audits (20 %) | 13 |
-| **Total** | **~77 GPU-days** |
+| Idea 1 finetunes (GR00T + π0.5, 20 tasks) | 3 |
+| Idea 1 matrix (1,400 episodes) | 20 |
+| Idea 2 finetunes (4 GR00T + 2 π0.5) | 8.5 |
+| Idea 2 matrix (1,750 episodes) | 22 |
+| Idea 3 intervention matrix (1,900 episodes) | 25 |
+| Pilots, re-runs, audits (20 %) | 16 |
+| **Total** | **~95 GPU-days** |
 
-Two boxes from Nov 1 to Feb 10 give ~200 GPU-days of capacity — comfortable. One box gives ~100: enough for Ideas 1 + 2 to IROS 2027 with Idea 3 moving to ICRA 2028. Disk: plan 2 TB per box (20-task demos ≈ 0.7 TB, relabeled datasets are symlinked, videos ≈ 0.3 TB per 1,000 episodes at 720p).
+Two boxes Nov 1–Feb 10 ≈ 200 GPU-days capacity. One box ≈ 100: Ideas 1 + 2 to IROS 2027 with reduced Idea 2 matrix (drop S-vlm, S-stage → 1,200 eps), Idea 3 to ICRA 2028. Disk: 2 TB per box.
 
 ## Paper plan
 
 | Paper | Venue | Submit | Primary artifact |
 |---|---|---|---|
-| Anatomy of Failure (Idea 1) | IROS 2027 | Mar 1, 2027 | `b1k-anatomy` labeled dataset + labeler + protocol |
-| Mind the Interface (Idea 2) | IROS 2027 (fallback ICRA 2028) | Mar 1, 2027 | relabeled skill datasets + 4 checkpoints + switching metrics |
-| Disagreement Is a Free Alarm (Idea 3) | ICRA 2028 (stretch IROS 2027) | Sep 15, 2027 | `alarm` detector + feature dataset + K-sample serving code |
+| Where the Demos End (Idea 1) | IROS 2027 | Mar 1, 2027 | `b1k-anatomy` labeled dataset + automatic labeler + instance-generalization protocol |
+| What to Say vs. When to Switch (Idea 2) | IROS 2027 (fallback ICRA 2028) | Mar 1, 2027 | relabeled skill datasets + 4 checkpoints + switching metrics + oracle side-channel |
+| Do Runtime Failure Detectors Pay for Themselves (Idea 3) | ICRA 2028 (stretch IROS 2027) | Sep 15, 2027 | detector zoo + feature dataset + trigger-matched ladder |
 
-All three share one evaluation protocol, one task stratification, and one pair of policy families, so the writing cost of the second and third papers is roughly half of the first. Submit the three as a "diagnose → interface → predict" line; each must stand alone (no cross-dependence in claims).
+Each must stand alone; shared protocol/strata/policies halve the writing cost of papers 2 and 3.
 
-## Backup idea (if an idea dies at its gate)
+## Backup idea
 
-**"Which 50 demos?" — demonstration selection for long-horizon VLA finetuning.** Using the 200 demos/task, finetune at budgets {25, 50, 100, 200} under three selection rules (random, max instance/layout diversity via `task_instance_id`, shortest-duration) on 5 tasks; 60 short finetunes × 5k steps ≈ 15 GPU-days + 1,200 short episodes ≈ 10 GPU-days. Answers gap G1.4 (data quality vs. scale) on a public house-scale benchmark; low method risk; slots into either venue.
+**"Which 50 demos?"** — demo selection for long-horizon finetuning: budgets {25, 50, 100, 200} × rules {random, max layout diversity via `task_instance_id`, shortest duration} × 5 tasks; 60 finetunes × 5k steps ≈ 15 GPU-days + 1,200 short episodes ≈ 10. Comet [5] scaled *tasks*; nobody has scaled *demos per task* with a diversity criterion on BEHAVIOR. Low method risk.
+
+---
+
+## References (verified 2026-10-19)
+
+1. Ma, C. et al. *Behavior-Skill: A Fine-Grained Benchmark for Evaluating Vision-Language-Action Policies in Long-Horizon Tasks.* arXiv:2608.30536, Aug 31 2026. https://arxiv.org/abs/2608.30536 — code https://github.com/nubot-nudt/Behavior-Skill
+2. Rasouli, A. et al. (Huawei Noah's Ark). *How VLAs (Really) Work In Open-World Environments.* arXiv:2604.21192, Apr 2026. https://arxiv.org/abs/2604.21192
+3. Rui, K. et al. (SimpleAI). *Diagnosing Semantic Handoff Failures in Agent-Orchestrated Vision-Language-Action Skill Composition.* arXiv:2607.06256, Jul 2026. https://arxiv.org/abs/2607.06256
+4. Larchenko, I., Zarin, G., Karnatak, A. *Task adaptation of Vision-Language-Action model: 1st Place Solution for the 2025 BEHAVIOR Challenge.* arXiv:2512.06951, Dec 2025. https://arxiv.org/abs/2512.06951
+5. Bai, J. et al. (NVIDIA). *Openpi Comet: Competition Solution For 2025 BEHAVIOR Challenge.* arXiv:2512.10071, Dec 2025. https://arxiv.org/abs/2512.10071
+6. Ma, C. et al. (Oxford). *CycleVLA: Proactive Self-Correcting Vision-Language-Action Models via Subtask Backtracking and Minimum Bayes Risk Decoding.* arXiv:2601.02295, Jan 2026. https://arxiv.org/abs/2601.02295
+7. *CARE: Experience-Guided Atomic Corrective Execution for Vision-Language-Action Policies.* arXiv:2609.24118, Sep 2026. https://arxiv.org/abs/2609.24118
+8. Hao, H. et al. (CMU). *FAR: Failure-Aware Retry for Test-Time Recovery and Continual Policy Improvement.* arXiv:2607.01111, Jul 2026. https://arxiv.org/abs/2607.01111
+9. *From Reaction to Anticipation: Proactive Failure Recovery through Agentic Task Graph for Robotic Manipulation (AgentChord).* arXiv:2605.11951, May 2026. https://arxiv.org/abs/2605.11951
+10. *ProAct-VLM: Pre-Failure Vision-Language Task Replanning with Continuous Perception Feedback.* arXiv:2609.37681, Sep 2026. https://arxiv.org/abs/2609.37681
+11. Gu, Q. et al. *SAFE: Multitask Failure Detection for Vision-Language-Action Models.* arXiv:2506.09937, Jun 2025. https://arxiv.org/abs/2506.09937 — https://vla-safe.github.io/
+12. Xu, C. et al. (TRI). *Can We Detect Failures Without Failure Data? Uncertainty-Aware Runtime Failure Detection for Imitation Learning Policies (FAIL-Detect).* arXiv:2503.08558, Mar 2025. https://arxiv.org/abs/2503.08558
+13. *FIPER: Failure Prediction at Runtime for Generative Robot Policies.* arXiv:2510.09459, Oct 2025. https://arxiv.org/abs/2510.09459
+14. Lee, Y., Har, D. (KAIST). *Perturbation-Based Epistemic Uncertainty for Failure Detection in Vision-Language-Action Models (PFD).* arXiv:2606.20754, Jun 2026. https://arxiv.org/abs/2606.20754
+15. Lee, S.-W., Kang, X., Kuo, Y.-L. *Diff-DAgger: Uncertainty Estimation with Diffusion Policy for Robotic Manipulation.* arXiv:2410.14868, 2024/2025. https://arxiv.org/abs/2410.14868
+16. Wu, Z. et al. (BAAI). *ATOM-Bench: A Real-World Benchmark for Atomic Skills and Compositional Generalization in Manipulation Policies.* arXiv:2606.16826, Jun 2026. https://arxiv.org/abs/2606.16826
+17. *AtomVLA: Scalable Post-Training for Robotic Manipulation via Predictive Latent World Models.* arXiv:2603.08519, Mar 2026. https://arxiv.org/abs/2603.08519
+18. *Enhancing Long-Horizon Robot Manipulation with Hierarchical Subtask Conditioning (RoboTwin study).* MLHMI 2026. https://stargazerzj.github.io/RoboTwin/materials/MLHMI_2026_Paper.pdf
+19. *Beyond Flat Policies: Hierarchical Post-Training for Embodied Agents in Robotic Manipulation (HiRoC).* arXiv:2608.05999, Aug 2026. https://arxiv.org/abs/2608.05999
+20. *Anticipation-VLA: Solving Long-Horizon Embodied Tasks via Anticipation-based Subgoal Generation.* arXiv:2605.01772, May 2026. https://arxiv.org/abs/2605.01772
+21. *Steerable Vision-Language-Action Policies for Embodied Reasoning and Hierarchical Control.* arXiv:2602.13193, Feb 2026. https://arxiv.org/abs/2602.13193
+22. *How Visible Are Silent Manipulation Failures? An Observability Study of False-Success Detection in Simulated Robot Episodes.* arXiv:2606.03134, Jun 2026. https://arxiv.org/abs/2606.03134
+23. *SSC: A Verifiable Structured Representation for Bimanual Manipulation Labelling.* arXiv:2608.04425, Aug 2026. https://arxiv.org/abs/2608.04425
+24. Sagar, S. et al. *RoboMD: Uncovering Robot Vulnerabilities through Semantic Potential Fields.* ICLR 2025, arXiv:2412.02818. https://arxiv.org/abs/2412.02818
+25. Li, C. et al. *BEHAVIOR-1K: A Human-Centered, Embodied AI Benchmark with 1,000 Everyday Activities and Realistic Simulation.* arXiv:2403.09227. https://arxiv.org/abs/2403.09227
+26. 2025 BEHAVIOR Challenge leaderboard (RLC 0.2599 / Comet 0.2514 held-out Q). https://behavior.stanford.edu/challenge/archive/2025/leaderboard.html
+
+Earlier background (VLA surveys, π0.5, GR00T N1, Hi Robot, HAMSTER, LIBERO, venue facts) is in `docs/icra-iros-2027-trends.md` (63 sources, Sep 2026). **Re-run this overlap check in January 2027 before drafting**: the BEHAVIOR-1K failure/recovery space produced ≥ 6 directly relevant papers in the last 7 months.
