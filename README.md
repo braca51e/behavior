@@ -47,8 +47,8 @@ GPU, simulator, or the 3.27 TB demo set** — that is the design's
 > — three research studies (questions, hypotheses, positioning vs. 2026
 > literature, study design); engineering detail in
 > [`docs/research-implementation-2027.md`](docs/research-implementation-2027.md);
-> people, compute, process, writing, release, risks and decision calendar in
-> [`docs/research-requirements-2027.md`](docs/research-requirements-2027.md).
+> scientific success conditions (validity, power, evidence standard, intellectual
+> risks) in [`docs/research-requirements-2027.md`](docs/research-requirements-2027.md).
 > Supersedes the Sep-2026 `icra-iros-2027-*` drafts.
 
 ---

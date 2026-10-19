@@ -1,196 +1,173 @@
-# What the Research Programme Needs to Succeed
+# Conditions for Scientific Success
 
-**Date:** 2026-10-19. Companion to [`research-plan-2027.md`](research-plan-2027.md) (the three studies) and [`research-implementation-2027.md`](research-implementation-2027.md) (engineering). This document lists everything *besides the ideas* that has to be in place for papers to come out the other end: people, compute, data, process, writing, release, and the decisions that must be made on time. Items marked **[gap]** do not exist yet.
-
----
-
-## 1. Definition of success
-
-| Level | Outcome | Date |
-|---|---|---|
-| Minimum | One IROS 2027 submission (Study 1 or 2) with released artifact, all gates passed honestly, n per cell reported | Mar 1, 2027 |
-| Target | Two IROS 2027 submissions (Studies 1 + 2); Study 3 pilot gates passed and matrix scheduled | Mar 1, 2027 |
-| Stretch | Studies 1 + 2 at IROS; Study 3 at ICRA 2028; the three cited as a line | Sep 15, 2027 |
-| Also a success | A well-documented null result at any gate that is written up as a boundary result or workshop paper, not buried | — |
-
-Success is **not** "all three hypotheses confirmed". Each study's hypothesis table in the plan states what a refutation means and how it is still written up.
+**Date:** 2026-10-19. Companion to [`research-plan-2027.md`](research-plan-2027.md). This document states what must be *scientifically true* for each of the three studies to yield a publishable result — the validity of the questions, instruments, comparisons, and evidence — and what the team must understand before running anything. It contains no engineering or operations; those are in `research-implementation-2027.md` and are the team's business.
 
 ---
 
-## 2. People and roles
+## 1. Programme-level conditions
 
-Realistic team: 2–3 people plus an advisor-level reviewer. Roles can be shared but every role must have a name against it.
+A study in this programme is publishable if and only if all seven hold. Check each study against them before committing compute.
 
-| Role | Responsibility | Time | Status |
+| # | Condition | Meaning | How we know it holds |
 |---|---|---|---|
-| Programme lead | Owns the gates, makes go/no-go calls on the dates below, owns the second-box decision, is corresponding author | ~20 % | **[gap] assign** |
-| Study 1 owner | Instrument (automatic attribution), instance axis, matrix, paper 1 draft | ~60 % Oct–Mar | **[gap] assign** |
-| Study 2 owner | Conditioning variants, switching regimes, matrix, paper 2 draft | ~60 % Oct–Mar | **[gap] assign** |
-| Study 3 owner | Detector zoo, trigger-matched ladder, pilot; may be the same person as Study 1 until the Dec 31 gate | ~30 % Nov–Feb, 60 % after | **[gap] assign** |
-| Infrastructure owner | Docker images, eval path, throughput, matrix runner, data downloads, disk | ~40 % Oct–Nov, 15 % after | **[gap] assign** (default: Study 1 owner) |
-| Human annotators ×2 | 300-episode blind labeling for Study 1 κ (≈ 25 h each incl. training); must not be the Study 1 owner | 50 h total, Dec–Jan | **[gap] recruit** |
-| Internal reviewer | Reads each draft two weeks before deadline as a hostile IROS reviewer; not an author | 2 × 4 h per paper | **[gap] recruit** |
-| Writing lead per paper | Owns the narrative, figure list, and the 8-page budget; usually the study owner | — | = study owner |
-
-**Skills required across the team** (check coverage; train or recruit for gaps): PyTorch + HF datasets; OmniGibson / Isaac Sim basics (enough to write an env wrapper and read privileged state); GR00T and openpi finetuning; experimental statistics (bootstrap CIs, κ, AUROC, task-grouped cross-validation, multiple-comparison awareness); scientific writing for IEEE RAS venues; Docker on a headless GPU box.
+| C1 | **The question is open and named** | A specific published paper either poses the question as future work or stops short of it in a way we can quote | Plan §1 positioning table: one row per study with the quote or the omission |
+| C2 | **The claim is falsifiable and pre-stated** | Each hypothesis has a direction, an effect size, and a stated meaning for both confirmation and refutation | Plan hypothesis tables; hypotheses written down before the matrix runs |
+| C3 | **The instrument measures the construct** | The dependent variable actually captures what the claim is about (construct validity) | §2 per study |
+| C4 | **The comparison isolates the cause** | Arms differ in exactly one factor; every confound is held fixed or measured (internal validity) | §2 per study |
+| C5 | **The design can detect the effect** | The minimum effect that would matter is larger than the design's noise floor at the stated n (statistical power) | §3 |
+| C6 | **The scope is stated and honest** | Simulation-only, two policy families, 20 stratified tasks; no claim leaks beyond its evidence | Abstract and limitations drafted first, not last |
+| C7 | **The contribution survives the desk screen** | Reviewer can name what is new relative to the five closest papers in one sentence; a released instrument or dataset backs it | Contribution statements in the plan; artifact named per study |
 
 ---
 
-## 3. Compute, storage, money
+## 2. Per-study scientific conditions
 
-| Need | Amount | Status |
-|---|---|---|
-| Primary GPU node (Brev, Docker-only) | continuous Oct 20 → Feb 10 (~110 GPU-days) | have |
-| Second identical node for evaluation waves | Nov 1 → Feb 10 (~100 GPU-days); ≈ $1.5–3k at current hourly rates | **[decision] by Oct 24** (ticket T12) |
-| Disk per node | 2 TB (20-task demos ≈ 0.7 TB; videos ≈ 0.3 TB per 1,000 episodes; checkpoints 5 × ~7 GB per finetune) | **[gap] verify free space; expand volume** |
-| Off-node storage for released artifacts | ~1 TB (HF dataset or S3) | **[gap]** |
-| CPU box for detector training / analysis | any laptop is enough (LightGBM, pandas) | have |
-| W&B project (online) for finetunes | free tier suffices | have (see `docs/docker-training.md`) |
-| VLM API budget for the verifier baselines (Studies 2, 3) | ~1 frame-pair / 2 s × ~3,000 episodes × 6 min ≈ 500k calls; or self-host Qwen-VL on the second node | **[decision] self-host recommended** |
-| Measured throughput number | episodes / GPU-day (plan assumes ~50 full-length) | **[gap] measure in week 1 (A2)** |
+### Study 1 — Where the Demos End
 
-Everything in the plan is sized to these numbers; if A2 comes in below 35 episodes/day, drop Study 3 to ICRA 2028 immediately and shrink Study 2 to five switching arms.
+**The construct.** The claim is about *distribution shift from demonstrated to novel instance compositions*. For the instrument to be valid:
 
----
+- "Seen" must mean *composition overlap with the demonstrations* (which objects, which layout, which rooms) — not instance id, which is disjoint by construction. If composition overlap cannot be established, the axis degrades to "public vs. hidden official instances", which measures something weaker (sampling variance within the test distribution) and the claim must be rewritten accordingly. **This decision determines whether Study 1 is a generalization paper or a variance paper.**
+- Partial-credit Q must be the right dependent variable for *where* failure happens. Q is progress-agnostic: it scores final predicate states, not the path. Rasouli et al. [2] show this hides order violations and lucky end-states. Report official Q (comparability with the leaderboard) **and** a progress-aware variant alongside it, so the attribution does not reward accidental completion.
+- The failure taxonomy must be *the field's*, not ours. Adopting the 10 classes of [2] makes the automatic labeler a measurement of an established construct rather than a new, unvalidated one. κ against human labels on that schema is the validity test; without it, the labeler is an opinion.
 
-## 4. Data and assets
+**The comparisons that must be clean.**
+- Seen vs. unseen must hold policy, checkpoint, task, time budget, and serving path fixed; only the instance changes.
+- Watchdog vs. none must be the *same weights*; the wrapper is the only difference. Otherwise the fixability map confounds intervention with policy.
+- The two policy families must be finetuned on identical demos for identical steps; otherwise "both families show X" is a data-size effect.
 
-| Asset | Need | Status |
-|---|---|---|
-| Demo chunks for the 20 stratified tasks | download via `scripts/docker/download_demos.sh` (HF token, gate accepted) | **[gap] after task selection** |
-| Skill-segment annotations for those tasks | ship with the demos (`annotation_path`) | have once downloaded |
-| Official test instance files (301–340) in the sim image | required for all evaluation | have (in `stanfordvl/behavior:3.9.2`) |
-| Demo-composition ("seen") instance files or a composition-overlap mapping | required for Study 1's instance axis | **[gap] verify (A3)**; fallback defined in plan §5 |
-| Organizer-provided checkpoints (π0.5, GR00T; `turning_on_radio`) | pilots, sanity rows | have |
-| Multi-task finetunes (GR00T, π0.5 on 20 tasks) | Studies 1, 3 | **[gap] ~3 GPU-days** |
-| Four conditioning-variant finetunes (GR00T) + two (π0.5) | Study 2 | **[gap] ~8.5 GPU-days** |
-| Trained predicate detectors (per BDDL family) | Study 1 watchdog arm, Study 2 onboard switching, Study 3 progress family | **[gap]** |
-| Rasouli et al.'s labeling instructions and class definitions [2] | human-annotation protocol for Study 1 κ | **[gap] extract from paper; write a 2-page annotator SOP** |
-| Behavior-Skill code and skill taxonomy [1] | align our 31-skill taxonomy with their 34 categories for comparability | **[gap] map taxonomies; document differences** |
-| License check on demos and sim assets for redistribution of labels/videos | release plan | **[gap] (A7)** |
+**The theory the result must speak to.** If the gap is dominated by navigation and semantic-confusion classes on multi-room tasks, the interpretation is that household VLA failure at this quality is a *coverage* problem (which layouts the demos spanned), which is a distinct claim from Behavior-Skill's *capacity* finding (contact-rich skills are the bottleneck). The paper must engage with that disagreement directly: both can be true at different horizons, and the horizon-decay curve is the figure that reconciles them.
+
+**Result that makes the paper:** a stratum-dependent gap with an attribution profile that shifts between conditions, plus a fixability map that separates planning-side from data-side loss.
+**Result that still makes a paper:** no gap, but a validated automatic labeler at 3× the scale of [2] with a published confusion analysis of what is and is not observable from state.
+**Result that kills it:** the labeler cannot reach κ ≥ 0.6 even on collapsed classes. Then the instrument is invalid and nothing downstream is trustworthy. This is why κ is the first gate.
+
+**What the team must understand deeply before starting:** [2] (its taxonomy, its variance finding, its progress-aware metric proposals); the BDDL goal-predicate semantics and how Q is computed from them; what `task_instance_id` actually encodes about an instance.
 
 ---
 
-## 5. Process: how work is run
+### Study 2 — What to Say vs. When to Switch
 
-**Cadence.**
-- Monday 30-min sync: gates, blockers, compute queue for the week.
-- Friday written log entry per study in `docs/research/log.md` **[gap: create]**: what ran, n, result, decision. One paragraph. This log is the raw material for the papers' experiment sections and the defence against "we think we saw…".
-- Gate meetings on the dates in §8: a go/no-go decision is recorded in the log the same day.
+**The construct.** The claim is about *the interface between sub-goal selection and execution* in hierarchical policies. Validity requires:
 
-**Pre-registration.** Before each matrix starts, the study owner commits a short `docs/research/prereg-<study>.md` **[gap]** stating hypotheses, primary metric, n, exclusion rules, and the analysis script name. Deviations are allowed but must be logged with a reason. This is what lets us write "we hypothesised X" honestly and protects against post-hoc metric shopping.
+- The *only* manipulated factors are (a) the language the low-level policy is conditioned on and (b) the signal that advances to the next sub-goal. The policy architecture, demos, training steps, and action chunking must be identical across variants. If the skill-conditioned variant also sees shorter prompts or more frequent re-queries, the effect is confounded — hence the shuffled-text control (H4) and re-query timing held fixed across regimes.
+- "Oracle switching" must be a true upper bound: the privileged predicate flip for the active skill's exit condition, applied instantly. Anything less (e.g. a delayed or noisy oracle) makes the decomposition uninterpretable.
+- The decomposition identity *interface value + switching cost + execution residual = 1 − Q(task-conditioned)* only holds if the arms are nested as designed. Verify the arithmetic on the pilot before trusting it on the matrix.
 
-**Experiment registry.** Every rollout directory records image digest, checkpoint hash, instance ids, seeds, git SHA (implementation §D.8). A `manifest.csv` per matrix is the single source of truth for n per cell. Tables in the paper are generated from it, never typed.
+**The comparisons that must be clean.**
+- Behavior-Skill's +6 isolated-skill gain [1] is the *premise*, so our task set should overlap theirs where possible and our skill taxonomy should map onto their 34 categories, so the isolated-vs-sequential comparison is like-for-like.
+- Switching regimes are compared *at the same policy*; the VLM-verifier arm is a system baseline, labeled as such, not a controlled factor.
+- Held-out compositional tasks must be verified to contain *only* skills present in training; one novel skill contaminates H3.
 
-**Compute queue.** One shared text file or board **[gap]** listing what is running on which node, owner, expected finish. Prevents the two most common failures on a shared box: two jobs on one GPU, and a matrix stalled for days because nobody noticed it crashed. Add a crash alert (W&B alert or a cron that checks the manifest growth) **[gap]**.
+**The theory the result must speak to.** Hierarchical VLA work assumes decomposition gains flow through the interface. If H2 holds (switching dominates), the field's bottleneck is progress estimation — a perception/verification problem, not a language-grounding one — and work like Steerable Policies [21] is optimising the wrong side. If content dominates, the opposite. The discussion must state which research line each outcome favours; that is the paper's value beyond the numbers.
 
-**Literature watch.** One person checks arXiv cs.RO weekly for "BEHAVIOR", "long-horizon VLA", "failure detection VLA", "subtask conditioning" and appends to `docs/research/litwatch.md` **[gap]**. Full re-run of the §1 overlap check on Jan 10, 2027, before drafting. Six directly relevant papers appeared in the last seven months; being scooped between now and March is the single largest external risk.
+**Result that makes the paper:** a clean decomposition with a clear dominant term and a horizon dependence.
+**Result that still makes a paper:** skill conditioning does *not* survive sequencing — a negative result that qualifies [1] and all oracle-switched ablations [17–21].
+**Result that kills it:** the finetuned policy ignores the language field entirely, so no variant differs. This is a known failure of small-data VLA finetunes and must be ruled out on a cheap pilot before any further training; if it cannot be fixed, the study is not runnable on these policies.
 
-**Code hygiene.** Research code lives in `src/research/`, never imported from `src/b1k/` (the challenge serving path stays legal). PRs to `main`, small, with a log entry. Tests for anything that produces a number in the paper (labeler rules, metrics, aggregation).
-
-**Statistics standards (apply to every table).**
-- n per cell stated; 95 % bootstrap CIs on Q; binomial CIs on success rates.
-- Simulator nondeterminism measured (repeat rollouts) and reported as the noise floor.
-- Held-out *tasks* (not just episodes) for any learned detector or classifier; task-grouped cross-validation.
-- Multiple hypotheses per study → report all, do not cherry-pick; state which were pre-registered.
-- Effect sizes in Q points, not only p-values.
+**What the team must understand deeply before starting:** [1] in full (its evaluation protocol from restored states, exactly what it did not measure); [3] (how its verifier decides advance/retry/replan and why chaining stalls); [4]'s stage-tracking mechanism; the hierarchical-VLA ablations [17–21] and which switching signal each used.
 
 ---
 
-## 6. Writing and submission
+### Study 3 — Do Runtime Failure Detectors Pay for Themselves
 
-**Venue facts (verify on the CFP before relying on them).**
-- IROS 2027: Florence, Sep 26–Oct 1, 2027; paper deadline **Mar 1, 2027 23:59 PST**; double-anonymous; 8 pages including references (6 + 2 over-length fee pattern typical — confirm); video ≤ 180 s / ≤ 20 MB; AI-use disclosure required.
-- ICRA 2028: deadline expected ~Sep 15, 2027; same format family.
-- Summary rejection applies for page violations and "no novel contribution with cited counterexamples" — the §1 positioning table in the plan exists to pre-empt the second.
+**The construct.** The claim is about *recovery value*, not detection quality. Validity requires:
 
-**Per-paper checklist (the reviewer bar).**
-1. Quantified gap claim in paragraph one, with the number and the citation (e.g. "the only existing failure study hand-labels 500 episodes of one policy [2]").
-2. Evidence ladder: every abstract claim has a matching table; no real-world language anywhere.
-3. Related work names the five closest papers and states, in one sentence each, what they did not measure.
-4. n per condition, success criterion verbatim, failure table disclosed.
-5. Baselines hardware/sensor-matched and tuned with comparable effort; a strong non-learned or rule baseline included (the watchdog / progress rule serves this role).
-6. Limitations section that names the simulator-only scope and the two policy families.
-7. Reproducibility: code, labels, protocol released; checkpoint hashes in the appendix.
-8. Figures first: the expected-figures list in the plan is the paper's skeleton; draft figures by Jan 31 from pilot data so the matrix only fills them in.
+- The dependent variable is **recovered Q**: Q(detector-triggered ladder) − Q(no intervention), net of false-alarm damage. AUROC is a secondary, explanatory variable. A study that reports AUROC and infers value has not measured the construct.
+- The recovery ladder must be *identical* across triggers, with identical budgets and identical thresholds-at-fixed-false-alarm-rate. Then and only then is ΔQ attributable to the trigger. This is the trigger-matched protocol; any per-family tuning of the ladder breaks it.
+- "Failure onset" labels must come from Study 1's validated attribution with a stated lead window; the lead-window sensitivity table is part of the result, not an appendix, because every detector's AUROC depends on it.
 
-**Timeline per IROS paper.**
-- Jan 31: figures from completed matrix, results tables generated.
-- Feb 7: full draft v1 to internal reviewer.
-- Feb 14: reviewer notes back; revise.
-- Feb 21: v2 frozen; video cut; supplementary assembled; anonymisation check (no repo URLs, no team names in artifacts).
-- Feb 26: submit (do not use the last 72 hours).
-- Mar 1: deadline.
+**The comparisons that must be clean.**
+- Detector families must include the field's current best (internal-feature probe [11], perturbation disagreement [14]), the cheap policy-agnostic signals (dispersion, progress), the rule the system already has, a VLM verifier, and an oracle. Omitting the strong ones makes the comparison uninteresting; omitting the oracle leaves the ceiling unknown.
+- Known zero-trigger improvements (medoid / MBR decoding [6]) are baselines, not contributions. Claiming them is a desk-reject.
+- Held-out *tasks* for detector evaluation; detectors that only generalise across episodes of seen tasks are not deployable and the field knows it [11].
 
-**Authorship and credit** agreed in writing before the matrices start **[gap]**: order, who is corresponding, how annotators and infrastructure work are credited.
+**The theory the result must speak to.** The failure-detection literature optimises classification metrics with "stop or ask" as the only action. In long-horizon tasks the robot must keep going; the detector's worth is the partial credit it protects. If detection and recovery rankings diverge (H3), the field's metric is wrong and the paper proposes recovered-Q as the replacement. If they agree, the paper is a clean replication at a new scale plus the first per-class recovery map.
+
+**Result that makes the paper:** a predictive trigger recovering Q beyond the post-hoc rule, with class-resolved limits consistent with Study 1's fixability map.
+**Result that still makes a paper:** no trigger beats the post-hoc rule — a boundary result that says prediction does not pay at this policy quality — provided the detector comparison itself is thorough.
+**Result that kills it:** no detector family separates failed from successful episodes at all on the pilot. Then there is nothing to recover from and the study folds into Study 1.
+
+**What the team must understand deeply before starting:** SAFE [11] (features, conformal thresholds, and its own finding that sample variance is weak); PFD [14]; Diff-DAgger's multimodality argument [15]; CycleVLA [6] (what MBR does and does not do); the existing watchdog's trigger logic, since it is the control arm.
 
 ---
 
-## 7. Release artifacts (the desk-screen defence)
+## 3. Statistical power — what the designs can and cannot detect
 
-| Study | Artifact | Where | Blocking requirement |
+Assume per-episode Q has standard deviation ≈ 0.30 (consistent with [2]'s bimodal "fully succeed or fully fail" finding). Then, for a difference of means between two arms:
+
+| Comparison level | Episodes per arm | Standard error of ΔQ | Smallest reliably detectable ΔQ (≈ 2 SE) |
 |---|---|---|---|
-| 1 | `b1k-anatomy`: ~1,400 labeled episodes (labels + privileged parquet; videos if license permits), the automatic labeler, annotator SOP, stratification table | HF dataset + GitHub | A7 license check; anonymised release for review, de-anonymised at camera-ready |
-| 2 | Relabeled skill datasets (as scripts that derive them from the public demos, not copies), four checkpoints, switching-metric code, oracle side-channel protocol | HF + GitHub | Checkpoint hosting space (~30 GB) |
-| 3 | Detector zoo code, feature dataset, trigger-matched ladder, latency benchmarks | GitHub + HF | — |
-| all | A `CITATION.cff`, a license (MIT for code; dataset license matching the demos), a README with exact reproduction commands | GitHub | — |
+| Whole matrix (20 tasks × 10 instances) | 200 | ≈ 0.030 | **≈ 6 points** |
+| One stratum (5 tasks × 10 instances) | 50 | ≈ 0.060 | **≈ 12 points** |
+| One task (10 instances) | 10 | ≈ 0.13 | ≈ 27 points — per-task claims are not supportable |
 
-Every artifact is prepared *during* the study, not after acceptance.
+Consequences for the hypotheses:
+- Whole-matrix claims of ≥ 6–8 points (Study 2 H1, Study 3 H2 "≥ 6 over none") are detectable. The "≥ 3 over the post-hoc rule" margin in Study 3 H2 is **at the edge**; it needs either paired analysis (same instances across arms — which the design provides, roughly halving the SE) or more instances on the subset where the rule and the predictor disagree.
+- Stratum-level claims (Study 1 H2 "≥ 2× larger on multi-room tasks") require stratum differences of ≥ 12 points or paired analysis across conditions on the same instances. State this; do not claim stratum ordering on point estimates alone.
+- Per-task results are descriptive only (the horizon-decay curve, the worst-case Q); never test them.
+- Simulator nondeterminism must be measured (repeat rollouts) and subtracted conceptually: an effect smaller than the repeat-to-repeat spread on the same instance is not an effect.
+- Pairing: every arm runs on the same instance set, so analyse ΔQ *per instance* and bootstrap over instances. This is the single largest free gain in power the design offers; use it.
 
 ---
 
-## 8. Decision calendar (the lead owns these)
+## 4. The evidence standard every claim is held to
 
-| Date | Decision | Input |
+1. **Numbers in the abstract have a table.** Each has n, CI, and the condition it was measured in.
+2. **Every "better than" names the baseline and the matching.** Same weights, same budget, same instances, same serving path — or the difference is stated.
+3. **Every hypothesis is reported**, confirmed or not, in the order it was pre-stated.
+4. **The failure table is in the paper**, not the supplement. Reviewers at these venues read it as a strength.
+5. **Prior results are reproduced where they are the premise.** Study 2 should show [1]'s isolated-skill gain on our tasks before showing what sequencing does to it; Study 3 should show [11]'s variance-vs-features ordering before showing recovery.
+6. **Scope sentences are in the abstract.** "In simulation, on 20 BEHAVIOR-1K tasks, for π0.5 and GR00T N1.7."
+7. **A claim not supported at the detectable effect size (§3) is downgraded to an observation**, in the text, by us, before a reviewer does it.
+
+---
+
+## 5. Intellectual risks (not operational ones)
+
+| Risk | Which study | Why it threatens validity | Guard |
+|---|---|---|---|
+| Construct drift: measuring public-vs-hidden variance and calling it generalization | 1 | Overclaims distribution shift | Decide the instance definition first; name it in the title if weak |
+| Q rewards accidental end-states | 1, 2, 3 | Attribution and recovery credited to luck | Report a progress-aware Q variant alongside official Q |
+| Labeler validated only against our own intuitions | 1 | Circular instrument | κ against human labels on an external schema [2] |
+| Conditioning confounded with prompt format or re-query frequency | 2 | Interface value overstated | Shuffled-text control; fixed re-query cadence across arms |
+| Oracle switching not a true upper bound | 2 | Decomposition arithmetic breaks | Verify Q(oracle) ≥ every other regime on the pilot |
+| Held-out "compositional" tasks contain an unseen skill | 2 | H3 contaminated | Audit mined plans skill-by-skill |
+| Detector evaluated on seen tasks | 3 | Inflated AUROC, non-deployable | Task-grouped cross-validation only |
+| Ladder tuned per detector | 3 | ΔQ no longer attributable to the trigger | Freeze ladder and budgets before any detector exists |
+| Claiming medoid/MBR or dispersion as novel | 3 | Desk reject with citation | Positioned as baselines in the plan; keep it so |
+| Being scooped on the exact framing | all | Novelty gone | Weekly literature watch; Jan 10 full re-check; ability to re-position each study around its *measurement* rather than its *topic* |
+| Both policies at Q ≈ 0 on hard strata | all | Floor effect; no variance to explain | Stratification includes easy strata; report where the floor is as a finding |
+| Over-interpreting two policy families as "VLAs in general" | all | External validity | Say "two families"; replication on the second is the minimum |
+
+---
+
+## 6. Scientific decision points
+
+These are the moments where the *science* changes course (operational dates are in the implementation appendix).
+
+| Decision | Trigger | Options |
 |---|---|---|
-| Oct 23 | Eval path works end to end (A1); throughput measured (A2) | T1 |
-| Oct 24 | Rent second node? | A2, team size |
-| Oct 31 | Instance definition for Study 1 (A3): seen/unseen vs public/hidden | sim image inspection |
-| Nov 8 | Study 3 pilot gate: continue or fold into Study 1 | 60-episode separation test |
-| Nov 10 | Study 2 pilot gate: skill-conditioning signal present? | 5k-step pilots |
-| Nov 15 | Study 1 pilot gate: instance gap and κ present? | 100-episode pilot |
-| Dec 31 | Study 1 κ gate; Study 3 detector gate | 300-episode audit; AUROC on held-out tasks |
-| Jan 10 | Literature re-check; which paper leads | arXiv scan |
-| Jan 25 | Study 2 H1 gate | matrix |
-| Jan 31 | Study 1 H2 gate; figures frozen for both IROS papers | matrices |
-| Feb 10 | Study 3: IROS or ICRA 2028 | H2 probe |
-| Feb 26 | Submit | — |
+| Is Study 1 a generalization study or a variance study? | Whether seen-composition instances are evaluable | Keep the strong framing / rewrite H2 and the title |
+| Is the labeler an instrument or an opinion? | κ on the first 50 human-labeled episodes | Proceed / refine rules / collapse classes / stop |
+| Does the policy read the language at all? | Pilot: skill- vs task-conditioned differ under oracle switching | Proceed / change conditioning recipe / Study 2 not runnable on these policies |
+| Does any detector see failure coming? | Pilot separation test | Proceed / fold Study 3 into Study 1 |
+| Does prediction beat the post-hoc rule? | Probe on 5 tasks | Full study / boundary-result paper / detector-comparison only |
+| Which study leads the IROS submission? | Jan 10 literature re-check + pilot effect sizes | Study 1 / Study 2 / both |
+| Is official Q enough? | Pilot attribution shows accidental completions | Add progress-aware variant as co-primary |
 
 ---
 
-## 9. Risk register
+## 7. Required background (read, not skim)
 
-| Risk | Likelihood | Impact | Mitigation | Owner |
-|---|---|---|---|---|
-| Eval path never stabilises on the Docker-only box (A1) | medium | blocks everything | First ticket; escalate to building `b1k-eval` from the official Dockerfile; ask organizers' Discord | infra |
-| Throughput half of assumed (A2) | medium | matrices do not fit | Second node; drop Study 3 to ICRA 2028; cap episodes at 2× human mean | lead |
-| Scooped before March | medium-high | paper rejected for novelty | Weekly lit watch; Jan 10 re-check; positioning table kept current; submit early workshop versions to timestamp | lit-watch owner |
-| Finetuned policies too weak to show any effect (Q ≈ 0 everywhere) | medium | no signal | Pilot gates on organizer checkpoints first; use their tasks; report honestly | study owners |
-| Instance axis not evaluable (A3) | medium | Study 1 H2 weakens | Fallback definition pre-agreed (plan §5.3) | Study 1 |
-| Human annotation slips (annotators unavailable in Dec) | medium | κ gate missed | Recruit by Nov 15; SOP written by Dec 1; 50 episodes labeled as a dry run | Study 1 |
-| Single point of failure in people (one person leaves) | low-medium | a study dies | Every study has written pre-reg, log, and runnable scripts; shared tickets documented | lead |
-| Disk full mid-matrix | high (it has already happened once) | lost days | 2 TB per node; `df` check in the matrix runner before each episode; videos optional per run | infra |
-| HF token / gated-model access breaks | low | training blocked | Tokens in shell only, never in chat or git; `hf auth whoami` preflight already in scripts | infra |
-| Over-scoping (trying to run all three matrices at full size on one node) | high | nothing finishes | The plan's single-node fallback is binding unless the second node is rented | lead |
-| Reviewer: "sim-only, so what?" | certain | weaker scores | Abstracts make no real-world claims; limitations explicit; BEHAVIOR is the accepted house-scale sim benchmark — cite [25] and the 2025 challenge reports | writing leads |
+Per person, before touching their study. Each reading ends with a one-page note in `docs/research/reading/` answering: what did they measure, what did they explicitly not measure, which of our hypotheses does it bear on.
+
+- **Everyone:** [2] Rasouli et al.; [1] Behavior-Skill; [25] BEHAVIOR-1K; the 2025 challenge reports [4][5]; `docs/challenge-spec.md` §5–6 (how Q is computed).
+- **Study 1:** the BDDL predicate families used by the 20 tasks; [22] (privileged-state labeling precedent); [16] ATOM-Bench's AS/CFS metrics as a comparison point for "skill vs. composition" attribution.
+- **Study 2:** [3] Semantic Handoff; [17]–[21] hierarchical conditioning ablations, noting the switching signal each used; [4] stage tracking.
+- **Study 3:** [11] SAFE, [12] FAIL-Detect, [13] FIPER, [14] PFD, [15] Diff-DAgger, [6] CycleVLA, [7]–[10] recovery schemes — with a table of task horizon, success metric, and recovery action for each (this table becomes Related Work).
 
 ---
 
-## 10. Things we deliberately do not need
+## 8. What success looks like in March
 
-- A physical robot. All claims are simulation-scoped.
-- A GPU cluster. Two nodes suffice for the sized matrices.
-- A new policy architecture. All three studies measure; none proposes a model.
-- Full 100-task coverage. 20 stratified tasks with stated strata is a defensible, reviewable scope.
-- Perfect finetunes. The studies are about structure of failure and of hierarchy, which are measurable at Q ≈ 0.2–0.4.
-
----
-
-## 11. Immediate actions (this week)
-
-1. Assign the roles in §2 and write the names into this file.
-2. Run A1 and A2 (implementation §B); record the throughput number.
-3. Decide on the second node (Oct 24).
-4. Create `docs/research/log.md`, `docs/research/litwatch.md`, and the compute queue file.
-5. Write the annotator SOP skeleton from Rasouli et al. [2] and start recruiting the two annotators.
-6. Agree authorship in writing.
+Two papers whose abstracts a reviewer in this area cannot summarise as "they ran π0.5 and GR00T on BEHAVIOR and reported numbers", because each contains a measurement that did not exist before: a validated instrument and an instance-generalization gap; a decomposition of hierarchy loss into content and timing. A third study either queued for ICRA 2028 with a pilot result in hand, or honestly closed with a boundary result. Every hypothesis — confirmed or refuted — reported as pre-stated. Nothing claimed that the design could not detect.
