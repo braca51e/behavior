@@ -43,6 +43,9 @@ GPU, simulator, or the 3.27 TB demo set** — that is the design's
 > (Isaac/OmniGibson is a separate image — not inside `b1k-groot`).
 > `docs/challenge-spec.md` is the authoritative requirements spec;
 > `docs/design.md` is the strategy rationale.
+> **Research (IROS 2027 / ICRA 2028):** [`docs/research-plan-2027.md`](docs/research-plan-2027.md)
+> — three implementation-level paper plans sized to this repo's single-GPU
+> Docker setup (supersedes the Sep-2026 `icra-iros-2027-*` drafts).
 
 ---
 
